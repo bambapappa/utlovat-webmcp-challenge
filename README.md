@@ -1,9 +1,10 @@
 # Utlovat.se — WebMCP Challenge snapshot
 
-This repository is the deliberately frozen competition version of Utlovat.se's
-WebMCP demonstration. It is separate from the live election-information
-project at [`bambapappa/valflask`](https://github.com/bambapappa/valflask),
-which continues to receive ordinary editorial and technical updates.
+This repository is the pre-deadline rehearsal snapshot for the frozen
+competition version of Utlovat.se's WebMCP demonstration. It is separate from
+the live election-information project at
+[`bambapappa/valflask`](https://github.com/bambapappa/valflask), which
+continues to receive ordinary editorial and technical updates.
 
 The intended judge URL is `https://webmcp.utlovat.se/webmcp/`.
 
@@ -27,6 +28,9 @@ policy.
   this build. It excludes Git history and installed dependencies.
 - `SNAPSHOT.json` records the source revision, data hash and checksums. Its
   current value is a pre-deadline rehearsal, not the final competition freeze.
+- `DECISION_LOG.md` records the scope boundary between the competition snapshot
+  and the continuing election-information service.
+- `SESSION_HANDOFF.md` records the remaining release steps and their evidence.
 
 The final snapshot is built from one named `valflask` revision immediately
 before the challenge cutoff. It replaces the rehearsal once, then this
