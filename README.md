@@ -22,8 +22,10 @@ policy.
 
 ## Snapshot layout
 
-- `docs/` is the static site published by GitHub Pages. `.nojekyll` preserves
-  the generated `_astro/` assets.
+- `docs/` is the complete public static site published by GitHub Pages:
+  WebMCP, the Swedish promise and question views, comparison views, and
+  Handlingsvågen under `/handlingsvagen/`. Internal Utlovat.se links stay on
+  this frozen subdomain. `.nojekyll` preserves the generated `_astro/` assets.
 - `source/` is an archive of the exact Utlovat.se source revision used for
   this build. It excludes Git history and installed dependencies.
 - `SNAPSHOT.json` records the source revision, data hash and checksums. Its

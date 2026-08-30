@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>utlovat.se — Svängregistret</title>
+    <link>https://webmcp.utlovat.se/svangningar</link>
+    <description>Varje gång ett riksdagsparti ändrar sitt besked i en av valets stora frågor: gamla och nya beskedet, båda med ordagrant citat, källa och arkivkopia. Ren datasortering.</description>
+    <language>sv</language>
+    <atom:link href="https://webmcp.utlovat.se/svangningar.rss.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Socialdemokraterna: JA → VILLKORAT om energipolitiken (villkorsändring)</title>
+      <link>https://webmcp.utlovat.se/fraga/energipolitiken#sq-energi-karnkraft-s</link>
+      <guid>https://webmcp.utlovat.se/svangningar#st-2026-0046-st-2026-0060</guid>
+      <description>Ska staten fortsätta finansiera utbyggnad av ny kärnkraft? Då (2026-07-15): ”Socialdemokraterna bejakar kärnkraften, men menar att staten måste ha kontroll över säkerhet, ekonomi och lokalisering.” Nu (2026-08-13): ”Vad som nu krävs är ett teknikneutralt stöd till alla storskaliga fossilfria kraftslag.” Båda beskeden med källa och arkivkopia på utlovat.se.</description>
+      <pubDate>Thu, 13 Aug 2026 00:00:00 GMT</pubDate>
+    </item>
+  </channel>
+</rss>

@@ -11,6 +11,9 @@
   GitHub's TLS certificate was still being issued at the most recent check, so
   HTTPS must be rechecked before the address is used as the final live-demo URL.
 - Rehearsal source commit: `6d77945637089022df79fab731e0b6f16a270010`
+- The rehearsal now includes the full public Utlovat static surface and a
+  separately built Handlingsvågen under `/handlingsvagen/`. Internal absolute
+  Utlovat.se links were rewritten to this frozen subdomain.
 - `scripts/test-webmcp.mts` and `scripts/test-webmcp-retest.mts` passed against
   that source build.
 - Local static server check returned 200 for `/webmcp/`, `/webmcp.js` and

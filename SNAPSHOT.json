@@ -6,8 +6,10 @@
   "built_at": "2026-08-30T20:00:00+02:00",
   "data_hash": "ec409bfa53e834738644126c2202330f51ee8fcbf7513f3afd9a4c49dad555a3",
   "files": {
-    "docs/webmcp/index.html": "sha256:1ce33f84a072b0327fc136b3a0e497ba87611a90c08b7351b192c1ae89e910bb",
+    "docs/index.html": "sha256:7cf7d4596331a7f1e877963bbadabfe548532f4d82e14b85be9466aa311df109",
+    "docs/webmcp/index.html": "sha256:e321399af0225c1af58df0cb1f111aa8ebf428e2df25ffe6ce36c877ddfec15f",
     "docs/webmcp.js": "sha256:83ef23c204766694c79f3d0d4c800ba1ae4d340948eec5fb446cdf49d0f8b4ac",
-    "docs/api/v1/promises.json": "sha256:9c2d18712e17788e660bf8151d1e0ce8562e42ed034b6fcc4df483309a3a1fb8"
+    "docs/api/v1/promises.json": "sha256:9c2d18712e17788e660bf8151d1e0ce8562e42ed034b6fcc4df483309a3a1fb8",
+    "docs/handlingsvagen/index.html": "sha256:b63daa312af4495a3ddee823d5c55dc60ac48d3884ecd8adcaaa1c8e533e8967"
   }
 }
