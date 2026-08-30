@@ -6,7 +6,8 @@
 - Rehearsal commit containing the static evidence surface: `63e2d6b`
 - GitHub Pages source: `main` / `/docs`
 - Requested custom domain: `webmcp.utlovat.se`; its public CNAME resolves to
-  `bambapappa.github.io` and GitHub Pages returns HTTP 200 for `/webmcp/`.
+  `bambapappa.github.io`. GitHub Pages returns HTTP 200 for both `/` and
+  `/webmcp/`; the root page immediately routes visitors to `/webmcp/`.
   GitHub's TLS certificate was still being issued at the most recent check, so
   HTTPS must be rechecked before the address is used as the final live-demo URL.
 - Rehearsal source commit: `6d77945637089022df79fab731e0b6f16a270010`
