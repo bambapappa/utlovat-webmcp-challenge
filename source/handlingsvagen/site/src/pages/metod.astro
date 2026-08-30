@@ -1,0 +1,250 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Rattelsenot from "../components/Rattelsenot.astro";
+import { rattelserForPath } from "../lib/data.ts";
+import { metodTal } from "../lib/metodtal.ts";
+
+// Talen nedan är påståenden om datat, inte om metoden, och slås därför upp
+// vid varje bygge. Skrivna som siffror i texten blev de tysta osanningar.
+const tal = metodTal();
+const [flest1, flest2] = tal.partier;
+const [farrest1, farrest2] = [...tal.partier].reverse();
+// Meningen byggs i frontmatter, inte i mallen: ett radbryte intill ett
+// {uttryck} äter mellanslaget i bygget, och «medanLiberalernas» gick i drift.
+const ojamnheten =
+  `${flest1!.namn}s löften bär ${flest1!.kopplingar} kopplingar och ` +
+  `${flest2!.namn}s ${flest2!.kopplingar}, medan ${farrest1!.namn}s bär ` +
+  `${farrest1!.kopplingar} och ${farrest2!.namn}s ${farrest2!.kopplingar}`;
+// Byggs här av samma skäl som `ojamnheten` ovan: ett radbryte intill ett
+// {uttryck} äter mellanslaget i bygget. Första utkastet hade uttrycket sist på
+// raden och «48egna förslag» gick igenom bygget grönt — samma fälla som
+// «medanLiberalernas», en andra gång.
+const motionsflitet =
+  `Under mandatperioden skrev en centerpartistisk riksdagsledamot ` +
+  `${tal.motionerPerLedamot.get("c")} egna förslag, en liberal ` +
+  `${tal.motionerPerLedamot.get("l")} — räknat som medianen per ledamot.`;
+const andelOprovade = (p: (typeof tal.partier)[number]): number =>
+  p.loften === 0 ? 0 : Math.round((p.oprovade / p.loften) * 100);
+const oprovadeMest = [...tal.partier].sort((a, b) => andelOprovade(b) - andelOprovade(a))[0]!;
+const oprovadeMinst = [...tal.partier].sort((a, b) => andelOprovade(a) - andelOprovade(b))[0]!;
+---
+<Layout title="Så görs vägningen — Handlingsvågen" canonicalPath="/metod">
+  <div class="prosa">
+    <h1>Så görs vägningen</h1>
+    <Rattelsenot rattelser={rattelserForPath("/metod")} />
+    <p class="ingress">
+      Vi ställer partiernas löften inför valet 2026 bredvid det de faktiskt
+      gjorde i riksdagen åren innan, 2022–2026. Alltså: vad gjorde de i frågan
+      redan innan de lovade något om den? Här står hur vi går till väga, och
+      var gränserna för metoden går.
+    </p>
+
+    <h2>Så kopplas ett löfte till en handling</h2>
+    <p>
+      En <b>koppling</b> är sajtens minsta byggsten: ett löfte i ena änden,
+      något ett parti gjort i riksdagen i den andra, och ett citat som visar
+      att de handlar om samma sak. Så blir en till:
+    </p>
+    <ol>
+      <li>
+        <b>Ett program letar.</b> Det söker igenom allt partierna gjort i
+        riksdagen — egna förslag, frågor till ministrarna och omröstningar —
+        efter sådant som kan höra ihop med ett löfte.
+      </li>
+      <li>
+        <b>Citatet kontrolleras ord för ord.</b> Varje träff måste bära ett
+        citat ur dokumentet självt som visar vad saken gäller, och citatet
+        jämförs tecken för tecken med originalet. Stämmer det inte läggs
+        träffen åt sidan. Det kravet sänker vi aldrig.
+      </li>
+      <li>
+        <b>En människa säger ja.</b> Ingenting visas förrän en person läst
+        citatet och godkänt det. Varken en språkmodell eller ett program får
+        sista ordet.
+      </li>
+    </ol>
+
+    <h2>Vad en cell betyder</h2>
+    <p>
+      Rutnätet har en rad per löfte och en kolumn per riksdagsparti. En cell
+      fylls bara där partiet självt agerat: hur partiet röstade i en kopplad
+      omröstning, eller att partiet självt skrivit en kopplad motion. <b>I linje</b> och <b>emot</b> beskriver riktningen mot
+      löftet, inte om det är bra eller dåligt — att agera emot ett löfte kan vara
+      precis vad en väljare hoppas på. Därför finns ingen grön-röd-skala; formen
+      på cellen och det utskrivna ordet bär allt.
+    </p>
+
+    <h2>Vad som räknas som en handling</h2>
+    <p>
+      Arbetet i riksdagen ser olika ut. En ledamot kan föreslå en åtgärd rakt
+      av — "arbetsgivaravgiften ska sänkas" — eller be regeringen utreda den:
+      "se över möjligheten att sänka arbetsgivaravgiften". Eller bara beskriva
+      ett problem: "dagens avgifter är för höga". De två första räknas som
+      handlingar. Den tredje gör det inte — en beskrivning av läget är inte
+      något partiet har gjort.
+    </p>
+    <p>
+      Att räkna även uppmaningar att utreda är ett medvetet val. Att begära en
+      utredning är ett av de vanligaste sätt en enskild riksdagsledamot
+      faktiskt kan agera, och att bara godta det skarpast formulerade förslaget skulle
+      mäta hur partierna skriver i stället för vad de gör. Men en begäran om
+      att utreda något är inte detsamma som att göra det. Därför står alltid
+      det exakta citatet intill kopplingen: läs det, så ser du om partiet
+      föreslog åtgärden eller bad någon annan titta på den.
+    </p>
+
+    <h2>Regering och opposition agerar inte likadant</h2>
+    <p>
+      Ett oppositionsparti driver sin politik med motioner. Ett regeringsparti
+      driver den med propositioner — lagförslagen som regeringen lämnar till
+      riksdagen. Registret väger motioner men inte propositioner, och skälet är
+      att en proposition inte bär något parti: den skrivs av ett departement
+      och läggs av regeringen som helhet. Att fördela den på regeringspartierna
+      vore en bedömning av vem som drivit vad, och sådana gissningar gör vi
+      inte.
+    </p>
+    <p>
+      Följden ska sägas rakt ut: <b>läser man bara motionerna ser oppositionen
+      flitig ut och regeringen tom.</b> Det säger mer om rollerna i riksdagen
+      än om partierna, och så ska tabellen inte läsas.
+    </p>
+    <p>
+      Vägen till regeringspartiernas handlingar går i stället genom
+      <b>omröstningarna</b>. När ett förslag når kammaren måste varje parti ta
+      ställning, och rösterna är offentliga, exakta och redovisade per parti —
+      också när en ledamot röstar mot sin egen partilinje. Därför prioriterar
+      vi omröstningar framför propositioner i det fortsatta arbetet. En
+      omröstning visar vad ett parti gjorde när det gällde; en proposition
+      visar bara att regeringen som helhet ville något.
+    </p>
+
+    <h2>Vi har hunnit olika långt med olika partier</h2>
+    <p>
+      Registret är inte lika fullt för alla åtta partierna. Just nu är det som
+      vägts ojämnt fördelat: {ojamnheten}.
+      <b>Det är inget mått på partierna.</b> Så här ser det ut bakom siffran:
+    </p>
+    <ul>
+      <li>
+        <b>Vi hade helt enkelt inte letat lika mycket.</b> Sökningen gick
+        igenom löftena i den ordning de råkade ligga i vår fil, och den
+        ordningen följer partierna. Tog tiden slut var det alltid samma
+        partier som blev utan. Det är rättat: numera tas det löfte först som
+        vi letat minst på.
+      </li>
+      <li>
+        <b>Vi väger bara det ett parti självt skrivit under.</b> En handling
+        räknas mot ett löfte bara om partiet bakom löftet också står bakom
+        handlingen. Det är en medveten gräns: annars vore det inte partiets
+        eget agerande vi vägde.
+      </li>
+      <li>
+        <b>Sökningen hittar inte fram till alla löften.</b> För att vi ska
+        läsa igenom en handling måste den likna löftet tillräckligt mycket i
+        ordval. För {tal.oprovade} av {tal.loften} löften — {tal.oprovadeProcent} procent —
+        liknar ingen enda handling löftet tillräckligt, och då blir
+        det aldrig prövat mot någonting. Det beror nästan aldrig på att
+        partiet saknar handlingar; de partierna har hundratals eller tusentals
+        egna i registret. Det beror på att löftet är kort och allmänt hållet.
+        "Vi ska satsa på vårdpersonalen" delar för få utmärkande ord med något
+        enskilt dokument för att peka ut vilket som borde läsas. Det slår
+        ojämnt: för {oprovadeMest.namn} gäller det {andelOprovade(oprovadeMest)} procent
+        av löftena, för {oprovadeMinst.namn} {andelOprovade(oprovadeMinst)} procent.
+        Nästan alla de här löftena låg strax
+        under gränsen, inte långt ifrån den, och <b>gränsen är därför
+        vidgad</b> — ungefär hälften av dem kommer att prövas efterhand som
+        sökningarna körs. Att vidga den sänker inga krav på beläggen: varje
+        förslag måste fortfarande bära ett exakt citat och godkännas av en
+        människa. Det betyder bara att vi läser igenom fler handlingar för
+        att hitta dem.
+      </li>
+      <li>
+        <b>Partier arbetar olika mycket med motioner.</b> {motionsflitet} Motioner är den vanligaste
+        handlingen vi kan väga, så ett parti som arbetar på andra sätt syns
+        mindre här — utan att för den skull ha gjort mindre.
+      </li>
+    </ul>
+    <p>
+      Slutsatsen är enkel och tråkig: <b>ett tomt fält betyder att vi inte har
+      vägt rutan, aldrig att partiet varit passivt.</b> Jämför därför inte
+      partier på hur många kopplingar de har. Läs raden för det löfte du bryr
+      dig om, och läs citatet.
+    </p>
+
+    <h2>Varför "i linje" dominerar</h2>
+    <p>
+      De flesta vägda handlingarna är partiets egna motioner, interpellationer
+      och skriftliga frågor — och dem skriver ett parti sällan mot sin egen
+      linje. Att <b>i linje</b> är så mycket vanligare än <b>emot</b> säger
+      därför mer om vilken sorts handlingar som finns än om hur väl löften
+      hålls. Omröstningar är den handlingstyp som på allvar kan gå åt båda
+      hållen, eftersom partiet där måste ta ställning till någon annans
+      förslag. Räkna alltså inte ihop registret till ett betyg: det visar vad
+      partierna gjort, inte hur mycket de hållit.
+    </p>
+    <p>
+      Därför står två skilda saker isär på varje partisida. Talen högst upp
+      gäller <b>partiets egna löften</b> — där hamnar <b>emot</b> nästan
+      aldrig, eftersom ett parti sällan handlar mot vad det självt lovat. Vad
+      partiet gjort när <i>andra</i> partier lovat något räknas för sig längre
+      ner. Ett emot där är oenighet mellan partier, inte ett brutet löfte, och
+      det ska inte läsas som att partiet svikit sig självt.
+    </p>
+
+    <h2>Tomma celler är ärliga</h2>
+    <p>
+      Saknas en ren, kontrollerad koppling står cellen tom. Tomt är inte ett
+      betyg och inte ett misslyckande att dölja — det betyder bara att registret
+      ännu inte vägt just den rutan. Vi hittar aldrig på ett svar för att fylla
+      täckning.
+    </p>
+
+    <h2>Vad vi aldrig låter avgöra</h2>
+    <ul>
+      <li>
+        <b>Att inte ha röstat.</b> Partierna kommer ofta överens om att lika
+        många från varje sida stannar hemma, så att styrkeförhållandet består.
+        Frånvaro är därför sällan ett ställningstagande. Vi visar den på
+        ledamotssidorna, men den påverkar aldrig ett omdöme.
+      </li>
+      <li>
+        <b>Vad en ensam ledamot skrivit.</b> Ett förslag som en ledamot lämnat
+        in på egen hand hamnar på den personens sida, inte på partiets. Det är
+        inte partiets linje.
+      </li>
+      <li>
+        <b>Frågor till ministrarna.</b> Dem ställer ledamöter var för sig. De
+        syns på personens sida, men ger inget omdöme om partiet.
+      </li>
+      <li>
+        <b>Ett löfte utan sakfråga.</b> Många löften räknar upp flera saker på
+        en gång, och säger sällan hur mycket. Det hindrar inte vägningen: säger
+        ett parti att skatterna ska bli lägre och föreslår det sedan en
+        skattesänkning i riksdagen, drar det åt det håll det sa. Handlingen vägs
+        mot den punkt den faktiskt träffar, och citatet intill visar vilken
+        punkt det är. Men löftet måste peka på <i>något</i> — en sakfråga och
+        ett håll i den. Ord som bara beskriver ett tillstånd, "en anda som
+        främjar investeringar" eller "ett tryggare Sverige", pekar ingenstans
+        som går att jämföra med, och då står cellen tom. Samma krav ställs på
+        handlingen: en mening om varför något behövs är inte en åtgärd.
+        Fläskvågen ställer ett hårdare krav på samma löfte och sätter noll
+        kronor på det — men det är för att ett belopp kräver en nivå att räkna
+        på. Att jämföra två håll kräver bara två håll.
+      </li>
+    </ul>
+
+    <h2>När vi har fel</h2>
+    <p>
+      Hittar du ett verkligt fel rättar vi det synligt, med en rättelsenot på
+      berörd sida. Tyst rättelse förekommer inte. Varje koppling går att följa
+      hela vägen till riksdagens eget dokument och, när den finns, en arkivkopia.
+    </p>
+  </div>
+</Layout>
+
+<style>
+  .prosa { max-width: 68ch; }
+  .prosa h2 { margin-top: 1.8rem; font-size: 1.2rem; }
+  .prosa li { margin: 0.4rem 0; }
+  .prosa ol, .prosa ul { padding-left: 1.2rem; }
+</style>

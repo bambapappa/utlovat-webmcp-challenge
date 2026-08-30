@@ -1,0 +1,42 @@
+name: koppling-sync
+# Manuell synk av kopplingskön → GitHub-issues i det här repot. Körs när kön
+# fyllts på (efter en foreslag-körning). Efter sammanslagningen ligger
+# granskningsflödet i samma repo som löftena, och löftestexterna läses direkt
+# ur data/promises.json i stället för ur en utcheckning bredvid.
+on:
+  workflow_dispatch:
+    inputs:
+      cap:
+        description: "Max antal issues att skapa denna körning"
+        required: false
+        default: "60"
+permissions:
+  contents: read
+  issues: write
+concurrency:
+  group: koppling-sync
+  cancel-in-progress: false
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        # Alla run-steg utan egen working-directory kör ur Handlingsvågens
+        # rot, så relativa sökvägar (data/, cd pipeline) betyder samma sak
+        # som före sammanslagningen.
+        working-directory: handlingsvagen
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38  # v6.5.0
+        with:
+          node-version: 22
+      - name: Install pipeline deps
+        run: npm ci
+        working-directory: handlingsvagen/pipeline
+      - name: Sync koppling-kö till issues
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          SYNC_CAP: ${{ inputs.cap }}
+          PROMISES_PATH: ${{ github.workspace }}/data/promises.json
+        run: node --import tsx/esm scripts/koppling-issues.mts
+        working-directory: handlingsvagen/pipeline

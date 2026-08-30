@@ -1,0 +1,61 @@
+name: release
+on:
+  schedule:
+    - cron: "0 5 * * 1"   # Måndagar 05:00 UTC
+  workflow_dispatch: {}
+permissions:
+  contents: write
+jobs:
+  tag:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          fetch-depth: 0
+      - name: Configure git
+        run: |
+          git config user.name "utlovat-bot"
+          git config user.email "bot@utlovat.se"
+      - name: Create annotated tag
+        run: |
+          TAG="release/v$(date +%Y-%m-%d)"
+          git tag -a "$TAG" -m "Weekly release $(date +%Y-%m-%d)"
+          git push origin "$TAG"
+      - name: Create GitHub Release
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3  # v9.0.0
+        with:
+          script: |
+            const tag = `release/v${new Date().toISOString().slice(0,10)}`;
+            await github.rest.repos.createRelease({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              tag_name: tag,
+              name: `Release ${tag}`,
+              body: `Veckovis release-tagg för utlovat.se.\n\n- Data-hash: se integrity.json i byggt artifact\n- Deploy: GitHub Pages bakom Cloudflares proxy\n\n**GPG-signering:** ägarsteg — när GPG-nyckel är konfigurerad, byt till \\"git tag -s\\" i workflow.`
+            });
+      - name: Mirror to secondary remote (if configured)
+        run: |
+          if git remote | grep -q secondary; then
+            git push secondary --tags
+            git push secondary main
+            echo "Secondary mirror pushed."
+          else
+            echo "No secondary remote configured — ägarsteg (se RUNBOOK)."
+          fi
+
+  # Larmet är hela skälet till att ett fel i den här körningen syns för en
+  # människa. Delad implementation i larm.yml — lägg aldrig en kopia här.
+  larm:
+    needs: [tag]
+    if: failure()
+    permissions:
+      contents: read
+      issues: write
+    uses: ./.github/workflows/larm.yml
+    with:
+      rubrik: "Veckotaggningen"
+      etikett: "larm-release"
+      atgard: |
+            Taggen är återställningspunkten. Utan den finns ingen märkt punkt
+            att rulla tillbaka till den vecka något går sönder — se
+            `ops/RUNBOOK.md`.

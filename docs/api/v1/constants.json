@@ -1,0 +1,46 @@
+{
+  "generated_at": "2026-08-30T17:59:07.226Z",
+  "data_hash": "75aba324ad069ed42766e49ce93117ea24ad150e68b8a47c84aa80bdb603732c",
+  "license": "CC-BY-4.0",
+  "data": {
+    "generated_note": "Kvarvarande konstanter är rent fysiska storheter utan politiskt innehåll: enkronans tjocklek (Riksbankens föreskrifter) och två avstånd (NASA). De sex måttstockar som själva kan vara vallöften — sjuksköterskelön, lärarlön, sjukvård per invånare, skolmåltid, Förbifart Stockholm och JAS 39E-programmet — togs bort 2026-08-01. Att mäta ett vårdlöfte i sjuksköterskelöner ramar tyst in kostnaden i policytermer och är därför inte neutralt; se DECISION_LOG 2026-07-10 och 2026-08-01. Vikt-liknelsen i dryLine() är den enda glasyren. Per-post source_url anger exakt källa.",
+    "reformutrymme_msek_per_ar": {
+      "value": 80000,
+      "source_url": "https://www.regeringen.se/artiklar/2025/09/budgeten-for-2026-pa-fem-minuter/ — Budgetpropositionen för 2026: 'reformer för närmare 80 miljarder kronor' (exkl. försvar/Ukraina). 80 000 msek. OBS: detta är regeringens reformvolym i BP2026, inte KI:s beräknade reformutrymme — valt som källsatt officiellt mått; se DECISION_LOG.",
+      "source_date": "2025-09",
+      "fetched_date": "2026-06-13"
+    },
+    "items": [
+      {
+        "id": "enkrona_tjocklek_m",
+        "label": "tjocklek 1-krona",
+        "value": 0.00179,
+        "unit": "m",
+        "kind": "kosmisk",
+        "source_url": "https://www.riksdagen.se/sv/dokument-och-lagar/dokument/svensk-forfattningssamling/riksbankens-foreskrifter-201484-om-nya-mynt-av_sfs-2014-84/ — Riksbankens föreskrifter (2014:84), valören en krona: 'diameter på 19,50 millimeter och en tjocklek på 1,79 millimeter'. Primär författningstext (SFS), Riksbanken som utfärdande myndighet.",
+        "source_date": "2013-12-20",
+        "fetched_date": "2026-06-13"
+      },
+      {
+        "id": "avstand_manen_m",
+        "label": "månen",
+        "value": 384400000,
+        "unit": "m",
+        "kind": "kosmisk",
+        "source_url": "https://science.nasa.gov/moon/facts/",
+        "source_date": "2026-02-12",
+        "fetched_date": "2026-06-12"
+      },
+      {
+        "id": "avstand_mars_medel_m",
+        "label": "Mars",
+        "value": 225308160000,
+        "unit": "m",
+        "kind": "kosmisk",
+        "source_url": "https://www.nasa.gov/hrp/hazard-distance-from-earth/ — NASA Human Research Program: 'Mars is, on average, 140 million miles from Earth.' Omräknat med 1 mile = 1 609,344 m: 140 000 000 × 1 609,344 = 225 308 160 000 m (genomsnittligt avstånd Jorden–Mars). Sidan uppdaterad 2024-08-01. Konstanten omdefinierad 2026-06-13 från 'minsta avstånd' → 'genomsnittligt avstånd' (id ändrat min→medel).",
+        "source_date": "2024-08-01",
+        "fetched_date": "2026-06-13"
+      }
+    ]
+  }
+}

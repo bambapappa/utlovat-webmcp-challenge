@@ -1,0 +1,236 @@
+/**
+ * Byte av bevis på en REDAN PUBLICERAD koppling.
+ *
+ * `godkann-lista` når bara kön. Är kopplingen godkänd är citatet publicerat
+ * intill den, och ett byte är därför en **rättelse** — inte en omvägning.
+ * Tyst rättelse är förbjuden: bytet kräver en post i `data/rattelser.json`
+ * och lämnar spår i kopplingens motivering.
+ *
+ * De 111 bevisrättningarna 2026-08-06 gjordes med engångsskript som ingen
+ * testsvit nådde, och 663 motioner plus 110 frågor väntar fortfarande. Den
+ * här modulen är samma kontroll, men i pipelinen där testerna når den.
+ *
+ * Ren logik utan fil- och nätverksåtkomst — källtexten hämtas av anroparen
+ * (scripts/bevis-byt.mts), precis som `provaNyttBevis` kräver.
+ */
+import { CITAT_MIN_TECKEN, normalizeForVerbatim, utanforHandlingen } from "./grindar.ts";
+import type { GrindKontext } from "./grindar.ts";
+import type { KopplingPost } from "./granskning.ts";
+
+/** En rad i bytesfilen: vilken koppling, vilket nytt citat, och ett eventuellt undantag. */
+export interface Byte {
+  id: string;
+  citat: string;
+  /**
+   * Skälet till att ett citat som INTE står i handlingens egen del ändå får
+   * bytas in — anslagsmotionens yrkande anvisar bara medel enligt en tabell
+   * och visar mindre än brödtexten gör.
+   *
+   * Krävs som utskriven text, aldrig som en flagga. Vid genomgången
+   * 2026-08-06 gick elva kopplingar in på just det undantaget, var och en med
+   * sitt skäl nedskrivet. Ett undantag som inte behöver motiveras blir ett
+   * undantag man tar av vana.
+   */
+  brodtextSkal?: string;
+}
+
+/** Vad kontrollen fann. `iHandlingen` är odefinierad när lydelserna inte gick att hämta. */
+export interface Bytesprovning {
+  ok: boolean;
+  skal: string[];
+  iHandlingen: boolean | undefined;
+  /** Sant när bytet gick igenom på ett utskrivet undantag i stället för på grinden. */
+  paUndantag: boolean;
+}
+
+/**
+ * Prövar ett bevisbyte lika hårt som ett godkännande gör, plus en kontroll
+ * till: att citatet står i handlingens EGEN del.
+ *
+ * Ordagrannheten är absolut och lossas aldrig. Att citatet står i handlingens
+ * egen del är däremot en bedömning en människa får göra om — men bara med
+ * skälet utskrivet, och då säger utfallet det.
+ */
+export function provaByte(
+  byte: Byte,
+  nuvarandeCitat: string,
+  kalltext: string,
+  handlingstext: GrindKontext["handlingstext"] | undefined,
+): Bytesprovning {
+  const skal: string[] = [];
+  const c = normalizeForVerbatim(byte.citat);
+
+  // Ett byte till samma citat rättar ingenting, men skulle ändå skriva en post
+  // i rättelseloggen och en not i motiveringen. En rättelselogg full av
+  // rättelser som inte rättade något är svårare att lita på än en kort.
+  if (c === normalizeForVerbatim(nuvarandeCitat)) {
+    skal.push("det nya citatet är detsamma som det nuvarande — det finns ingenting att rätta");
+  }
+
+  if (c.length < CITAT_MIN_TECKEN) {
+    skal.push(`citatet har ${c.length} tecken — minst ${CITAT_MIN_TECKEN} krävs`);
+  }
+  if (c !== "" && !normalizeForVerbatim(kalltext).includes(c)) {
+    skal.push(
+      "citatet står inte ordagrant i riksdagsdokumentet. Skriv aldrig av det för hand — " +
+        "hämta lydelsen ur riksdagens egna data. Står det ändå inte där kan det vara " +
+        "textutvinningen som klippt sönder ett avstavat ord",
+    );
+  }
+
+  let iHandlingen: boolean | undefined;
+  let paUndantag = false;
+  if (c !== "" && handlingstext && handlingstext.delar.length > 0) {
+    iHandlingen = handlingstext.delar.some((del) => normalizeForVerbatim(del).includes(c));
+    if (!iHandlingen) {
+      if (byte.brodtextSkal) {
+        paUndantag = true;
+      } else {
+        skal.push(
+          `${utanforHandlingen(handlingstext.sort, handlingstext.delar.length)}. ` +
+            "Ska bytet ändå göras: skriv skälet efter citatet, åtskilt med tabb",
+        );
+      }
+    }
+  }
+
+  return { ok: skal.length === 0, skal, iHandlingen, paUndantag };
+}
+
+/** Spåret bytet lämnar i kopplingens motivering — bytet får aldrig vara osynligt. */
+export function bytesnot(byte: Byte, datum: string): string {
+  return byte.brodtextSkal
+    ? `Beviset byttes ${datum} mot handlingens egen lydelse, hämtad ur riksdagens data och ` +
+        `kontrollerad ord för ord. Citatet står inte bland handlingens egna lydelser, och togs ` +
+        `in på ett mänskligt beslut: ${byte.brodtextSkal}`
+    : `Beviset byttes ${datum} mot handlingens egen lydelse, hämtad ur riksdagens data och ` +
+        `kontrollerad ord för ord.`;
+}
+
+/**
+ * Kopplingen med det nya beviset.
+ *
+ * Bara `bevis.citat` och `method_note` rör sig. Riktningen, målet och
+ * handlingen står stilla — det är samma dom, buren av ett annat stycke ur
+ * samma dokument. Därför behöver domarna inte räknas om efter ett byte.
+ */
+export function bytBevis(koppling: KopplingPost, byte: Byte, datum: string): KopplingPost {
+  // Undantaget följer citatet. Bytte granskaren in ett citat på sitt eget skäl
+  // bär posten grunden `manskligt_beslut`; bytte hen in en lydelse som står i
+  // handlingen försvinner grunden, för då finns inget undantag kvar att bära.
+  // Utan den nollställningen skulle fältet beskriva ett citat som är borta —
+  // samma fälla som `utanTidigareBytesnot` finns för att undvika i prosan.
+  const { brodtext_oppen: _tidigare, ...bevis } = koppling.bevis;
+  return {
+    ...koppling,
+    bevis: byte.brodtextSkal
+      ? { ...bevis, citat: byte.citat, brodtext_oppen: "manskligt_beslut" }
+      : { ...bevis, citat: byte.citat },
+    method_note: `${utanTidigareBytesnot(koppling.method_note)} ${bytesnot(byte, datum)}`.trim(),
+  };
+}
+
+/**
+ * Motiveringen utan noten från ett TIDIGARE byte.
+ *
+ * Ett bevis kan bytas mer än en gång, och då får den gamla noten inte stå
+ * kvar. Skälet är inte bara att texten växer: bar det förra bytet ett
+ * utskrivet undantag ("citatet står inte bland handlingens egna lydelser,
+ * och togs in på ett mänskligt beslut: …") beskriver det undantaget ett citat
+ * som inte längre står där. Noten skulle då säga motsatsen till vad posten
+ * visar, och det är värre än ingen not.
+ *
+ * Historiken tappas inte: varje byte har sin egen post i `rattelser.json`,
+ * och den offentliga rättelseloggen är platsen där ordningen står.
+ */
+export function utanTidigareBytesnot(motivering: string): string {
+  const i = motivering.indexOf("Beviset byttes ");
+  return (i === -1 ? motivering : motivering.slice(0, i)).trim();
+}
+
+/** En rad i genomgången: kopplingen, bytet, och vad som var fel med det gamla citatet. */
+export interface Bytesrad {
+  koppling: KopplingPost;
+  byte: Byte;
+  /**
+   * Sant när det GAMLA citatet inte stod ord för ord i sin källa.
+   *
+   * Då är bytet en **reparation av en trasig avskrift**, inte ett byte av
+   * vilken del av dokumentet som citeras — och rättelseposten får inte påstå
+   * att det gamla citatet stod ordagrant i dokumentet, för det gjorde det
+   * inte. Utelämnas fältet beskrivs raden som ett vanligt byte.
+   */
+  gammaltCitatSaknasIKallan?: boolean;
+}
+
+/**
+ * En rättelsepost för hela genomgången — inte en per koppling.
+ *
+ * "Rättelser samlas": en systematisk kvalitetshöjning blir EN post. `affects`
+ * måste namnge varje berört löfte, för rättelsenoten på löftessidan väljs
+ * genom att söka löftets id i just det fältet.
+ *
+ * Posten beskriver de två sorters rättelser var för sig. En genomgång kan
+ * bära båda, och en läsare ska inte behöva gissa vilken sort som gällde
+ * vilken koppling.
+ */
+export function rattelsePost(
+  byten: Bytesrad[],
+  datum: string,
+): { date: string; affects: string; what: string; why: string; commit: string } {
+  const loften = [...new Set(byten.map((b) => b.koppling.promise_id).filter((x): x is string => !!x))].sort();
+  const undantag = byten.filter((b) => b.byte.brodtextSkal).length;
+  const reparerade = byten.filter((b) => b.gammaltCitatSaknasIKallan).length;
+  const flyttade = byten.length - reparerade;
+
+  const flyttadText =
+    flyttade > 0
+      ? `Vi visar nu en annan del av samma riksdagsdokument som belägg för ${flyttade} ` +
+        `${flyttade === 1 ? "koppling" : "kopplingar"} mellan ett löfte och en handling. ` +
+        "Det gamla citatet stod ordagrant i dokumentet, men det visade argumenten för handlingen " +
+        "i stället för handlingen själv — motionens brödtext i stället för dess yrkande, frågans " +
+        "bakgrund i stället för frågan."
+      : "";
+
+  const reparadText =
+    reparerade > 0
+      ? `För ${reparerade} ${reparerade === 1 ? "koppling" : "kopplingar"} var den sparade ` +
+        "citattexten trasig: när texten en gång hämtades ur riksdagens dokument sköts mellanrum " +
+        "in mitt i ord, så att citatet inte längre stod ord för ord i sin källa. Meningen är " +
+        "densamma — det är avskriften som är lagad, hämtad på nytt ur dokumentet."
+      : "";
+
+  const påUndantagText =
+    undantag > 0
+      ? ` ${undantag} av dem står inte bland handlingens egna lydelser och togs in på ett ` +
+        "mänskligt beslut, med skälet utskrivet i varje enskild motivering."
+      : "";
+
+  const varförFlyttad =
+    flyttade > 0
+      ? "Ett belägg ska visa vad ledamoten eller partiet faktiskt gjorde. En motions handling är " +
+        "dess yrkande; brödtexten argumenterar för yrkandet och är inte i sig en handling. "
+      : "";
+  const varförReparad =
+    reparerade > 0
+      ? "Ett citat som inte går att hitta i sin källa går inte heller att kontrollera, och då är " +
+        "det inte längre ett belägg. "
+      : "";
+
+  return {
+    date: datum,
+    affects:
+      `Handlingsvågens rutnät och löftessidorna för ${loften.join(", ")} — ` +
+      `${byten.length} ${byten.length === 1 ? "bevis" : "bevis"} utbytta`,
+    what:
+      [flyttadText, reparadText].filter(Boolean).join(" ") +
+      " Varje nytt citat är hämtat ur riksdagens egna data och kontrollerat ord för ord mot " +
+      `källan.${påUndantagText}`,
+    why:
+      varförFlyttad +
+      varförReparad +
+      "Bedömningen av kopplingen är oförändrad — det är belägget som bytt stycke, inte domen.",
+    // Backfillas i en andra commit, samma mönster som övriga dataändringar.
+    commit: "0000000",
+  };
+}

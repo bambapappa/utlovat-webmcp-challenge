@@ -1,0 +1,186 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { buildSummary } from "../lib/rutnat.ts";
+import type { Cell } from "../lib/rutnat.ts";
+
+const summary = buildSummary();
+const base = import.meta.env.BASE_URL.replace(/\/?$/, "/"); // alltid exakt en avslutande slash
+
+const PARTINAMN = new Map(summary.partier.map((p) => [p.code, p.namn]));
+
+function cellVy(c: Cell | undefined): { klass: string; ord: string; aria: string } {
+  if (!c) return { klass: "status--tom", ord: "–", aria: "ingen godkänd koppling i vårt underlag" };
+  if (c.status === "bade_och") return { klass: "status--bade", ord: "både och", aria: "både i linje och emot, vid olika tillfällen" };
+  if (c.status === "agerat_i_linje") return { klass: "status--linje", ord: "i linje", aria: "har agerat i linje med löftet" };
+  if (c.status === "agerat_emot") return { klass: "status--emot", ord: "emot", aria: "har agerat emot löftet" };
+  if (c.n_avstod > 0) return { klass: "status--avstod", ord: "avstod", aria: "lade ner sin röst" };
+  return { klass: "status--tom", ord: "–", aria: "ingen godkänd koppling i vårt underlag" };
+}
+
+// Filtrens etiketter (SKISS §3). Statusnycklarna matchar URL-parametrarna.
+const KINDORD: Record<string, string> = {
+  votering: "voteringar", motion: "motioner", proposition: "propositioner",
+  interpellation: "interpellationer", skriftlig_fraga: "skriftliga frågor",
+};
+const MOTORD: Record<string, string> = { parti: "partimotion", kommitte: "kommittémotion", enskild: "enskild motion" };
+const STATUSVAL: Array<[string, string]> = [["i-linje", "i linje"], ["emot", "emot"], ["bade-och", "både och"], ["avstod", "avstod"]];
+
+/** Radens statusnycklar (för status-filtret) ur dess celler. */
+function statusTokens(celler: Record<string, Cell>): string[] {
+  const s = new Set<string>();
+  for (const c of Object.values(celler)) {
+    if (c.status === "agerat_i_linje") s.add("i-linje");
+    else if (c.status === "agerat_emot") s.add("emot");
+    else if (c.status === "bade_och") s.add("bade-och");
+    if (c.n_avstod > 0 && c.status === "ingen_handling_annu") s.add("avstod");
+  }
+  return [...s];
+}
+---
+<Layout title="Handlingsvågen — löften vägda mot handling" canonicalPath="/">
+  <div data-api-base={base} id="rutnat-rot">
+    <h1>Rutnätet</h1>
+    <p class="ingress">
+      Rutnätet jämför inte partiernas löften med varandra. Varje rad gäller
+      just det löftet, med en kolumn per parti. En cell fylls när partiet gjort
+      något i riksdagen som har kopplats till löftet — röstat om det, lämnat in
+      ett förslag eller ställt en fråga. Varje sådan koppling är kontrollerad
+      av en människa, ord för ord mot riksdagens eget dokument. Klicka på ett
+      löfte för att läsa bevisen.
+    </p>
+
+    <div class="summa" role="group" aria-label="Sammanfattning">
+      <div><b>{summary.summa.vagda}</b><span>löften där vi hittat en handling</span></div>
+      <div><b>{summary.summa.total_lof}</b><span>löften vi följer totalt</span></div>
+      <div><b>{summary.summa.utan_handling}</b><span>väntar fortfarande på granskning</span></div>
+    </div>
+
+    {/*
+      Filtren är en blankett: en rubrik, och ett fält per filter med
+      etiketten ovanför sin väljare. Etiketten är inte längre radens minsta
+      och blekaste text — den står i full svärta, och ett satt filter får
+      dessutom fet etikett och tjockare ram.
+
+      `aria-label` behövs inte längre: varje väljare ligger i sin egen
+      <label> med synlig text, vilket är den bättre kopplingen. Id:na,
+      `data-falt`, `#f-rensa` och `#f-antal` är oförändrade — klientkoden i
+      hv-rutnat.js läser dem.
+    */}
+    <section class="verktyg" id="filter" data-antal-lof={summary.loften.length} aria-labelledby="filter-rubrik">
+      <h2 class="verktyg-rubrik" id="filter-rubrik">Filtrera rutnätet</h2>
+      <div class="verktyg-falt">
+        <label><span class="verktyg-etikett">Kategori</span>
+          <select id="f-kategori" data-falt="kategori">
+            <option value="">alla</option>
+            {summary.kategorier.map((k) => <option value={k}>{k}</option>)}
+          </select>
+        </label>
+        <label><span class="verktyg-etikett">Parti</span>
+          <select id="f-parti" data-falt="parti">
+            <option value="">alla</option>
+            {summary.partier.map((p) => <option value={p.code}>{p.namn}</option>)}
+          </select>
+        </label>
+        <label><span class="verktyg-etikett">Status</span>
+          <select id="f-status" data-falt="status">
+            <option value="">alla</option>
+            {STATUSVAL.map(([v, t]) => <option value={v}>{t}</option>)}
+          </select>
+        </label>
+        <label><span class="verktyg-etikett">Dokumenttyp</span>
+          <select id="f-dokumenttyp" data-falt="dokumenttyp">
+            <option value="">alla</option>
+            {summary.fasetter.dokumenttyper.map((d) => <option value={d}>{KINDORD[d] ?? d}</option>)}
+          </select>
+        </label>
+        {summary.fasetter.motionstyper.length > 0 && (
+          <label><span class="verktyg-etikett">Motionstyp</span>
+            <select id="f-motionstyp" data-falt="motionstyp">
+              <option value="">alla</option>
+              {summary.fasetter.motionstyper.map((m) => <option value={m}>{MOTORD[m] ?? m}</option>)}
+            </select>
+          </label>
+        )}
+        <label><span class="verktyg-etikett">Riksmöte</span>
+          <select id="f-riksmote" data-falt="rm">
+            <option value="">alla</option>
+            {summary.fasetter.riksmoten.map((r) => <option value={r}>{r}</option>)}
+          </select>
+        </label>
+      </div>
+      <div class="verktyg-rad">
+        <button type="button" id="f-rensa" class="f-rensa" hidden>Rensa filter</button>
+        <p id="f-antal" class="f-antal" aria-live="polite"></p>
+      </div>
+    </section>
+
+    <section class="forklaring" aria-label="Så läses cellerna">
+      <h2>Så läses cellerna</h2>
+      <ul>
+        <li><span class="status status--linje">i linje</span> partiet har gjort något som drar åt samma håll som löftet</li>
+        <li><span class="status status--emot">emot</span> partiet har gjort något som drar åt motsatt håll</li>
+        <li><span class="status status--bade">både och</span> partiet har gjort båda delarna, vid olika tillfällen</li>
+        <li><span class="status status--avstod">avstod</span> partiet lade ner sin röst i en omröstning om saken</li>
+        <li><span class="status status--tom">ingen godkänd koppling</span> för partiet på just den raden — det betyder inte att partiet tycker annorlunda eller saknar politik i frågan</li>
+      </ul>
+      <p>Besläktade löften kan därför stå på flera olika rader.</p>
+    </section>
+
+    <p class="rutnat-listnot">
+      På smal skärm står löftena som en lista. <b>Tryck på ett löfte</b> för att
+      se vad varje parti gjort — alla åtta, i samma vy. Rutnätet med alla
+      partier bredvid varandra kräver en bredare skärm.
+    </p>
+
+    <div class="rutnat-hölje">
+      <table class="rutnat">
+        <thead>
+          <tr>
+            <th class="lofte-huvud" scope="col">Löfte</th>
+            {summary.partier.map((p) => (
+              <th class="parti" scope="col" title={p.namn}><a href={`${base}parti/${p.code}`}>{p.code.toUpperCase()}</a></th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {summary.loften.map((l) => (
+            <tr
+              data-kategori={l.kategori}
+              data-parti={Object.keys(l.celler).join(" ")}
+              data-status={statusTokens(l.celler).join(" ")}
+              data-dokumenttyp={l.dokumenttyper.join(" ")}
+              data-motionstyp={l.motionstyper.join(" ")}
+              data-rm={l.riksmoten.join(" ")}
+            >
+              <td class="lofte-cell">
+                <button type="button" class="lofte-titel" data-lofte={l.id}>{l.titel}</button>
+                <div class="lofte-kat">
+                  {l.kategori}{l.parties.length ? ` · löfte av ${l.parties.map((c) => (PARTINAMN.get(c) ?? c)).join(", ")}` : ""}
+                </div>
+              </td>
+              {summary.partier.map((p) => {
+                const v = cellVy(l.celler[p.code]);
+                return (
+                  <td class="cell">
+                    <button type="button" class={`status ${v.klass}`} data-lofte={l.id} aria-label={`${l.titel} — ${PARTINAMN.get(p.code) ?? p.code}: ${v.aria}`} title={v.aria}>{v.ord}</button>
+                  </td>
+                );
+              })}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+
+    <p class="ingress ingress--efter">
+      {summary.summa.utan_handling} av {summary.summa.total_lof} löften har vi
+      ännu inte hittat någon kontrollerad handling till. Det säger ingenting om
+      partierna — bara att arbetet inte är färdigt. Varje rad granskas av en
+      människa, och det tar tid.
+    </p>
+
+    <dialog class="panel" id="detalj" aria-label="Bevis bakom löftet"></dialog>
+  </div>
+
+  <script is:inline src={`${base}hv-rutnat.js`}></script>
+</Layout>

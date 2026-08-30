@@ -1,0 +1,3588 @@
+[
+  {
+    "promise_id": "p-2026-1161",
+    "handling_id": "h-2026-2192",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att se över hur den gröna skatteväxlingen kan fortsätta genom att bl.a. en eventuell utfasning av alla nedsättningar av koldioxidskatten ses över, samtidigt som branschernas konkurrenskraft värnas med stärkt miljöstyrning och färre rent fiskala inslag, och detta tillkännager riksdagen för regeringen."
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Yrkandet handlar om att fortsätta den gröna skatteväxlingen genom att fasa ut nedsättningar av koldioxidskatten, vilket är en höjning av skatten på miljöförstöring och därmed stödjer löftets inriktning.",
+    "confidence": 0.9,
+    "skapad": "2026-08-26T07:51:59.633Z",
+    "extraction": {
+      "model": "deepseek-v4-flash",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-26"
+    }
+  },
+  {
+    "promise_id": "p-2026-1162",
+    "handling_id": "h-2026-2219",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att stärka studiemedelssystemet och på sikt höja bidragsdelen och tillkännager detta för regeringen."
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Yrkande 2 i motionen föreslår att riksdagen ställer sig bakom att på sikt höja bidragsdelen i studiemedlet, vilket är samma sakfråga som löftet.",
+    "confidence": 0.95,
+    "skapad": "2026-08-26T08:04:43.418Z",
+    "extraction": {
+      "model": "deepseek-v4-flash",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-26"
+    }
+  },
+  {
+    "promise_id": "p-2026-1162",
+    "handling_id": "h-2026-7238",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att stärka studiemedelssystemet och på sikt höja bidragsdelen och tillkännager detta för regeringen."
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Yrkandet anger explicit att bidragsdelen i studiemedlet ska höjas på sikt, vilket direkt motsvarar löftet.",
+    "confidence": 1,
+    "skapad": "2026-08-26T08:05:49.337Z",
+    "extraction": {
+      "model": "deepseek-v4-flash",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-26"
+    }
+  },
+  {
+    "promise_id": "p-2026-1163",
+    "handling_id": "h-2026-11949",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om CSN-lån till körkort och tillkännager detta för regeringen."
+    },
+    "motionstyp": "enskild",
+    "method_note": "Motionen yrkar att riksdagen ställer sig bakom CSN-lån till körkort, vilket är samma åtgärd som löftet att återinföra CSN-lån för körkort.",
+    "confidence": 0.95,
+    "skapad": "2026-08-26T08:18:54.967Z",
+    "extraction": {
+      "model": "deepseek-v4-flash",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-26"
+    }
+  },
+  {
+    "promise_id": "p-2026-1163",
+    "handling_id": "h-2026-18626",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om CSN-lån till körkort och tillkännager detta för regeringen."
+    },
+    "motionstyp": "enskild",
+    "method_note": "Motionen yrkar ett tillkännagivande om CSN-lån till körkort, vilket är samma sakfråga som löftet att återinföra CSN-lån för körkort och stödjer det.",
+    "confidence": 0.95,
+    "skapad": "2026-08-26T08:19:22.956Z",
+    "extraction": {
+      "model": "deepseek-v4-flash",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-26"
+    }
+  },
+  {
+    "promise_id": "p-2026-1163",
+    "handling_id": "h-2026-7123",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att det ska vara möjligt att ta CSN-lån för att kunna ta körkort och tillkännager detta för regeringen."
+    },
+    "motionstyp": "enskild",
+    "method_note": "Motionen yrkar på att CSN-lån för körkort ska vara möjligt, vilket direkt stödjer löftet om att återinföra sådana lån.",
+    "confidence": 1,
+    "skapad": "2026-08-26T08:22:07.835Z",
+    "extraction": {
+      "model": "deepseek-v4-flash",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-26"
+    }
+  },
+  {
+    "promise_id": "p-2026-1164",
+    "handling_id": "h-2026-21381",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Vad avser ministern att göra för att säkerställa att CSN har förutsättningar att klara handläggningstiden med minskade resurser?"
+    },
+    "method_note": "Interpellationen frågar hur regeringen ska säkerställa att CSN kan klara handläggningstiderna för omställningsstudiestödet, vilket direkt rör löftet om korta handläggningstider med mer resurser till CSN.",
+    "confidence": 0.9,
+    "skapad": "2026-08-26T08:33:13.908Z",
+    "extraction": {
+      "model": "deepseek-v4-flash",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-26"
+    }
+  },
+  {
+    "promise_id": "p-2026-1164",
+    "handling_id": "h-2026-20480",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "säkerställa att CSN har tillräckliga ekonomiska resurser för att korta väntetiderna och klara handläggningen av ansökningar till omställningsstudiestödet inom rimlig tid"
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Yrkandet handlar direkt om att korta handläggningstider för omställningsstudiestödet genom att ge CSN resurser.",
+    "confidence": 1,
+    "skapad": "2026-08-26T08:34:39.321Z",
+    "extraction": {
+      "model": "deepseek-v4-flash",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-26"
+    }
+  },
+  {
+    "promise_id": "p-2026-1164",
+    "handling_id": "h-2026-7238",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att öka stödet till CSN för att korta väntetiderna och klara handläggningen av ansökningar till omställningsstudiestödet inom rimlig tid och tillkännager detta för regeringen."
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Motionen föreslår mer resurser till CSN för att korta handläggningstiderna för omställningsstudiestödet, vilket är samma konkreta åtgärd som löftet efterfrågar.",
+    "confidence": 0.95,
+    "skapad": "2026-08-26T08:36:44.880Z",
+    "extraction": {
+      "model": "deepseek-v4-flash",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-26"
+    }
+  },
+  {
+    "promise_id": "p-2026-1164",
+    "handling_id": "h-2026-21695",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Avser ministern att vidta några åtgärder för att säkerställa att CSN har tillräckliga resurser och administrativa förutsättningar för att handlägga ansökningar om omställningsstudiestöd utan att medel riskerar att frysa inne?"
+    },
+    "method_note": "Interpellationen frågar direkt om åtgärder för att ge CSN tillräckliga resurser för handläggningen, vilket är samma sakfråga som löftet om korta handläggningstider med mer resurser till CSN.",
+    "confidence": 0.9,
+    "skapad": "2026-08-26T08:39:35.412Z",
+    "extraction": {
+      "model": "deepseek-v4-flash",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-26"
+    }
+  },
+  {
+    "promise_id": "p-2026-1164",
+    "handling_id": "h-2026-8213",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Varför väljer regeringen mot CSN:s och parternas vilja att skjuta på ikraftträdandet av de föreslagna regelförenklingarna?"
+    },
+    "method_note": "Interpellationen ifrågasätter regeringens försening av regelförenklingar som syftar till att korta handläggningstiderna för omställningsstudiestödet, vilket direkt rör löftet om att säkerställa korta handläggningstider.",
+    "confidence": 0.75,
+    "skapad": "2026-08-26T08:39:46.124Z",
+    "extraction": {
+      "model": "deepseek-v4-flash",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-26"
+    }
+  },
+  {
+    "promise_id": "p-2026-1164",
+    "handling_id": "h-2026-13460",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att säkerställa att CSN har tillräckliga ekonomiska resurser för att korta väntetiderna och klara handläggningen av ansökningar till omställningsstudiestödet inom rimlig tid och tillkännager detta för regeringen."
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Yrkandet kräver att CSN får tillräckliga resurser för att korta väntetiderna i handläggningen av omställningsstudiestödet, vilket är samma sakfråga som löftet om korta handläggningstider för omställningsstudiestöd.",
+    "confidence": 0.95,
+    "skapad": "2026-08-26T08:52:26.784Z",
+    "extraction": {
+      "model": "deepseek-v4-flash",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-26"
+    }
+  },
+  {
+    "promise_id": "p-2026-1165",
+    "handling_id": "h-2026-20480",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att utreda hur ett nytt studiestöd kan utformas för kortutbildade i behov av utbildning efter att studiestartsstödet avskaffats, och detta tillkännager riksdagen för regeringen."
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Yrkandet begär att regeringen utreder hur ett nytt studiestöd kan utformas för kortutbildade i behov av utbildning efter att studiestartsstödet avskaffats, vilket är samma sakfråga som löftet att utforma ett nytt studiemedel för kortutbildade som ersättning för det avskaffade studiestartsstödet.",
+    "confidence": 0.9,
+    "skapad": "2026-08-26T08:58:25.538Z",
+    "extraction": {
+      "model": "deepseek-v4-flash",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-26"
+    }
+  },
+  {
+    "promise_id": "p-2026-1166",
+    "handling_id": "h-2026-10295",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att regeringen bör uppdra åt Svenska kraftnät att prioritera de planerade förstärkningarna av stamnätet och tillkännager detta för regeringen."
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Yrkandet handlar om att prioritera förstärkningar av stamnätet, vilket direkt motsvarar löftet att investera i transmissionsnätet och stärka överföringskapaciteten.",
+    "confidence": 0.95,
+    "skapad": "2026-08-26T09:05:23.762Z",
+    "extraction": {
+      "model": "deepseek-v4-flash",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-26"
+    }
+  },
+  {
+    "promise_id": "p-2026-1166",
+    "handling_id": "h-2026-1030",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att regeringen bör uppdra åt Svenska kraftnät att prioritera de planerade förstärkningarna av stamnätet och tillkännager detta för regeringen."
+    },
+    "motionstyp": "parti",
+    "method_note": "Yrkandet uppdrar åt Svenska kraftnät att prioritera förstärkningar av stamnätet, vilket direkt stödjer löftet om investeringar i transmissionsnätet och stärkt överföringskapacitet.",
+    "confidence": 0.9,
+    "skapad": "2026-08-26T09:07:23.283Z",
+    "extraction": {
+      "model": "deepseek-v4-flash",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-26"
+    }
+  },
+  {
+    "promise_id": "p-2026-1174",
+    "handling_id": "h-2026-0955",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att stärka statens ansvar för cybersäkerheten och tillkännager detta för regeringen."
+    },
+    "motionstyp": "enskild",
+    "method_note": "Motionen föreslår att staten ska ta ett starkare ansvar för cybersäkerheten, vilket direkt stödjer löftet om att stärka skyddet mot cyberhot.",
+    "confidence": 0.9,
+    "skapad": "2026-08-26T10:07:16.750Z",
+    "extraction": {
+      "model": "deepseek-v4-flash",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-26"
+    }
+  },
+  {
+    "promise_id": "p-2026-1174",
+    "handling_id": "h-2026-14361",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Vilken analys har genomförts avseende Sveriges förmåga att säkerställa resiliens för kritisk data och applikationer i händelse av kris eller krig?"
+    },
+    "method_note": "Interpellationen efterfrågar konkret hur Sverige ska skydda samhällsviktiga system och data, vilket ligger i linje med löftet om att stärka skyddet mot cyberhot.",
+    "confidence": 0.65,
+    "skapad": "2026-08-26T10:10:43.706Z",
+    "extraction": {
+      "model": "deepseek-v4-flash",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-26"
+    }
+  },
+  {
+    "promise_id": "p-2026-1174",
+    "handling_id": "h-2026-7118",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att regeringen bör ta initiativ till kunskapsuppbyggnad inom cybersäkerhetsområdet i offentlig sektor och tillkännager detta för regeringen."
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Motionen föreslår att regeringen ska bygga upp kunskap inom cybersäkerhet i offentlig sektor, vilket stödjer löftet om att stärka IT- och cybersäkerheten och samhällets förmåga att möta cyberhot.",
+    "confidence": 0.74,
+    "skapad": "2026-08-26T10:20:40.315Z",
+    "extraction": {
+      "model": "deepseek-v4-flash",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-26"
+    }
+  },
+  {
+    "promise_id": "p-2026-1176",
+    "handling_id": "h-2026-11194",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att regeringen bör verka för att EU möjliggör införande av asylvisum, och detta tillkännager riksdagen för regeringen."
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Asylvisum är en konkret laglig väg för människor att söka skydd i Europa, vilket direkt stödjer löftet att lagliga vägar ska ersätta livsfarliga Medelhavsresor.",
+    "confidence": 0.8,
+    "skapad": "2026-08-26T10:52:11.604Z",
+    "extraction": {
+      "model": "deepseek-v4-flash",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-26"
+    }
+  },
+  {
+    "promise_id": "p-2026-1176",
+    "handling_id": "h-2026-16947",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att regeringen bör verka för att EU möjliggör införande av asylvisum, och detta tillkännager riksdagen för regeringen."
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Motionen föreslår asylvisum, vilket är en konkret laglig väg för flyktingar att söka skydd, och därmed direkt stödjer löftet om att lagliga vägar ska ersätta farliga Medelhavsresor.",
+    "confidence": 0.9,
+    "skapad": "2026-08-26T10:53:53.824Z",
+    "extraction": {
+      "model": "deepseek-v4-flash",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-26"
+    }
+  },
+  {
+    "promise_id": "p-2026-1176",
+    "handling_id": "h-2026-5202",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att regeringen bör verka för att EU möjliggör införande av asylvisum och tillkännager detta för regeringen."
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Asylvisum är en konkret laglig väg för flyktingar att söka skydd i EU, vilket ligger i linje med löftet att lagliga vägar ska ersätta de livsfarliga resorna över Medelhavet.",
+    "confidence": 0.9,
+    "skapad": "2026-08-26T10:54:22.000Z",
+    "extraction": {
+      "model": "deepseek-v4-flash",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-26"
+    }
+  },
+  {
+    "promise_id": "p-2026-1179",
+    "handling_id": "h-2026-13661",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen godkänner de riktlinjer för den ekonomiska politiken och budgetpolitiken som föreslås i motionen."
+    },
+    "motionstyp": "parti",
+    "method_note": "Yrkandet godkänner motionens riktlinjer, vilka inkluderar förslag om sänkta skatter på arbete, såsom sänkta arbetsgivaravgifter och sänkt skatt för småföretag.",
+    "confidence": 0.95,
+    "skapad": "2026-08-26T10:58:43.671Z",
+    "extraction": {
+      "model": "deepseek-v4-flash",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-26"
+    }
+  },
+  {
+    "promise_id": "p-2026-1179",
+    "handling_id": "h-2026-7303",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att justera i inkomstskattelagen för att utöka skattereduktionen i jobbskatteavdraget särskilt för låga och medelhöga inkomster och tillkännager detta för regeringen."
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Motionen föreslår ett utökat jobbskatteavdrag, vilket innebär sänkt skatt på arbete, i linje med löftet om sänkta skatter på arbete.",
+    "confidence": 0.95,
+    "skapad": "2026-08-26T11:00:59.748Z",
+    "extraction": {
+      "model": "deepseek-v4-flash",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-26"
+    }
+  },
+  {
+    "promise_id": "p-2026-1180",
+    "handling_id": "h-2026-5251",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om en översyn av förtalslagstiftningen och tillkännager detta för regeringen."
+    },
+    "motionstyp": "enskild",
+    "method_note": "Motionen begär en översyn av förtalslagstiftningen, vilket är samma åtgärd som Moderaterna lovar att se över.",
+    "confidence": 0.8,
+    "skapad": "2026-08-26T11:09:48.139Z",
+    "extraction": {
+      "model": "deepseek-v4-flash",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-26"
+    }
+  },
+  {
+    "promise_id": "p-2026-1181",
+    "handling_id": "h-2026-15555",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "När avser regeringen att återkomma till riksdagen med ett skarpt lagstiftningsförslag för att förtydliga och förstärka stödet upp till 25 års ålder för unga som lämnar samhällsvård?"
+    },
+    "method_note": "Citatet visar att MP i riksdagen efterfrågar ett lagstiftningsförslag om utökat stöd upp till 25 år för unga som lämnar samhällsvård, vilket är samma sak som löftet om lagstadgad rätt till eftervård upp till 25 år.",
+    "confidence": 0.9,
+    "skapad": "2026-08-26T11:17:10.919Z",
+    "extraction": {
+      "model": "deepseek-v4-flash",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-26"
+    }
+  },
+  {
+    "promise_id": "p-2026-1181",
+    "handling_id": "h-2026-5690",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att förlänga tiden då en ungdom kan få samhällets stöd och tillkännager detta för regeringen."
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Yrkandet avser att förlänga tiden för samhällets stöd, vilket motsvarar löftet om lagstadgad rätt till eftervård upp till 25 år.",
+    "confidence": 0.95,
+    "skapad": "2026-08-26T11:21:19.833Z",
+    "extraction": {
+      "model": "deepseek-v4-flash",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-26"
+    }
+  },
+  {
+    "promise_id": "p-2026-1185",
+    "handling_id": "h-2026-13195",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att alla bör ges möjlighet att vara med och spara på såväl elräkningen som klimatet, genom att energibesparingar inkluderas i ett utvidgat grönt avdrag samt med införandet av klimatkrediter och tillkännager detta för regeringen."
+    },
+    "motionstyp": "parti",
+    "method_note": "Yrkandet föreslår att energibesparande åtgärder ska omfattas av det gröna avdraget, vilket är en skattelättnad för investeringar som sparar energi – samma sakfråga som löftet.",
+    "confidence": 0.95,
+    "skapad": "2026-08-26T11:57:41.550Z",
+    "extraction": {
+      "model": "deepseek-v4-flash",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-26"
+    }
+  },
+  {
+    "promise_id": "p-2026-1190",
+    "handling_id": "h-2026-1264",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att bredda skatteavdraget för idrottsledare till att även omfatta friluftslivet och ungdomsorganisationerna och tillkännager detta för regeringen."
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Löftet om likvärdiga villkor för ledarledd verksamhet matchar yrkandet om att bredda skatteavdraget för idrottsledare till friluftsliv och ungdomsorganisationer.",
+    "confidence": 0.95,
+    "skapad": "2026-08-26T12:19:55.624Z",
+    "extraction": {
+      "model": "deepseek-v4-flash",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-26"
+    }
+  },
+  {
+    "promise_id": "p-2026-1164",
+    "handling_id": "h-2026-13931",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Hur ska ministern säkerställa att alla studenter får rätt till snabb handläggningstid?"
+    },
+    "method_note": "Interpellationen kräver att ministern säkerställer snabb handläggningstid, vilket ligger i linje med löftet om korta handläggningstider för omställningsstudiestödet.",
+    "confidence": 0.8,
+    "skapad": "2026-08-27T18:23:19.641Z",
+    "extraction": {
+      "model": "deepseek-v4-flash",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-27"
+    }
+  },
+  {
+    "promise_id": "p-2026-1169",
+    "handling_id": "h-2026-12708",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att se över 3:12-reglerna i syfte att sänka skatten och förenkla för de ägarledda småföretagen och tillkännager detta för regeringen."
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Yrkandet föreslår en översyn av 3:12-reglerna för att sänka skatten och förenkla för ägarledda småföretag, vilket är samma sak som att förenkla reglerna för personligt ägande i små företag.",
+    "confidence": 0.8,
+    "skapad": "2026-08-27T18:25:45.146Z",
+    "extraction": {
+      "model": "deepseek-v4-flash",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-27"
+    }
+  },
+  {
+    "promise_id": "p-2026-1183",
+    "handling_id": "h-2026-13264",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att stärka landets psykologiska försvar och tillkännager detta för regeringen."
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Motionen yrkar på att stärka det psykologiska försvaret, vilket är samma åtgärd som löftet vill genomföra.",
+    "confidence": 0.8,
+    "skapad": "2026-08-27T18:29:32.762Z",
+    "extraction": {
+      "model": "deepseek-v4-flash",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-27"
+    }
+  },
+  {
+    "promise_id": "p-2026-1190",
+    "handling_id": "h-2026-12015",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att bredda skatteavdraget för ledare till att även omfatta friluftslivet och ungdomsorganisationerna och tillkännager detta för regeringen."
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Motionen föreslår att skatteavdraget för ledare breddas till fler ledarledda verksamheter, vilket direkt stödjer löftet om likvärdiga villkor för ledarledd verksamhet i civilsamhället.",
+    "confidence": 0.85,
+    "skapad": "2026-08-27T18:31:10.162Z",
+    "extraction": {
+      "model": "deepseek-v4-flash",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-27"
+    }
+  },
+  {
+    "promise_id": "p-2026-1192",
+    "handling_id": "h-2026-6483",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att skapa en nationell digital infrastruktur för sjukvård och äldreomsorg och tillkännager detta för regeringen."
+    },
+    "motionstyp": "enskild",
+    "method_note": "Motionen yrkar på att skapa en nationell digital infrastruktur för sjukvård och äldreomsorg, vilket är samma åtgärd som löftet att bygga en nationell digital infrastruktur för vården.",
+    "confidence": 0.9,
+    "skapad": "2026-08-27T18:37:35.665Z",
+    "extraction": {
+      "model": "deepseek-v4-flash",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-27"
+    }
+  },
+  {
+    "promise_id": "p-2026-1192",
+    "handling_id": "h-2026-0501",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att säkra en nationell digital infrastruktur för hälsodataområdet baserad på nationella standarder och tillkännager detta för regeringen."
+    },
+    "motionstyp": "enskild",
+    "method_note": "Citatet visar ett yrkande om en nationell digital infrastruktur för hälsodata, vilket är samma sakfråga som löftet att bygga en nationell digital infrastruktur för vården.",
+    "confidence": 0.95,
+    "skapad": "2026-08-27T18:39:29.794Z",
+    "extraction": {
+      "model": "deepseek-v4-flash",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-27"
+    }
+  },
+  {
+    "promise_id": "p-2026-1192",
+    "handling_id": "h-2026-8835",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Vilken del av nationell gemensam digital infrastruktur för hälso- och sjukvården ska staten ta ett större ansvar för, och ska Inera AB förvärvas till statens ägo?"
+    },
+    "method_note": "Frågan rör samma sakfråga som löftet: en nationell digital infrastruktur för vården, och den driver på för att staten ska ta ett större ansvar för den.",
+    "confidence": 0.8,
+    "skapad": "2026-08-27T18:39:55.347Z",
+    "extraction": {
+      "model": "deepseek-v4-flash",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-27"
+    }
+  },
+  {
+    "promise_id": "p-2026-1194",
+    "handling_id": "h-2026-1566",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att marknadsföringen av sjukvårdstjänster bör regleras, och detta tillkännager riksdagen för regeringen."
+    },
+    "motionstyp": "enskild",
+    "method_note": "Motionen yrkar på reglering av marknadsföring av sjukvårdstjänster, vilket ligger i linje med löftet om att förbjuda aggressiv reklam för sjukvårdstjänster.",
+    "confidence": 0,
+    "skapad": "2026-08-27T18:45:18.970Z",
+    "extraction": {
+      "model": "deepseek-v4-flash",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-27"
+    }
+  },
+  {
+    "promise_id": "p-2026-1194",
+    "handling_id": "h-2026-1725",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att marknadsföringen av sjukvårdstjänster bör regleras och tillkännager detta för regeringen."
+    },
+    "motionstyp": "enskild",
+    "method_note": "Motionen yrkar på reglerad marknadsföring av sjukvårdstjänster, vilket är samma sakfråga som löftet att förbjuda aggressiv reklam för sjukvårdstjänster.",
+    "confidence": 0.85,
+    "skapad": "2026-08-27T18:46:44.152Z",
+    "extraction": {
+      "model": "deepseek-v4-flash",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-27"
+    }
+  },
+  {
+    "promise_id": "p-2026-1197",
+    "handling_id": "h-2026-7320",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om ett särskilt landsbygdsavdrag för samtliga bränslen vid pump och tillkännager detta för regeringen."
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Yrkandet föreslår ett särskilt landsbygdsavdrag, vilket är samma konkreta åtgärd som löftet vill införa för att minska skatteklyftan.",
+    "confidence": 0,
+    "skapad": "2026-08-27T19:10:31.484Z",
+    "extraction": {
+      "model": "deepseek-v4-flash",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-27"
+    }
+  },
+  {
+    "promise_id": "p-2026-1201",
+    "handling_id": "h-2026-13539",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att ställa ökade krav på privata aktörer i fråga om jour och beredskap och tillkännager detta för regeringen."
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Motionens första yrkande föreslår exakt den åtgärd som löftet anger: ökade krav på jour och beredskap för privata aktörer, vilket stödjer löftet om veterinär beredskap dygnet runt.",
+    "confidence": 0.95,
+    "skapad": "2026-08-27T19:36:10.909Z",
+    "extraction": {
+      "model": "deepseek-v4-flash",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-27"
+    }
+  },
+  {
+    "promise_id": "p-2026-1201",
+    "handling_id": "h-2026-20483",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att säkerställa veterinär beredskap dygnet runt, året runt i hela landet bl.a. genom att ställa ökade krav på privata aktörer i fråga om jour och beredskap och tillkännager detta för regeringen."
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Motionen yrkar på samma sak som löftet: veterinär beredskap dygnet runt i hela landet, bland annat genom ökade krav på privata aktörer.",
+    "confidence": 0.98,
+    "skapad": "2026-08-27T19:41:13.724Z",
+    "extraction": {
+      "model": "deepseek-v4-flash",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-27"
+    }
+  },
+  {
+    "promise_id": "p-2026-1203",
+    "handling_id": "h-2026-4989",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att regeringen bör utreda möjligheten att lagstifta om förskoleverksamhet på obekväm arbetstid och tillkännager detta för regeringen."
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Yrkandet tar upp samma sakfråga som löftet – barnomsorg på obekväm arbetstid (natt och helg) – och vill utreda lagstiftning på området. Det är i linje med löftet men formulerat som en utredning snarare än en garanterad rättighet.",
+    "confidence": 0.75,
+    "skapad": "2026-08-27T19:50:34.687Z",
+    "extraction": {
+      "model": "deepseek-v4-flash",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-27"
+    }
+  },
+  {
+    "promise_id": "p-2026-1205",
+    "handling_id": "h-2026-12166",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att regeringen bör tydliggöra att kvinnojourernas verksamhet inklusive deras skyddade boenden kommer att garanteras långsiktiga, stabila ekonomiska lösningar och tillkännager detta för regeringen."
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Motionen yrkar att regeringen ska garantera långsiktigt stabila ekonomiska lösningar för kvinnojourer och skyddade boenden, vilket är precis vad löftet handlar om.",
+    "confidence": 0.95,
+    "skapad": "2026-08-27T20:01:09.798Z",
+    "extraction": {
+      "model": "deepseek-v4-flash",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-27"
+    }
+  },
+  {
+    "promise_id": "p-2026-1205",
+    "handling_id": "h-2026-7332",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att regeringen bör utreda ett garantisystem för delat ekonomiskt ansvar för skyddat boende utifrån förslaget från SKR och tillkännager detta för regeringen."
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Löftet om stabil finansiering av kvinnojourer och skyddade boenden matchas av yrkandet som kräver utredning av ett garantisystem för delat ekonomiskt ansvar, vilket direkt adresserar finansieringsfrågan.",
+    "confidence": 0.95,
+    "skapad": "2026-08-27T20:02:33.280Z",
+    "extraction": {
+      "model": "deepseek-v4-flash",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-27"
+    }
+  },
+  {
+    "promise_id": "p-2026-1212",
+    "handling_id": "h-2026-13566",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att Sverige bör verka för ett förbud mot icke skonsam bottentrålning inom EU och tillkännager detta för regeringen."
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Motionen föreslår att Sverige ska verka för ett förbud mot icke skonsam bottentrålning, vilket är samma sak som löftet att förbjuda skadlig bottentrålning.",
+    "confidence": 0.9,
+    "skapad": "2026-08-27T20:59:55.325Z",
+    "extraction": {
+      "model": "deepseek-v4-flash",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-27"
+    }
+  },
+  {
+    "promise_id": "p-2026-1213",
+    "handling_id": "h-2026-12169",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att regeringen på EU-nivå bör verka för ett stopp för storskaligt fiske efter strömming och skarpsill i Östersjön, med undantag för småskaligt, kustnära fiske, och tillkännager detta för regeringen."
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Motionen kräver att regeringen verkar för ett stopp för storskaligt fiske på strömming och skarpsill i Östersjön, vilket är samma åtgärd som löftet efterfrågar.",
+    "confidence": 0.95,
+    "skapad": "2026-08-27T21:15:32.050Z",
+    "extraction": {
+      "model": "deepseek-v4-flash",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-27"
+    }
+  },
+  {
+    "promise_id": "p-2026-1213",
+    "handling_id": "h-2026-19534",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att regeringen på EU-nivå bör verka för ett stopp för storskaligt fiske efter strömming och skarpsill i Östersjön, med undantag för småskaligt kustnära fiske, och tillkännager detta för regeringen."
+    },
+    "motionstyp": "parti",
+    "method_note": "Motionens yrkande 39 kräver ett stopp för storskaligt fiske efter strömming och skarpsill i Östersjön, vilket är samma konkreta åtgärd som löftet.",
+    "confidence": 0.95,
+    "skapad": "2026-08-27T21:16:34.912Z",
+    "extraction": {
+      "model": "deepseek-v4-flash",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-27"
+    }
+  },
+  {
+    "promise_id": "p-2026-1215",
+    "handling_id": "h-2026-12169",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att regeringen bör ge Havs- och vattenmyndigheten i uppdrag att stoppa överföringen av fiskekvoter på lax från ett år till ett annat samt att göra nödvändiga förändringar för att det ska vara möjligt att snabbt begränsa yrkesfisket om beståndet är i dåligt skick, och detta tillkännager riksdagen för regeringen."
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Yrkandet föreslår åtgärder som syftar till att begränsa yrkesfisket på lax, vilket direkt stödjer löftet.",
+    "confidence": 0.85,
+    "skapad": "2026-08-27T21:21:21.295Z",
+    "extraction": {
+      "model": "deepseek-v4-flash",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-27"
+    }
+  },
+  {
+    "promise_id": "p-2026-1216",
+    "handling_id": "h-2026-20318",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att ge Skatteverket i uppdrag att se till att ägare av tävlande travhästar även i fortsättningen ska räknas som företagare med rätt att dra av moms och tillkännager detta för regeringen."
+    },
+    "motionstyp": "enskild",
+    "method_note": "Motionen yrkar på att Skatteverket ska säkerställa att travhästägare även fortsättningsvis räknas som företagare med rätt till momsavdrag, vilket är en konkret förenkling och förtydligande av momsreglerna för företagare.",
+    "confidence": 0.8,
+    "skapad": "2026-08-27T21:33:42.212Z",
+    "extraction": {
+      "model": "deepseek-v4-flash",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-27"
+    }
+  },
+  {
+    "promise_id": "p-2026-1218",
+    "handling_id": "h-2026-16017",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Vilka åtgärder avser ministern att vidta för att säkerställa att Ekobrottsmyndigheten och andra berörda rättsvårdande myndigheter får tillräckliga resurser för att bekämpa avancerad ekonomisk brottslighet?"
+    },
+    "method_note": "Frågan efterfrågar konkreta åtgärder för att ge Ekobrottsmyndigheten tillräckliga resurser, vilket är samma satsning på myndigheten som löftet handlar om.",
+    "confidence": 0.8,
+    "skapad": "2026-08-27T21:49:49.696Z",
+    "extraction": {
+      "model": "deepseek-v4-flash",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-27"
+    }
+  },
+  {
+    "promise_id": "p-2026-1219",
+    "handling_id": "h-2026-7299",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen avslår proposition 2023/24:18."
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Att avslå propositionen innebär att försörjningskravet vid familjeåterförening inte införs, vilket stödjer löftet att stoppa försörjningskrav.",
+    "confidence": 1,
+    "skapad": "2026-08-27T21:55:15.865Z",
+    "extraction": {
+      "model": "deepseek-v4-flash",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-27"
+    }
+  },
+  {
+    "promise_id": "p-2026-1224",
+    "handling_id": "h-2026-15984",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Avser ministern att ta initiativ till bindande krav på tillgång till elevhälsa i hela landet – så att stödet blir likvärdigt och inte en fråga om var eleven råkar bo?"
+    },
+    "method_note": "Frågan från Socialdemokraterna kräver bindande krav på likvärdig tillgång till elevhälsa för alla elever, vilket direkt stödjer löftet om att säkerställa elevers tillgång till elevhälsostöd.",
+    "confidence": 0.8,
+    "skapad": "2026-08-27T22:28:06.689Z",
+    "extraction": {
+      "model": "deepseek-v4-flash",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-28"
+    }
+  },
+  {
+    "promise_id": "p-2026-1224",
+    "handling_id": "h-2026-6932",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om förebyggande åtgärder i skolan för att bekämpa psykisk ohälsa och tillkännager detta för regeringen."
+    },
+    "motionstyp": "enskild",
+    "method_note": "Motionen yrkar på förebyggande åtgärder i skolan mot psykisk ohälsa, vilket direkt stödjer löftet om att säkerställa elevers tillgång till elevhälsostöd.",
+    "confidence": 0.8,
+    "skapad": "2026-08-27T22:29:35.119Z",
+    "extraction": {
+      "model": "deepseek-v4-flash",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-28"
+    }
+  },
+  {
+    "promise_id": "p-2026-1225",
+    "handling_id": "h-2026-17362",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att se över möjligheterna att införa elevhälsa även inom vuxenutbildningen och tillkännager detta för regeringen."
+    },
+    "motionstyp": "enskild",
+    "method_note": "Motionens yrkande är att se över möjligheterna att införa elevhälsa inom vuxenutbildningen, vilket direkt motsvarar löftet att utreda stärkt elevhälsa inom Komvux.",
+    "confidence": 1,
+    "skapad": "2026-08-27T22:40:49.384Z",
+    "extraction": {
+      "model": "deepseek-v4-flash",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-28"
+    }
+  },
+  {
+    "promise_id": "p-2026-1225",
+    "handling_id": "h-2026-13265",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om behovet av att utreda stöd- och elevhälsoinsatser i komvux och tillkännager detta för regeringen."
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Motionen yrkar uttryckligen på att utreda stöd- och elevhälsoinsatser inom komvux, vilket är samma sakfråga som löftet att utreda stärkt elevhälsa inom Komvux.",
+    "confidence": 0.95,
+    "skapad": "2026-08-27T22:41:02.434Z",
+    "extraction": {
+      "model": "deepseek-v4-flash",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-28"
+    }
+  },
+  {
+    "promise_id": "p-2026-1225",
+    "handling_id": "h-2026-20768",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att regeringen ska utreda och återkomma med förslag om stärkt individuellt stöd inom komvux och tillkännager detta för regeringen."
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Yrkandet begär en utredning om stärkt stöd inom komvux, vilket är samma sakfråga som löftet om att utreda stöd- och elevhälsoinsatser inom Komvux.",
+    "confidence": 0.85,
+    "skapad": "2026-08-27T22:45:57.188Z",
+    "extraction": {
+      "model": "deepseek-v4-flash",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-28"
+    }
+  },
+  {
+    "promise_id": "p-2026-1228",
+    "handling_id": "h-2026-2192",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att vid en större översyn av skattesystemet utreda hur skatteintäkter från fastighetsskatten på vind- och vattenkraftverk kan komma kommuner och regioner till del, och detta tillkännager riksdagen för regeringen."
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Motionen vill utreda hur skatteintäkter från vind- och vattenkraftverk kan tillfalla kommuner och regioner, vilket är ett steg mot att införa regionala skattebaser som löftet handlar om.",
+    "confidence": 0.6,
+    "skapad": "2026-08-27T22:55:58.786Z",
+    "extraction": {
+      "model": "deepseek-v4-flash",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-28"
+    }
+  },
+  {
+    "promise_id": "p-2026-1210",
+    "handling_id": "h-2026-1660",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att en översyn av skatteutjämningssystemet bör göras med syftet att skapa incitament för företagande, jobb och tillväxt samtidigt som gleshet i högre grad måste beaktas och tillkännager detta för regeringen."
+    },
+    "motionstyp": "enskild",
+    "method_note": "Motionen yrkar på en översyn av skatteutjämningssystemet, vilket motsvarar löftet att tillsätta en utredning för ett nytt utjämningssystem.",
+    "confidence": 0.85,
+    "skapad": "2026-08-28T19:32:27.956Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-28"
+    }
+  },
+  {
+    "promise_id": "p-2026-1212",
+    "handling_id": "h-2026-12169",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att Sverige bör verka för ett förbud mot icke skonsam bottentrålning inom EU och tillkännager detta för regeringen."
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Motionen yrkar att Sverige ska verka för ett förbud mot icke skonsam bottentrålning, vilket är samma åtgärd som löftet att förbjuda skadlig bottentrålning.",
+    "confidence": 0.9,
+    "skapad": "2026-08-28T19:36:05.427Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-28"
+    }
+  },
+  {
+    "promise_id": "p-2026-1230",
+    "handling_id": "h-2026-1626",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att se över om en större del av fastighetsskatten kan tillfalla kommuner och regioner och tillkännager detta för regeringen."
+    },
+    "motionstyp": "enskild",
+    "method_note": "Motionen vill att regeringen ser över om en större del av fastighetsskatten kan gå till kommuner och regioner, vilket ligger i linje med löftet att låta fastighetsskatten från elanläggningar bli en regional eller kommunal intäkt.",
+    "confidence": 0.65,
+    "skapad": "2026-08-28T19:48:19.152Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-28"
+    }
+  },
+  {
+    "promise_id": "p-2026-1230",
+    "handling_id": "h-2026-17882",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att se över om en större del av fastighetsskatten kan tillfalla kommuner och regioner och tillkännager detta för regeringen."
+    },
+    "motionstyp": "enskild",
+    "method_note": "Motionen vill att en större del av fastighetsskatten ska kunna gå till kommuner och regioner, vilket ligger i linje med löftet att göra fastighetsskatten från elanläggningar regional eller kommunal.",
+    "confidence": 0.6,
+    "skapad": "2026-08-28T19:49:28.286Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-28"
+    }
+  },
+  {
+    "promise_id": "p-2026-1230",
+    "handling_id": "h-2026-5795",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att se över om en större del av fastighetsskatten kan tillfalla kommuner och regioner och tillkännager detta för regeringen."
+    },
+    "motionstyp": "enskild",
+    "method_note": "Motionen yrkar på att en större del av fastighetsskatten ska kunna gå till kommuner och regioner, vilket ligger i linje med löftet att göra fastighetsskatten från elanläggningar regional eller kommunal.",
+    "confidence": 0.85,
+    "skapad": "2026-08-28T19:52:38.923Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-28"
+    }
+  },
+  {
+    "promise_id": "p-2026-1230",
+    "handling_id": "h-2026-0197",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att se över möjligheten att regionalisera fastighetsskatten på energiproducerande fastigheter såsom vatten- och vindkraft och tillkännager detta för regeringen."
+    },
+    "motionstyp": "enskild",
+    "method_note": "Motionen yrkar på att utreda att göra fastighetsskatten från vatten- och vindkraft till en regional eller kommunal intäkt, vilket är samma sakfråga som löftet.",
+    "confidence": 0.9,
+    "skapad": "2026-08-28T19:53:11.442Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-28"
+    }
+  },
+  {
+    "promise_id": "p-2026-1230",
+    "handling_id": "h-2026-12130",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att se över möjligheten att regionalisera fastighetsskatten på energiproducerande fastigheter såsom vatten- och vindkraft och tillkännager detta för regeringen."
+    },
+    "motionstyp": "enskild",
+    "method_note": "Motionen vill att riksdagen verkar för en översyn av hur fastighetsskatten på vatten- och vindkraft kan regionaliseras, vilket är i linje med löftet att göra skatten regional eller kommunal.",
+    "confidence": 0.7,
+    "skapad": "2026-08-28T19:53:42.422Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-28"
+    }
+  },
+  {
+    "promise_id": "p-2026-1230",
+    "handling_id": "h-2026-17867",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att se över möjligheten att regionalisera fastighetsskatten på energiproducerande fastigheter såsom vatten- och vindkraft och tillkännager detta för regeringen."
+    },
+    "motionstyp": "enskild",
+    "method_note": "Motionen vill att fastighetsskatten på elproducerande anläggningar som vatten- och vindkraft ska kunna bli en intäkt för regioner eller kommuner i stället för staten, vilket är samma sakfråga som löftet.",
+    "confidence": 0.9,
+    "skapad": "2026-08-28T19:54:06.906Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-28"
+    }
+  },
+  {
+    "promise_id": "p-2026-1230",
+    "handling_id": "h-2026-5606",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att se över möjligheten att regionalisera fastighetsskatten på energiproducerande fastigheter såsom vatten- och vindkraft och tillkännager detta för regeringen."
+    },
+    "motionstyp": "enskild",
+    "method_note": "Yrkandet i motionen avser att se över möjligheten att regionalisera fastighetsskatten på energiproducerande fastigheter, vilket direkt motsvarar löftet att göra fastighetsskatten från elanläggningar regional eller kommunal.",
+    "confidence": 1,
+    "skapad": "2026-08-28T19:55:33.227Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-28"
+    }
+  },
+  {
+    "promise_id": "p-2026-1239",
+    "handling_id": "h-2026-13410",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att inrätta ett kortsiktigt effektmål, ett planeringsmål på minst 100 terawattimmar ny elproduktion till 2030 och på sikt en fördubbling av Sveriges elproduktion och tillkännager detta för regeringen."
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Yrkandet slår fast ett mål om minst 100 terawattimmar ny elproduktion till 2030 och på sikt en fördubbling av Sveriges elproduktion, vilket är samma mål som löftet.",
+    "confidence": 0.95,
+    "skapad": "2026-08-28T20:37:42.010Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-28"
+    }
+  },
+  {
+    "promise_id": "p-2026-1239",
+    "handling_id": "h-2026-20332",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att regeringen ska fokusera på möjliggörande lagstiftning, t.ex. acceptansfrågor och tillståndsprocesser, i syfte att påskynda utbyggnadstakten och tillkännager detta för regeringen."
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Motionen vill påskynda utbyggnadstakten för elproduktion genom snabbare tillståndsprocesser, vilket stödjer löftet om att fördubbla Sveriges elproduktion genom snabbare tillstånd.",
+    "confidence": 0.85,
+    "skapad": "2026-08-28T20:40:07.258Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-28"
+    }
+  },
+  {
+    "promise_id": "p-2026-1239",
+    "handling_id": "h-2026-20346",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att överväga att tillsätta en kriskommission för ny kraft, med uppdrag att se över lagstiftning och tillståndsprocesser och korta handläggning till maximalt två år, och detta tillkännager riksdagen för regeringen."
+    },
+    "motionstyp": "parti",
+    "method_note": "Motionen föreslår en kriskommission för att korta tillståndsprocesserna för ny kraft, vilket direkt stödjer löftets mål att fördubbla elproduktionen genom snabbare tillstånd.",
+    "confidence": 0.8,
+    "skapad": "2026-08-28T20:40:52.760Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-28"
+    }
+  },
+  {
+    "promise_id": "p-2026-1239",
+    "handling_id": "h-2026-7012",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att överväga att tillsätta en kriskommission för ny kraft, med uppdrag att se över lagstiftning och tillståndsprocesser och korta handläggning till maximalt två år, och tillkännager detta för regeringen."
+    },
+    "motionstyp": "parti",
+    "method_note": "Motionen föreslår en kriskommission som ska korta tillståndsprocesserna för ny kraft, vilket direkt stödjer löftet om att fördubbla Sveriges elproduktion genom snabbare tillstånd.",
+    "confidence": 0.85,
+    "skapad": "2026-08-28T20:42:48.683Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-28"
+    }
+  },
+  {
+    "promise_id": "p-2026-1241",
+    "handling_id": "h-2026-17622",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om sänkt skatt på biodrivmedel och tillkännager detta för regeringen."
+    },
+    "motionstyp": "enskild",
+    "method_note": "Motionen begär sänkt skatt på biodrivmedel, vilket är samma åtgärd som löftet utlovar.",
+    "confidence": 0.95,
+    "skapad": "2026-08-28T20:43:26.865Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-28"
+    }
+  },
+  {
+    "promise_id": "p-2026-1241",
+    "handling_id": "h-2026-7317",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om avskaffad koldioxidskatt för biobränslen inom reduktionsplikten och tillkännager detta för regeringen."
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Motionen föreslår att koldioxidskatten för biobränslen avskaffas, vilket innebär sänkta skatter på biodrivmedel som löftet efterfrågar.",
+    "confidence": 0.85,
+    "skapad": "2026-08-28T20:44:49.079Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-28"
+    }
+  },
+  {
+    "promise_id": "p-2026-1241",
+    "handling_id": "h-2026-7341",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om avskaffad koldioxidskatt för biobränslen inom reduktionsplikten och tillkännager detta för regeringen."
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Löftet om att sänka skatterna på biodrivmedel inom Tanka svenskt-paketet motsvaras direkt av yrkandet om avskaffad koldioxidskatt för biobränslen inom reduktionsplikten.",
+    "confidence": 1,
+    "skapad": "2026-08-28T20:49:27.301Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-28"
+    }
+  },
+  {
+    "promise_id": "p-2026-1242",
+    "handling_id": "h-2026-22485",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Avser ministern och regeringen att verka för att ställverk, transformatorer och ledningar snabbare byts ut och uppdateras i syfte att säkerställa elförsörjningen till företaget i Dalstorp men också andra företag i landet?"
+    },
+    "method_note": "Frågan rör konkret utbyte av föråldrade elledningar, ställverk och transformatorer, vilket är en central del av att modernisera Sveriges elnät och säkra elförsörjningen.",
+    "confidence": 0.9,
+    "skapad": "2026-08-28T20:52:53.658Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-28"
+    }
+  },
+  {
+    "promise_id": "p-2026-1242",
+    "handling_id": "h-2026-1327",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att införa en ny finansieringsmodell för anslutningsavgifter till elnät så att det främjar företagsetableringar och nyinvesteringar i hela landet och tillkännager detta för regeringen."
+    },
+    "motionstyp": "enskild",
+    "method_note": "Yrkandet föreslår en ny finansieringsmodell för anslutningsavgifter till elnät, vilket direkt syftar till att underlätta utbyggnad av elnätet och därmed stödjer löftet om att modernisera och bygga ut Sveriges elnät.",
+    "confidence": 0.95,
+    "skapad": "2026-08-28T20:57:36.945Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-28"
+    }
+  },
+  {
+    "promise_id": "p-2026-1244",
+    "handling_id": "h-2026-1972",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att i Norden överväga ett utökat samarbete kring upphandling av och gemensamt upphandla vaccin och läkemedel samt att utreda möjligheter till gemensamma beredskapslager för läkemedel och sjukvårdsmaterial och tillkännager detta för regeringen."
+    },
+    "motionstyp": "enskild",
+    "method_note": "Motionen föreslår gemensam upphandling av läkemedel i Norden, vilket är ett sätt att uppnå större upphandlingar och därmed hålla tillbaka läkemedelskostnader, i linje med löftet.",
+    "confidence": 0.8,
+    "skapad": "2026-08-28T21:12:44.569Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-28"
+    }
+  },
+  {
+    "promise_id": "p-2026-1244",
+    "handling_id": "h-2026-11061",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att se över möjligheten för de nordiska länderna att upphandla vissa läkemedel, vacciner och medicinteknisk utrustning tillsammans och tillkännager detta för regeringen."
+    },
+    "motionstyp": "enskild",
+    "method_note": "Motionen föreslår att se över möjligheten till gemensam nordisk läkemedelsupphandling, vilket motsvarar löftets förslag om större upphandlingar för att hålla tillbaka framtida läkemedelskostnader.",
+    "confidence": 0.8,
+    "skapad": "2026-08-28T21:13:00.656Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-28"
+    }
+  },
+  {
+    "promise_id": "p-2026-1245",
+    "handling_id": "h-2026-18699",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att överväga förtydliganden i fritidshemmens och skolans ansvar för rörelse, hälsa och kultur i läroplanen och tillkännager detta för regeringen."
+    },
+    "motionstyp": "enskild",
+    "method_note": "Motionen föreslår att fritidshemmens och skolans ansvar för rörelse, hälsa och kultur förtydligas i läroplanen, vilket direkt stödjer löftet om mer rörelse genom fritids.",
+    "confidence": 0.8,
+    "skapad": "2026-08-28T21:15:31.361Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-28"
+    }
+  },
+  {
+    "promise_id": "p-2026-1246",
+    "handling_id": "h-2026-20395",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om aborträtten och tillkännager detta för regeringen."
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Motionen ställer sig bakom aborträtten, och i anförandet om aborträtten välkomnas en bestämmelse i grundlagen som slår fast rätten till abort, vilket stödjer löftet.",
+    "confidence": 0.9,
+    "skapad": "2026-08-28T21:26:22.935Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-28"
+    }
+  },
+  {
+    "promise_id": "p-2026-1246",
+    "handling_id": "h-2026-23431",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen antar som vilande regeringens förslag till lag om ändring i regeringsformen.",
+      "kalla_dok_id": "HD01KU34"
+    },
+    "method_note": "Punktens beslut innebär att riksdagen antar regeringens grundlagsförslag, som enligt betänkandet innebär att rätten till abort införs i regeringsformen, vilket stödjer löftet om att skydda aborträtten i grundlagen.",
+    "confidence": 0.95,
+    "skapad": "2026-08-28T21:31:02.324Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-28"
+    }
+  },
+  {
+    "promise_id": "p-2026-1247",
+    "handling_id": "h-2026-1107",
+    "riktning": "motverkar",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att se över abortlagstiftningen och angränsande lagstiftning för att möjliggöra aborter vid allvarlig fosterskada efter dagens abortgräns och tillkännager detta för regeringen."
+    },
+    "motionstyp": "enskild",
+    "method_note": "Motionen vill se över abortlagstiftningen för att tillåta aborter efter dagens abortgräns, vilket går emot löftet att bevara nuvarande tidsgränser.",
+    "confidence": 0.95,
+    "skapad": "2026-08-28T21:32:42.685Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-28"
+    }
+  },
+  {
+    "promise_id": "p-2026-1249",
+    "handling_id": "h-2026-13191",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om en modern social bostadspolitik och att ett utrednings- och reformarbete bör komma igång snarast, och detta tillkännager riksdagen för regeringen."
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Motionen yrkar på en modern social bostadspolitik och att reformarbete ska komma igång, vilket ligger i linje med löftet att stärka den sociala bostadspolitiken med stöd för de med svagast ekonomi.",
+    "confidence": 0.75,
+    "skapad": "2026-08-28T21:36:52.192Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-28"
+    }
+  },
+  {
+    "promise_id": "p-2026-1253",
+    "handling_id": "h-2026-1398",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att utreda möjligheter att bilda gemensamma bostadsrättsföreningar på olika fastigheter och tillkännager detta för regeringen."
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Motionen yrkar på att utreda möjligheter att bilda gemensamma bostadsrättsföreningar på olika fastigheter, vilket direkt motsvarar löftet att göra det möjligt att bilda sådana föreningar på flera fastigheter för att stärka boendeformen på landsbygden.",
+    "confidence": 0.9,
+    "skapad": "2026-08-28T21:51:56.189Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-28"
+    }
+  },
+  {
+    "promise_id": "p-2026-1253",
+    "handling_id": "h-2026-13196",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att en bostadsrättsförening bör tillåtas omfatta hus utspridda över ett större område, och också bildande av bostadsrättsföreningar som omfattar bostäder i mer än en kommun bör övervägas, och detta tillkännager riksdagen för regeringen."
+    },
+    "motionstyp": "parti",
+    "method_note": "Motionen föreslår att bostadsrättsföreningar ska få omfatta hus utspridda över ett större område, vilket är samma sak som löftet om att möjliggöra gemensamma bostadsrättsföreningar på flera fastigheter.",
+    "confidence": 0.95,
+    "skapad": "2026-08-28T21:54:38.894Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-28"
+    }
+  },
+  {
+    "promise_id": "p-2026-1253",
+    "handling_id": "h-2026-19935",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "att en bostadsrättsförening bör tillåtas omfatta hus utspridda över ett större område och om att också bildande av bostadsrättsföreningar som omfattar bostäder i mer än en kommun bör övervägas"
+    },
+    "motionstyp": "parti",
+    "method_note": "Yrkande 27 i motionen tar upp exakt samma sakfråga som löftet: att möjliggöra gemensamma bostadsrättsföreningar över flera fastigheter och även över kommungränser.",
+    "confidence": 1,
+    "skapad": "2026-08-28T21:56:02.005Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-28"
+    }
+  },
+  {
+    "promise_id": "p-2026-1253",
+    "handling_id": "h-2026-7011",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att en bostadsrättsförening bör tillåtas omfatta hus utspridda över ett större område och också att bildande av bostadsrättsföreningar som omfattar bostäder i mer än en kommun bör övervägas och tillkännager detta för regeringen."
+    },
+    "motionstyp": "parti",
+    "method_note": "Motionen föreslår att bostadsrättsföreningar ska få omfatta hus över ett större område och även över kommungränser, vilket direkt motsvarar löftet om att möjliggöra gemensamma bostadsrättsföreningar på flera fastigheter.",
+    "confidence": 0.95,
+    "skapad": "2026-08-28T21:56:11.742Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-28"
+    }
+  },
+  {
+    "promise_id": "p-2026-1254",
+    "handling_id": "h-2026-22791",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Avser ministern och regeringen att ge Boverket i uppdrag att se över regelverket så att dokumenterat säkra och verifierade tekniska lösningar i större utsträckning kan omfattas av generella regler eller undantag, i stället för att behöva prövas genom analytisk dimensionering i varje enskilt fall?"
+    },
+    "method_note": "Frågan rör att förenkla byggreglerna genom generella regler och undantag för verifierade tekniska lösningar, vilket stödjer löftet om förenklade byggregler.",
+    "confidence": 0.75,
+    "skapad": "2026-08-28T22:01:11.769Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-29"
+    }
+  },
+  {
+    "promise_id": "p-2026-1254",
+    "handling_id": "h-2026-0917",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att införa en maximal handläggningstid vid överklaganden och tillkännager detta för regeringen."
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Motionen föreslår en maximal handläggningstid vid överklaganden, vilket direkt stödjer löftet om att korta tiden för överklaganden.",
+    "confidence": 0.8,
+    "skapad": "2026-08-28T22:01:52.858Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-29"
+    }
+  },
+  {
+    "promise_id": "p-2026-1259",
+    "handling_id": "h-2026-20902",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att i stället för regeringens förslag om utmönstring av permanent uppehållstillstånd, införa etableringstillstånd för alla grupper som omfattas av förslaget om utmönstring förutom för kvotflyktingar, som även fortsättningsvis ska kunna beviljas permanent uppehållstillstånd, och detta tillkännager riksdagen för regeringen."
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Yrkandet innebär att permanenta uppehållstillstånd ersätts av etableringstillstånd men att kvotflyktingar även fortsättningsvis ska kunna beviljas permanent uppehållstillstånd, vilket värnar asylrätten samtidigt som migrationspolitiken förblir stram.",
+    "confidence": 0.75,
+    "skapad": "2026-08-28T22:25:05.532Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-29"
+    }
+  },
+  {
+    "promise_id": "p-2026-1260",
+    "handling_id": "h-2026-23523",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Därmed bifaller riksdagen proposition 2025/26:262 punkterna 1–29 och avslår motionerna 2025/26:4170 av Malcolm Momodou Jallow m.fl. (-) yrkande 1, 2025/26:4174 av Annika Hirvonen m.fl. (MP) yrkandena 1 och 2 samt 2025/26:4183 av Tony Haddou m.fl. (V) yrkandena 1 och 2.",
+      "kalla_dok_id": "HD01SfU30"
+    },
+    "method_note": "Voteringen gäller punkt 1 i betänkandet, där riksdagen antar regeringens förslag om att anpassa svensk rätt till EU:s migrations- och asylpakt, vilket direkt motsvarar löftet att implementera migrationspakten.",
+    "confidence": 1,
+    "skapad": "2026-08-28T22:48:54.436Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-29"
+    }
+  },
+  {
+    "promise_id": "p-2026-1262",
+    "handling_id": "h-2026-6341",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att förenkla regelverket kring uthyrning av komplementbostäder och tillkännager detta för regeringen."
+    },
+    "motionstyp": "enskild",
+    "method_note": "Yrkandet i motionen stödjer direkt löftet om att förenkla andrahandsuthyrning av bostäder, specifikt för komplementbostäder.",
+    "confidence": 1,
+    "skapad": "2026-08-28T23:11:23.588Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-29"
+    }
+  },
+  {
+    "promise_id": "p-2026-1262",
+    "handling_id": "h-2026-1399",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att utreda mer förmånliga skatteregler för andrahandsuthyrning och uthyrning av delar av den egna bostaden och tillkännager detta för regeringen."
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Motionen yrkar på att utreda mer förmånliga skatteregler för andrahandsuthyrning, vilket direkt stödjer löftet om att göra det mer förmånligt att hyra ut i andra hand.",
+    "confidence": 0.9,
+    "skapad": "2026-08-28T23:13:12.591Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-29"
+    }
+  },
+  {
+    "promise_id": "p-2026-1263",
+    "handling_id": "h-2026-21430",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Bedömer ministern att den nuvarande marknadsstrukturen, med fyra dominerande banker, påverkar hushållens ekonomiska situation, och om så är fallet, avser ministern att ta initiativ till att utveckla det statliga bolåneinstitutet SBAB för att öka konkurrensen på bankmarknaden?"
+    },
+    "method_note": "Interpellationen driver på för att utveckla SBAB för att öka konkurrensen, vilket är samma konkreta åtgärd som att använda SBAB för att pressa räntorna.",
+    "confidence": 0.8,
+    "skapad": "2026-08-28T23:16:56.910Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-29"
+    }
+  },
+  {
+    "promise_id": "p-2026-1263",
+    "handling_id": "h-2026-21489",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Avser ministern att ta initiativ till att ändra uppdraget och ägardirektiven för det statliga bolåneinstitutet SBAB, och i så fall på vilket sätt?"
+    },
+    "method_note": "Interpellationen efterfrågar ändrade ägardirektiv för SBAB, vilket är den åtgärd som löftet vill använda för att pressa räntorna.",
+    "confidence": 0.85,
+    "skapad": "2026-08-28T23:17:49.258Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-29"
+    }
+  },
+  {
+    "promise_id": "p-2026-1263",
+    "handling_id": "h-2026-13437",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att ändra SBAB:s uppdrag till att genom en effektiv verksamhet bidra till mångfald, konkurrens och prispress på marknaden för bolån, att utreda SBAB:s avkastningskrav i syfte att förbättra konkurrensförhållandena på bolånemarknaden samt att ge SBAB möjlighet att tillhandahålla lönekonton, och detta tillkännager riksdagen för regeringen."
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Yrkandet föreslår att SBAB:s uppdrag ändras så att banken ska bidra till prispress på bolånemarknaden, vilket är samma sak som att använda SBAB för att pressa räntorna.",
+    "confidence": 0.9,
+    "skapad": "2026-08-28T23:22:21.935Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-29"
+    }
+  },
+  {
+    "promise_id": "p-2026-1265",
+    "handling_id": "h-2026-1887",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om förändring av strandskyddet och tillkännager detta för regeringen."
+    },
+    "motionstyp": "enskild",
+    "method_note": "Motionen vill förändra strandskyddet så att hänsyn tas till lokala förutsättningar i skärgården och utveckling inte hindras, vilket stödjer löftet.",
+    "confidence": 0.8,
+    "skapad": "2026-08-28T23:36:06.928Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-29"
+    }
+  },
+  {
+    "promise_id": "p-2026-1265",
+    "handling_id": "h-2026-7156",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om förändring av strandskyddet och tillkännager detta för regeringen."
+    },
+    "motionstyp": "enskild",
+    "method_note": "Motionen yrkar på en förändring av strandskyddet med hänsyn till lokala förutsättningar i skärgården, vilket direkt stödjer löftet om att ta hänsyn till lokala förutsättningar i skärgården.",
+    "confidence": 0.85,
+    "skapad": "2026-08-28T23:38:00.501Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-29"
+    }
+  },
+  {
+    "promise_id": "p-2026-1266",
+    "handling_id": "h-2026-20787",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att mer makt, mandat och resurser ska decentraliseras i syfte att stärka lokalt beslutsfattande och tillkännager detta för regeringen."
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Motionen yrkar på decentralisering av makt och resurser för att stärka lokalt beslutsfattande, vilket direkt stödjer löftet om att värna lokalt självstyre.",
+    "confidence": 0.9,
+    "skapad": "2026-08-28T23:42:27.069Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-29"
+    }
+  },
+  {
+    "promise_id": "p-2026-1266",
+    "handling_id": "h-2026-20726",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen avslår de delar av 18 § i Förslag till lag om regeringens godkännande av kärntekniska anläggningar som möjliggör för regeringen att utan kommunal tillstyrkan godkänna vissa kärntekniska anläggningar."
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Motionen vill hindra regeringen från att godkänna kärntekniska anläggningar utan kommunal tillstyrkan, vilket direkt värnar det lokala självstyret.",
+    "confidence": 0.95,
+    "skapad": "2026-08-28T23:45:18.473Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-29"
+    }
+  },
+  {
+    "promise_id": "p-2026-1267",
+    "handling_id": "h-2026-13265",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att införa kännbara sanktioner mot skolor som uppvisar brister i sin betygsättning och tillkännager detta för regeringen."
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Motionen föreslår att införa kännbara sanktioner mot skolor som brister i betygsättningen, vilket är samma åtgärd som löftet.",
+    "confidence": 0.97,
+    "skapad": "2026-08-28T23:46:58.188Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-29"
+    }
+  },
+  {
+    "promise_id": "p-2026-1267",
+    "handling_id": "h-2026-20560",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att införa kännbara sanktioner mot skolor som uppvisar brister i sin betygsättning, och detta tillkännager riksdagen för regeringen."
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Motionen föreslår samma konkreta åtgärd som löftet: kännbara sanktioner mot skolor med brister i betygsättningen.",
+    "confidence": 0.95,
+    "skapad": "2026-08-28T23:47:14.689Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-29"
+    }
+  },
+  {
+    "promise_id": "p-2026-1268",
+    "handling_id": "h-2026-1627",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att målet för snabb uppkoppling ska gälla både hushåll, företag och andra adresspunkter och tillkännager detta för regeringen."
+    },
+    "motionstyp": "enskild",
+    "method_note": "Yrkandet vill att målet för snabb uppkoppling ska omfatta alla adresspunkter, vilket direkt stödjer löftet om snabb internetuppkoppling i hela landet.",
+    "confidence": 0.8,
+    "skapad": "2026-08-28T23:49:40.806Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-29"
+    }
+  },
+  {
+    "promise_id": "p-2026-1269",
+    "handling_id": "h-2026-1337",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om utveckling av Försvarsmaktens förmåga till både defensiva och offensiva cyberoperationer och tillkännager detta för regeringen."
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Yrkandet begär att Försvarsmaktens förmåga till cyberoperationer utvecklas, vilket direkt stärker Sveriges försvar mot cyberattacker.",
+    "confidence": 0.9,
+    "skapad": "2026-08-28T23:53:39.874Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-29"
+    }
+  },
+  {
+    "promise_id": "p-2026-1246",
+    "handling_id": "h-2026-12034",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att grundlagsskydda aborträtten och tillkännager detta för regeringen."
+    },
+    "motionstyp": "enskild",
+    "method_note": "Motionen yrkar att riksdagen ställer sig bakom att grundlagsskydda aborträtten, vilket är samma åtgärd som löftet.",
+    "confidence": 1,
+    "skapad": "2026-08-29T13:01:36.567Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-29"
+    }
+  },
+  {
+    "promise_id": "p-2026-1259",
+    "handling_id": "h-2026-23523",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen antar regeringens förslag till 1. lag om ändring i utlänningslagen (2005:716), 2. lag om ändring i föräldrabalken, 3. lag om ändring i socialförsäkringsbalken, 4. lag om ändring i lagen (1990:52) med särskilda bestämmelser om vård av unga, 5. lag om ändring i folkbokföringslagen (1991:481), 6. lag om ändring i lagen (1991:1128) om psykiatrisk tvångsvård, 7. lag om ändring i lagen (1991:1129) om rättspsykiatrisk vård, 8. lag om ändring i lagen (1994:137) om mottagande av asylsökande m.fl., 9. lag om ändring i studiestödslagen (1999:1395) med den ändringen att halvparentestecknet i 2 kap. 4 § efter ”direktiv 2011/95/EU” ska utgå, 10. lag om ändring i lagen (2001:82) om svenskt medborgarskap, 11. lag om ändring i lagen (2001:454) om behandling av personuppgifter inom socialtjänsten, 12. lag om ändring i lagen (2005:429) om god man för ensamkommande barn, 13. lag om ändring i lagen (2008:290) om godkännande för forskningshuvudmän att ta emot gästforskare, 14. lag om ändring i lagen (2008:344) om hälso- och sjukvård åt asylsökande m.fl., 15. lag om ändring i offentlighets- och sekretesslagen (2009:400), 16. lag om ändring i plan- och bygglagen (2010:900), 17. lag om ändring i lagen (2013:156) om samhällsorientering för vissa nyanlända invandrare, 18. lag om ändring i lagen (2013:407) om hälso- och sjukvård till vissa utlänningar som vistas i Sverige utan nödvändiga tillstånd, 19. lag om ändring i utlänningsdatalagen (2016:27), 20. lag om ändring i lagen (2016:38) om mottagande av vissa nyanlända invandrare för bosättning, 21. lag om ändring i lagen (2017:584) om ansvar för etableringsinsatser för vissa nyanlända invandrare, 22. lag om ändring i lagen (2018:1693) om polisens behandling av personuppgifter inom brottsdatalagens område, 23. lag om ändring i lagen (2022:700) om särskild kontroll av vissa utlänningar, 24. lag om ändring i lagen (2024:79) om placering av barn i skyddat boende, 25. lag om ändring i lagen (2024:691) om folkbokföring av utlänningar med tillfälligt skydd i vissa fall, 26. lag om ändring i lagen (2025:945) om ändring i utlänningsdatalagen (2016:27), 27. lag om ändring i mottagandelagen (2026:000), 28. lag om ändring i lagen (2026:000) om ändring i lagen (2023:339) om ändring i lagen (2018:1693) om polisens behandling av personuppgifter inom brottsdatalagens område, 29. lag om ändring i lagen (2026:000) om ändring i lagen (2025:947) om ändring i lagen (2018:1693) om polisens behandling av personuppgifter inom brottsdatalagens område.",
+      "kalla_dok_id": "HD01SfU30"
+    },
+    "method_note": "Punktens beslut är att anta regeringens förslag som utmönstrar permanenta uppehållstillstånd för asylrelaterade grupper och anpassar svensk rätt till EU:s miniminivå, vilket ligger i linje med löftet om en stram migrationspolitik i enlighet med EU:s miniminivåer.",
+    "confidence": 0.85,
+    "skapad": "2026-08-29T13:06:02.835Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-29"
+    }
+  },
+  {
+    "promise_id": "p-2026-1263",
+    "handling_id": "h-2026-7209",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att ändra SBAB:s uppdrag till att genom en effektiv verksamhet bidra till mångfald, konkurrens och prispress på marknaden för bolån samt om att utreda SBAB:s avkastningskrav i syfte att förbättra konkurrensförhållandena på bolånemarknaden och tillkännager detta för regeringen."
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Yrkandet föreslår att SBAB:s uppdrag ändras så att banken ska bidra till prispress på bolånemarknaden, vilket direkt stödjer löftet att använda SBAB för att pressa räntorna.",
+    "confidence": 0.95,
+    "skapad": "2026-08-29T13:12:14.670Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-29"
+    }
+  },
+  {
+    "promise_id": "p-2026-1265",
+    "handling_id": "h-2026-11221",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om förändring av strandskyddet nu och tillkännager detta för regeringen."
+    },
+    "motionstyp": "enskild",
+    "method_note": "Motionen yrkar på en förändring av strandskyddet, och i motiveringen framgår att syftet är att anpassa strandskyddet efter lokala förutsättningar i skärgården så att utveckling inte hindras, vilket stödjer löftet.",
+    "confidence": 0.8,
+    "skapad": "2026-08-29T13:12:24.906Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-29"
+    }
+  },
+  {
+    "promise_id": "p-2026-1272",
+    "handling_id": "h-2026-3506",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Avser statsrådet och regeringen att vidta några åtgärder för att stimulera nyproduktion av bostäder med rimliga hyror?"
+    },
+    "method_note": "Frågan efterfrågar åtgärder för att stimulera nyproduktion av bostäder med rimliga hyror, vilket ligger i linje med löftet om att bygga fler prisvärda bostäder för vanliga hushåll.",
+    "confidence": 0.9,
+    "skapad": "2026-08-29T13:14:46.205Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-29"
+    }
+  },
+  {
+    "promise_id": "p-2026-1272",
+    "handling_id": "h-2026-17740",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att investeringsstödet till hyresrätter ska återinföras och tillkännager detta för regeringen."
+    },
+    "motionstyp": "enskild",
+    "method_note": "Motionen yrkar på att investeringsstödet till hyresrätter återinförs, vilket direkt syftar till att öka byggandet av prisvärda hyresrätter, i linje med löftet om fler bostäder som vanligt folk har råd med.",
+    "confidence": 0.9,
+    "skapad": "2026-08-29T13:15:07.506Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-29"
+    }
+  },
+  {
+    "promise_id": "p-2026-1272",
+    "handling_id": "h-2026-1963",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att regeringen ska återkomma med förslag på åtgärder för att stödja Sveriges kommuner att klara bostadsförsörjningsansvaret, för att stimulera ökad bostadsproduktion av framför allt prisvärda hyresrätter och åtgärder för att underlätta för förstagångsköpare att ta sig in på den ägda marknaden, och detta tillkännager riksdagen för regeringen."
+    },
+    "motionstyp": "enskild",
+    "method_note": "Motionen yrkar på åtgärder för att stimulera ökad bostadsproduktion av prisvärda hyresrätter, vilket direkt stödjer löftet om att bygga fler bostäder som vanligt folk har råd med.",
+    "confidence": 0.95,
+    "skapad": "2026-08-29T13:19:55.776Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-29"
+    }
+  },
+  {
+    "promise_id": "p-2026-1272",
+    "handling_id": "h-2026-11124",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att undersöka möjligheterna att införa ett nytt investeringsstöd vid byggnation av hyresbostäder och bostäder för studenter och tillkännager detta för regeringen."
+    },
+    "motionstyp": "enskild",
+    "method_note": "Motionen föreslår ett investeringsstöd för byggande av hyresbostäder, vilket direkt syftar till att öka byggandet av prisvärda hyresrätter som löftet efterfrågar.",
+    "confidence": 0.9,
+    "skapad": "2026-08-29T13:20:25.349Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-29"
+    }
+  },
+  {
+    "promise_id": "p-2026-1273",
+    "handling_id": "h-2026-9512",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Är statsrådet beredd att verka för att staten skjuter till mer medel för att möjliggöra Spårväg syd?"
+    },
+    "method_note": "Frågan rör en specifik infrastruktursatsning inom ramen för Sverigeförhandlingen och efterfrågar statliga medel, vilket direkt stödjer löftet om att staten ska investera i infrastruktur och kollektivtrafik.",
+    "confidence": 0.9,
+    "skapad": "2026-08-29T13:22:06.748Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-29"
+    }
+  },
+  {
+    "promise_id": "p-2026-1273",
+    "handling_id": "h-2026-17458",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att se över möjligheten att via kollektivtrafiken skapa smidiga pendlingsmöjligheter och tillkännager detta för regeringen."
+    },
+    "motionstyp": "enskild",
+    "method_note": "Motionen vill förbättra pendling via kollektivtrafik, vilket stödjer löftet om att investera i kollektivtrafik och infrastruktur för att göra det enklare att resa.",
+    "confidence": 0.75,
+    "skapad": "2026-08-29T13:22:35.975Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-29"
+    }
+  },
+  {
+    "promise_id": "p-2026-1273",
+    "handling_id": "h-2026-2028",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att beakta behovet av fler bostäder för en växande Stockholmsregion och tillkännager detta för regeringen."
+    },
+    "motionstyp": "enskild",
+    "method_note": "Motionen yrkar på att regeringen ska beakta behovet av fler bostäder, vilket ligger i linje med löftet om att staten tillsammans med kommuner och regioner ska investera i bostäder.",
+    "confidence": 0.65,
+    "skapad": "2026-08-29T13:25:10.731Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-29"
+    }
+  },
+  {
+    "promise_id": "p-2026-1273",
+    "handling_id": "h-2026-13367",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att den nationella planen för transportinfrastrukturen fram till 2033 bör genomföras, inklusive byggandet av nya stambanor, och tillkännager detta för regeringen."
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Motionen stödjer genomförandet av den nationella infrastrukturplanen och byggandet av nya stambanor, vilket är en konkret investering i infrastruktur som löftet efterfrågar.",
+    "confidence": 0.85,
+    "skapad": "2026-08-29T13:25:15.963Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-29"
+    }
+  },
+  {
+    "promise_id": "p-2026-1274",
+    "handling_id": "h-2026-21664",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Vilka åtgärder avser ministern och regeringen att vidta för att förbättra tillförlitligheten, kapaciteten och kvaliteten i nattågstrafiken till och från Norrbotten och Narvik?"
+    },
+    "method_note": "Löftet vill öka kapaciteten och förbättra punktligheten i järnvägen. Interpellationen frågar specifikt om åtgärder för att förbättra just kapaciteten och tillförlitligheten (punktligheten) i nattågstrafiken, vilket direkt träffar de namngivna delarna av löftet.",
+    "confidence": 0.9,
+    "skapad": "2026-08-29T13:33:26.116Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-29"
+    }
+  },
+  {
+    "promise_id": "p-2026-1274",
+    "handling_id": "h-2026-21486",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Anser ministern att den nuvarande satsningen på järnvägsunderhåll är tillräcklig för att minska det eftersläpande underhållet och förbättra punktligheten i den svenska järnvägstrafiken, och vilka ytterligare åtgärder avser ministern och regeringen att vidta för att stärka järnvägens tillförlitlighet?"
+    },
+    "method_note": "Interpellationen frågar om underhållssatsningen räcker för att förbättra punktligheten och stärka järnvägens tillförlitlighet, vilket direkt berör löftet att förbättra punktligheten och öka kapaciteten i järnvägen.",
+    "confidence": 0.75,
+    "skapad": "2026-08-29T13:33:32.554Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-29"
+    }
+  },
+  {
+    "promise_id": "p-2026-1274",
+    "handling_id": "h-2026-21850",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Hur bedömer ministern att takten i återtagandet av underhållsskulden kommer att påverka järnvägens punktlighet, kapacitet och robusthet under de kommande decennierna och avser ministern vidta några åtgärder utifrån sin bedömning?"
+    },
+    "method_note": "Interpellationen ifrågasätter regeringens långsamma underhållstakt och frågar hur den påverkar järnvägens punktlighet och kapacitet, vilket direkt rör löftets mål om ökad kapacitet och förbättrad punktlighet.",
+    "confidence": 0.9,
+    "skapad": "2026-08-29T13:34:47.375Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-29"
+    }
+  },
+  {
+    "promise_id": "p-2026-1275",
+    "handling_id": "h-2026-13477",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om vikten av fortsatta satsningar på vägunderhåll, inte minst på landsbygden och i det finmaskiga vägnätet i glesbygden, och att arbetet med att öka bärigheten i det svenska vägnätet måste fortsätta för att säkerställa vägnätets robusthet och kapacitet och tillkännager detta för regeringen."
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Motionen vill att riksdagen ställer sig bakom fortsatta satsningar på vägunderhåll och ökad bärighet i vägnätet, vilket direkt motsvarar löftet om att underhålla och bygga ut vägar i hela landet.",
+    "confidence": 0.8,
+    "skapad": "2026-08-29T13:37:37.660Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-29"
+    }
+  },
+  {
+    "promise_id": "p-2026-1275",
+    "handling_id": "h-2026-20403",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om ett välutbyggt och välunderhållet vägnät och tillkännager detta för regeringen."
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Yrkandet kräver ett väl utbyggt och väl underhållet vägnät, vilket är samma sak som löftet att bygga ut och underhålla vägar i hela landet.",
+    "confidence": 0.9,
+    "skapad": "2026-08-29T13:40:19.672Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-29"
+    }
+  },
+  {
+    "promise_id": "p-2026-1275",
+    "handling_id": "h-2026-7179",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om vikten av fortsatta satsningar på vägunderhåll, inte minst på landsbygden och i det finmaskiga vägnätet i glesbygden, och att arbetet med att öka bärigheten i det svenska vägnätet måste fortsätta för att säkerställa vägnätets robusthet och kapacitet och tillkännager detta för regeringen."
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Motionen slår fast att satsningar på vägunderhåll ska fortsätta, vilket stödjer löftet att investera i vägar i hela landet.",
+    "confidence": 0.82,
+    "skapad": "2026-08-29T13:40:25.899Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-29"
+    }
+  },
+  {
+    "promise_id": "p-2026-1275",
+    "handling_id": "h-2026-2140",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att det är viktigt att satsningar på vägunderhåll fortsätter, inte minst på landsbygden och i det finmaskiga vägnätet i glesbygden där arbetet med att öka bärigheten i det svenska vägnätet måste fortsätta för att säkerställa vägnätets robusthet och kapacitet, och tillkännager detta för regeringen."
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Motionen stödjer fortsatta satsningar på vägunderhåll, vilket är en konkret del av löftet att bygga ut och underhålla vägar i hela landet.",
+    "confidence": 0.85,
+    "skapad": "2026-08-29T13:40:31.077Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-29"
+    }
+  },
+  {
+    "promise_id": "p-2026-1276",
+    "handling_id": "h-2026-13193",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att offentliga tjänster ska kunna hanteras digitalt och tillkännager detta för regeringen."
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Yrkandet är en konkret åtgärd för att digitalisera offentliga tjänster, vilket direkt stödjer löftet om att satsa på ny teknik för en smartare offentlig sektor.",
+    "confidence": 0.9,
+    "skapad": "2026-08-29T13:53:00.862Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-29"
+    }
+  },
+  {
+    "promise_id": "p-2026-1278",
+    "handling_id": "h-2026-2317",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att lagen även bör omfatta en faktisk tillgång till digitala tjänster, såsom banktjänster, digital signering och digital identifiering, och tillkännager detta för regeringen."
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Yrkandet kräver att lagen ska omfatta faktisk tillgång till digitala tjänster, vilket direkt motsvarar löftet om att digitala tjänster ska vara tillgängliga för alla.",
+    "confidence": 1,
+    "skapad": "2026-08-29T13:59:43.572Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-29"
+    }
+  },
+  {
+    "promise_id": "p-2026-1280",
+    "handling_id": "h-2026-1322",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att uppdra till Trafikverket att tillgängliggöra sin digitala infrastruktur så att tåg- och mobiloperatörer kan bygga ut master och stärka kapaciteten och tillkännager detta för regeringen."
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Yrkandet uppdrar åt Trafikverket att öppna sin digitala infrastruktur för mobiloperatörer, vilket direkt genomför löftet om bättre täckning på tåg.",
+    "confidence": 0.95,
+    "skapad": "2026-08-29T14:06:04.836Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-29"
+    }
+  },
+  {
+    "promise_id": "p-2026-1281",
+    "handling_id": "h-2026-2891",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Kommer ministern och regeringen att införa ett nytt mål om 1000 fler områdes- och kommunpoliser till 2025?"
+    },
+    "method_note": "Interpellationen frågar om regeringen avser att införa ett mål om fler poliser, vilket direkt stödjer löftet om att anställa fler poliser och öka närvaron.",
+    "confidence": 0.95,
+    "skapad": "2026-08-29T14:08:15.672Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-29"
+    }
+  },
+  {
+    "promise_id": "p-2026-1283",
+    "handling_id": "h-2026-1674",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att vidga Diskrimineringsombudsmannens informationsuppdrag kring personer med ledar- och assistanshund och tillkännager detta för regeringen."
+    },
+    "motionstyp": "enskild",
+    "method_note": "Yrkandet avser att vidga DO:s informationsuppdrag, vilket är en konkret del av att revidera DO:s uppdrag för ett mer aktivt arbete mot diskriminering, i linje med löftet.",
+    "confidence": 0.8,
+    "skapad": "2026-08-29T14:18:27.427Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-29"
+    }
+  },
+  {
+    "promise_id": "p-2026-1283",
+    "handling_id": "h-2026-20333",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om behovet av att bredda Diskrimineringsombudsmannens uppdrag och tillkännager detta för regeringen."
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Yrkandet vill bredda DO:s uppdrag, vilket är samma sak som att revidera uppdraget för ett mer aktivt arbete mot diskriminering.",
+    "confidence": 0.9,
+    "skapad": "2026-08-29T14:20:58.019Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-29"
+    }
+  },
+  {
+    "promise_id": "p-2026-1288",
+    "handling_id": "h-2026-7695",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Hur motiverar ministern nedskärningen av anslag för brottsförebyggande insatser, särskilt i ljuset av det aktuella gängvåldsklimatet?"
+    },
+    "method_note": "Interpellationen kritiserar nedskärningen av anslag för brottsförebyggande insatser och ifrågasätter regeringens prioritering, vilket direkt stödjer löftet om att satsa minst lika mycket på brottsförebyggande som på brottsbekämpning.",
+    "confidence": 0.95,
+    "skapad": "2026-08-29T14:22:46.267Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-29"
+    }
+  },
+  {
+    "promise_id": "p-2026-1288",
+    "handling_id": "h-2026-14194",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Vilka åtgärder planerar ministern, utifrån sitt ansvarsområde, att vidta för att motverka rekrytering av barn från LSS-boenden till kriminella nätverk?"
+    },
+    "method_note": "Interpellationen efterfrågar åtgärder för att stoppa rekryteringen av barn från LSS-boenden till kriminella nätverk, vilket är en konkret brottsförebyggande insats och ligger i linje med löftet att satsa minst lika mycket på brottsförebyggande som på brottsbekämpning.",
+    "confidence": 0.6,
+    "skapad": "2026-08-29T14:25:34.189Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-29"
+    }
+  },
+  {
+    "promise_id": "p-2026-1290",
+    "handling_id": "h-2026-12146",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att regeringen bör återkomma med förslag om att avkriminalisera eget bruk av narkotika och ersätta påföljden med ett obligatoriskt samtal med läkare och socialarbetare, samt för unga under 18 år även med föräldrar, och tillkännager detta för regeringen."
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Motionens yrkande 4 begär att regeringen ska återkomma med förslag om att avkriminalisera eget bruk av narkotika, vilket är samma sakfråga och samma riktning som löftet.",
+    "confidence": 0.98,
+    "skapad": "2026-08-29T14:34:35.956Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-29"
+    }
+  },
+  {
+    "promise_id": "p-2026-1292",
+    "handling_id": "h-2026-12145",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att regeringen bör ta initiativ till en treårig stopplag för nyetablering av företag i sektorerna vård, skola och omsorg i syfte att städa ut kriminella verksamheter och tillkännager detta för regeringen."
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Yrkandet avser exakt samma sak som löftet: en treårig stopplag för nyetablering av företag i vård, skola och omsorg för att städa ut kriminella verksamheter.",
+    "confidence": 1,
+    "skapad": "2026-08-29T14:45:45.872Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-29"
+    }
+  },
+  {
+    "promise_id": "p-2026-1294",
+    "handling_id": "h-2026-7047",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att stärka kunskapen kring könsdysfori och könsidentitet i sjukvårds- och omsorgsutbildningarna och tillkännager detta för regeringen."
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Yrkandet vill öka kunskapen om könsidentitet och könsdysfori i vårdutbildningarna, vilket är en konkret del av löftet om hög HBTQI-kunskap i vården.",
+    "confidence": 0.8,
+    "skapad": "2026-08-29T14:56:18.941Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-29"
+    }
+  },
+  {
+    "promise_id": "p-2026-1295",
+    "handling_id": "h-2026-20306",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om utbyggnad av civilplikt och tillkännager detta för regeringen."
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Yrkandet begär utbyggnad av civilplikt, vilket är samma åtgärd som löftet att utveckla civilplikten.",
+    "confidence": 0.9,
+    "skapad": "2026-08-29T15:02:03.411Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-29"
+    }
+  },
+  {
+    "promise_id": "p-2026-1295",
+    "handling_id": "h-2026-7118",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om införande och utbyggnad av civilplikt och tillkännager detta för regeringen."
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Motionen vill införa och bygga ut civilplikten, vilket stödjer löftet om att utveckla civilplikten.",
+    "confidence": 0.85,
+    "skapad": "2026-08-29T15:09:43.755Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-29"
+    }
+  },
+  {
+    "promise_id": "p-2026-1297",
+    "handling_id": "h-2026-7303",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att justera i inkomstskattelagen för att utöka skattereduktionen i jobbskatteavdraget särskilt för låga och medelhöga inkomster och tillkännager detta för regeringen."
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Citatet visar att motionen vill utöka jobbskatteavdraget, vilket sänker skatten på arbetsinkomster och därmed stödjer löftets del om sänkt skatt på arbete.",
+    "confidence": 0.85,
+    "skapad": "2026-08-29T15:12:53.721Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-29"
+    }
+  },
+  {
+    "promise_id": "p-2026-1297",
+    "handling_id": "h-2026-20587",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att ytterligare sänka skatten särskilt för låg- och medelinkomsttagare enligt Centerpartiets modell och tillkännager detta för regeringen."
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Yrkandet föreslår en ytterligare sänkning av skatten på arbetsinkomster, vilket stödjer löftets del om sänkt skatt på arbete.",
+    "confidence": 0.8,
+    "skapad": "2026-08-29T15:14:10.489Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-29"
+    }
+  },
+  {
+    "promise_id": "p-2026-1297",
+    "handling_id": "h-2026-3491",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Kommer ministern att agera för att leva upp till regeringens vallöften om att inte höja skatter och samtidigt säkra att kostnaden för Sveriges företag att anställa sänks?"
+    },
+    "method_note": "Frågan kritiserar en höjning av arbetsgivaravgifter och efterfrågar åtgärder för att sänka kostnaden att anställa, vilket stödjer löftet om sänkt skatt på arbete.",
+    "confidence": 0.9,
+    "skapad": "2026-08-29T15:15:37.960Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-29"
+    }
+  },
+  {
+    "promise_id": "p-2026-1276",
+    "handling_id": "h-2026-7009",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att offentliga tjänster ska kunna hanteras digitalt och tillkännager detta för regeringen."
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Motionen föreslår att offentliga tjänster ska kunna hanteras digitalt, vilket är en konkret satsning på ny teknik för att göra offentlig sektor smartare, precis som löftet efterfrågar.",
+    "confidence": 0.8,
+    "skapad": "2026-08-30T12:54:02.133Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-30"
+    }
+  },
+  {
+    "promise_id": "p-2026-1294",
+    "handling_id": "h-2026-13407",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att före mandatperiodens slut stärka kunskapen kring könsdysfori och tillkännager detta för regeringen."
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Motionen vill stärka kunskapen om könsdysfori, vilket är en HBTQI-fråga, och stödjer därmed löftet om hög HBTQI-kunskap i vård, skola och myndigheter.",
+    "confidence": 0.8,
+    "skapad": "2026-08-30T12:58:42.448Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-30"
+    }
+  },
+  {
+    "promise_id": "p-2026-1299",
+    "handling_id": "h-2026-10295",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att regeringen bör återkomma med en nationell plan för energibesparing och energieffektivisering och tillkännager detta för regeringen."
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Motionen yrkar på en nationell plan för energibesparing och energieffektivisering, vilket direkt stödjer löftets satsning på energieffektivisering.",
+    "confidence": 0.9,
+    "skapad": "2026-08-30T13:05:46.443Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-30"
+    }
+  },
+  {
+    "promise_id": "p-2026-1299",
+    "handling_id": "h-2026-6891",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen anvisar anslagen för 2024 inom utgiftsområde 21 Energi enligt förslaget i tabell 1 i motionen."
+    },
+    "motionstyp": "parti",
+    "method_note": "Motionen föreslår ett nytt anslag för investeringar i lokal förnybar elproduktion, vilket direkt stödjer löftets satsning på lokal förnybar elproduktion.",
+    "confidence": 0.9,
+    "skapad": "2026-08-30T13:08:40.710Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-30"
+    }
+  },
+  {
+    "promise_id": "p-2026-1301",
+    "handling_id": "h-2026-10037",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen antar 31 a § regeringens förslag till lag om ändring i lagen (1990:52) med särskilda bestämmelser om vård av unga.",
+      "kalla_dok_id": "HB01SoU24"
+    },
+    "method_note": "Att anta den nya 31 a § utvidgar grunderna för utreseförbud, vilket sänker tröskeln för när sådant förbud kan beslutas och därmed stödjer löftet.",
+    "confidence": 0.9,
+    "skapad": "2026-08-30T13:16:28.786Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-30"
+    }
+  },
+  {
+    "promise_id": "p-2026-1302",
+    "handling_id": "h-2026-2020",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att se över förutsättningarna för att en övergripande nationell strategi för global cyberpolitik, som ger en grund för ett samordnat beslutsfattande i staten, ska utarbetas och tillkännager detta för regeringen."
+    },
+    "motionstyp": "enskild",
+    "method_note": "Löftet om en sammanhållen svensk cyberpolitik motsvaras av motionens yrkande om en övergripande nationell strategi för global cyberpolitik med samordnat beslutsfattande.",
+    "confidence": 1,
+    "skapad": "2026-08-30T13:19:44.132Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-30"
+    }
+  },
+  {
+    "promise_id": "p-2026-1304",
+    "handling_id": "h-2026-19548",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att regeringen bör tillsätta en utredning för att se över rättssäkerheten inom asylprocesser och tillkännager detta för regeringen."
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Motionen yrkar på en utredning av rättssäkerheten i asylprocessen, vilket direkt siktar på löftet om en rättssäker asylprövning.",
+    "confidence": 0.85,
+    "skapad": "2026-08-30T13:30:19.483Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-30"
+    }
+  },
+  {
+    "promise_id": "p-2026-1304",
+    "handling_id": "h-2026-20932",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att regeringen bör återkomma med ett nytt förslag om att anpassa svensk rätt till EU:s migrations- och asylpakt utifrån asylrätten och dess intentioner och tillkännager detta för regeringen."
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Yrkandet kräver att anpassningen till EU:s migrations- och asylpakt sker utifrån asylrätten och dess intentioner, vilket direkt stödjer löftet om rättssäker asylprövning för alla.",
+    "confidence": 0.95,
+    "skapad": "2026-08-30T13:31:21.114Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-30"
+    }
+  },
+  {
+    "promise_id": "p-2026-1307",
+    "handling_id": "h-2026-13980",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Hur kommer statsrådet att agera för att säkerställa att föräldrar till barn som blir föremål för insatser från socialtjänsten ges förutsättningar att kunna delta och stötta sitt barn utan risk för inkomstbortfall?"
+    },
+    "method_note": "Citatet visar att MP driver en konkret åtgärd för att föräldrar ska kunna delta i socialtjänstens insatser för barn i riskzon, vilket direkt stödjer löftets mål om samordnat stöd till barn och deras familjer.",
+    "confidence": 0.9,
+    "skapad": "2026-08-30T13:52:45.361Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-30"
+    }
+  },
+  {
+    "promise_id": "p-2026-1307",
+    "handling_id": "h-2026-20260",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen anvisar anslagen för 2026 inom utgiftsområde 4 Rättsväsendet enligt förslaget i tabell A i motionen."
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Motionen föreslår en ökning av anslaget 1:14 Bidrag till brottsförebyggande arbete med 1 miljard kronor, vilket i motionens text beskrivs som en satsning för att fånga upp barn i riskzonen för kriminalitet. Därmed stödjer motionen löftet om särskilda insatser för barn i riskzon.",
+    "confidence": 0.9,
+    "skapad": "2026-08-30T13:54:24.630Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-30"
+    }
+  },
+  {
+    "promise_id": "p-2026-1311",
+    "handling_id": "h-2026-12015",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om behovet av insatser för att stärka och värna den ideella kulturen och tillkännager detta för regeringen."
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Yrkandet handlar direkt om att stärka och värna den ideella kulturen, vilket är en av de namngivna delarna i löftet.",
+    "confidence": 0.95,
+    "skapad": "2026-08-30T14:16:35.618Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-30"
+    }
+  },
+  {
+    "promise_id": "p-2026-1311",
+    "handling_id": "h-2026-20525",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att stärka studieförbunden och tillkännager detta för regeringen."
+    },
+    "motionstyp": "parti",
+    "method_note": "Motionen yrkar att studieförbunden ska stärkas, vilket är samma konkreta sakfråga som löftet pekar ut.",
+    "confidence": 0.95,
+    "skapad": "2026-08-30T14:18:28.391Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-30"
+    }
+  },
+  {
+    "promise_id": "p-2026-1311",
+    "handling_id": "h-2026-2097",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen anvisar anslagen för 2023 inom utgiftsområde 17 Kultur, medier, trossamfund och fritid enligt förslaget i tabell A i motionen."
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Motionen föreslår ökade anslag till folkbildning och ideell sektor, vilket motsvarar löftet att stärka dessa.",
+    "confidence": 0.9,
+    "skapad": "2026-08-30T14:19:31.730Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-30"
+    }
+  },
+  {
+    "promise_id": "p-2026-1311",
+    "handling_id": "h-2026-6439",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att värna folkbildningen och tillkännager detta för regeringen."
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Yrkandet handlar uttryckligen om att värna folkbildningen, vilket är en av de tre namngivna delarna i löftet.",
+    "confidence": 0.9,
+    "skapad": "2026-08-30T14:19:35.152Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-30"
+    }
+  },
+  {
+    "promise_id": "p-2026-1311",
+    "handling_id": "h-2026-14502",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Vilka åtgärder tänker ministern och regeringen vidta för att stärka det fria svenska musiklivet och i vilken mån ingår replokaler och musikhus i dessa eventuella åtgärder?"
+    },
+    "method_note": "Interpellationen efterfrågar åtgärder för att stärka det fria musiklivet, som enligt texten drabbats av nedskärningar i studieförbunden, vilket ligger i linje med löftet att stärka ideell kultur och studieförbund.",
+    "confidence": 0.8,
+    "skapad": "2026-08-30T14:19:57.436Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-30"
+    }
+  },
+  {
+    "promise_id": "p-2026-1311",
+    "handling_id": "h-2026-20116",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om behovet av stärkta folkhögskolor och tillkännager detta för regeringen."
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Motionen föreslår att stärka folkhögskolorna, vilket är en del av folkbildningen som löftet vill stärka.",
+    "confidence": 0.8,
+    "skapad": "2026-08-30T14:20:17.987Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-30"
+    }
+  },
+  {
+    "promise_id": "p-2026-1311",
+    "handling_id": "h-2026-7230",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen anvisar anslagen för 2024 inom utgiftsområde 17 Kultur, medier, trossamfund och fritid enligt förslaget i tabell A i motionen."
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Yrkandet avser hela utgiftsområde 17, vilket inkluderar anslag för studieförbund (14:1) och folkhögskolor (14:2) samt insatser för ideell sektor (13:5), där motionen föreslår höjda anslag jämfört med regeringen. Detta stödjer löftet om att stärka ideell kultur, studieförbund och folkbildning.",
+    "confidence": 0.95,
+    "skapad": "2026-08-30T14:20:57.789Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-30"
+    }
+  },
+  {
+    "promise_id": "p-2026-1312",
+    "handling_id": "h-2026-0611",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att lagen (1982:80) om anställningsskydd bör ändras så att särskild visstidsanställning utgår och det i stället införs objektiva kriterier för när det är tillåtet med visstidsanställningar och tillkännager detta för regeringen."
+    },
+    "motionstyp": "parti",
+    "method_note": "Motionen föreslår att särskild visstidsanställning avskaffas och att objektiva kriterier införs för visstidsanställningar, vilket direkt minskar otrygga anställningar och stärker anställningstryggheten i linje med löftet.",
+    "confidence": 0.9,
+    "skapad": "2026-08-30T14:26:52.942Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-30"
+    }
+  },
+  {
+    "promise_id": "p-2026-1312",
+    "handling_id": "h-2026-19122",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att lagen (1982:80) om anställningsskydd bör ändras så att särskild visstidsanställning utgår och det i stället införs objektiva kriterier för när det är tillåtet med visstidsanställningar och tillkännager detta för regeringen."
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Yrkandet avskaffar en otrygg visstidsanställningsform och kräver objektiva skäl för visstidsanställningar, vilket minskar de otrygga anställningarna och stärker anställningstryggheten i linje med löftet.",
+    "confidence": 0.92,
+    "skapad": "2026-08-30T14:28:28.953Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-30"
+    }
+  },
+  {
+    "promise_id": "p-2026-1312",
+    "handling_id": "h-2026-5201",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att lagen (1982:80) om anställningsskydd bör ändras så att omreglering av den anställdes sysselsättningsgrad (s.k. hyvling) förbjuds, och detta tillkännager riksdagen för regeringen."
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Motionen föreslår att hyvling förbjuds, vilket innebär att arbetsgivare inte ska kunna sänka anställdas sysselsättningsgrad från heltid, vilket direkt stödjer löftet om heltid som norm.",
+    "confidence": 0.95,
+    "skapad": "2026-08-30T14:28:42.134Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-30"
+    }
+  },
+  {
+    "promise_id": "p-2026-1312",
+    "handling_id": "h-2026-3609",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Vilka åtgärder avser statsrådet att vidta för att förbättra arbetsvillkoren inom äldreomsorgen i linje med Coronakommissionens förslag?"
+    },
+    "method_note": "Frågan rör samma sakfråga som löftet, då den efterfrågar åtgärder för att minska timanställningar och stärka anställningstryggheten, vilket är kärnan i löftet om stärkt anställningstrygghet och heltid som norm.",
+    "confidence": 0.9,
+    "skapad": "2026-08-30T14:29:22.961Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-30"
+    }
+  },
+  {
+    "promise_id": "p-2026-1313",
+    "handling_id": "h-2026-10306",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att regeringen skyndsamt bör återkomma med förslag om att ändra sekretesslagstiftningen i syfte att ge myndigheterna möjlighet att bedriva ett effektivt arbete mot arbetslivskriminalitet och tillkännager detta för regeringen."
+    },
+    "motionstyp": "parti",
+    "method_note": "Löftet är att skapa ordning och reda på arbetsmarknaden genom lagstiftning och kontroll, och motionens yrkande om ändrad sekretesslagstiftning är ett konkret lagstiftningsförslag för att stärka myndigheternas kontroll mot arbetslivskriminalitet.",
+    "confidence": 0.85,
+    "skapad": "2026-08-30T14:33:28.782Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-30"
+    }
+  },
+  {
+    "promise_id": "p-2026-1316",
+    "handling_id": "h-2026-16023",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Avser ministern och regeringen att gå vidare med utredningens förslag om obligatorisk kameraövervakning på slakterier, och när kan riksdagen i så fall förvänta sig att ett lagförslag presenteras?"
+    },
+    "method_note": "Frågan kräver att regeringen går vidare med förslaget om obligatorisk kameraövervakning på slakterier, vilket är exakt den åtgärd som löftet avser att införa.",
+    "confidence": 0.95,
+    "skapad": "2026-08-30T14:37:08.906Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-30"
+    }
+  },
+  {
+    "promise_id": "p-2026-1319",
+    "handling_id": "h-2026-2192",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att genomföra en översyn av oönskade effekter av mervärdesskatteregelverket och tillkännager detta för regeringen."
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Motionen begär en översyn av mervärdesskatteregelverket, vilket ligger i linje med löftet om en stor översyn av hela momssystemet för att förenkla och minska regelkrånglet.",
+    "confidence": 0.65,
+    "skapad": "2026-08-30T14:46:16.132Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-30"
+    }
+  },
+  {
+    "promise_id": "p-2026-1320",
+    "handling_id": "h-2026-20398",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att regeringen skyndsamt ska återkomma med proposition om höjning av minsta tillåtna aktiekapital i aktiebolag och tillkännager detta för regeringen."
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Motionen innehåller ett yrkande om att höja minsta tillåtna aktiekapital, vilket direkt motsvarar löftet om att höja aktiekapital. Dessutom finns ett separat yrkande om att återinföra revisionsplikten, vilket täcker den andra delen av löftet.",
+    "confidence": 1,
+    "skapad": "2026-08-30T14:47:45.505Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-30"
+    }
+  },
+  {
+    "promise_id": "p-2026-1320",
+    "handling_id": "h-2026-12579",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att regeringen skyndsamt ska återkomma med proposition om höjning av minsta tillåtna aktiekapital i aktiebolag till 75 000 kronor och tillkännager detta för regeringen."
+    },
+    "motionstyp": "enskild",
+    "method_note": "Motionen begär att regeringen skyndsamt ska lägga fram en proposition om höjt minsta aktiekapital, vilket stödjer löftet att höja kravet på minsta tillåtna aktiekapital.",
+    "confidence": 0.95,
+    "skapad": "2026-08-30T14:48:09.117Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-30"
+    }
+  },
+  {
+    "promise_id": "p-2026-1320",
+    "handling_id": "h-2026-11785",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att regeringen skyndsamt ska återkomma med en proposition om att återinföra revisionsplikten för fler aktiebolag och tillkännager detta för regeringen."
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Yrkandet begär att regeringen skyndsamt ska lägga fram en proposition om att återinföra revisionsplikten för fler aktiebolag, vilket är samma åtgärd som löftet pekar på.",
+    "confidence": 0.9,
+    "skapad": "2026-08-30T14:48:51.828Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-30"
+    }
+  },
+  {
+    "promise_id": "p-2026-1320",
+    "handling_id": "h-2026-14248",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Avser ministern att vidta åtgärder för att återinföra revisionsplikten för fler aktiebolag för att minska den ekonomiska brottsligheten?"
+    },
+    "method_note": "Interpellationen förespråkar återinförande av revisionsplikten för fler aktiebolag, vilket direkt motsvarar löftets första del.",
+    "confidence": 0.95,
+    "skapad": "2026-08-30T14:50:42.203Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-30"
+    }
+  },
+  {
+    "promise_id": "p-2026-1320",
+    "handling_id": "h-2026-14317",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Avser ministern att vidta åtgärder för att återinföra revisionsplikten för fler aktiebolag för att minska den ekonomiska brottsligheten?"
+    },
+    "method_note": "Interpellationen föreslår explicit att återinföra revisionsplikten för fler aktiebolag, vilket direkt motsvarar löftets första del.",
+    "confidence": 0.95,
+    "skapad": "2026-08-30T14:51:46.035Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-30"
+    }
+  },
+  {
+    "promise_id": "p-2026-1321",
+    "handling_id": "h-2026-20932",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att regeringen bör återkomma med ett nytt förslag om att anpassa svensk rätt till EU:s migrations- och asylpakt utifrån asylrätten och dess intentioner och tillkännager detta för regeringen."
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Motionen kräver att den svenska anpassningen till EU:s migrations- och asylpakt ska utgå från asylrätten, vilket är samma sak som att försvara asylrätten.",
+    "confidence": 0.9,
+    "skapad": "2026-08-30T14:52:28.345Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-30"
+    }
+  },
+  {
+    "promise_id": "p-2026-1321",
+    "handling_id": "h-2026-0248",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att regeringen i förhandlingar om en ny migrationspolitik inom EU bör stå upp för asylrätten och dess andemening och tillkännager detta för regeringen."
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Motionen yrkar att regeringen i EU-förhandlingar ska stå upp för asylrätten, vilket är samma sak som att försvara asylrätten.",
+    "confidence": 0.95,
+    "skapad": "2026-08-30T14:52:40.292Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-30"
+    }
+  },
+  {
+    "promise_id": "p-2026-1321",
+    "handling_id": "h-2026-11194",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att regeringen bör verka för att förändra EU:s migrationspakt i syfte att skapa ett regelverk som värnar asylrätten och grundläggande mänskliga rättigheter samt fördelar ansvaret jämnare mellan EU:s medlemsländer, och detta tillkännager riksdagen för regeringen."
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Yrkandet syftar direkt till att värna asylrätten, vilket överensstämmer med löftet att försvara asylrätten.",
+    "confidence": 1,
+    "skapad": "2026-08-30T14:53:56.399Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-30"
+    }
+  },
+  {
+    "promise_id": "p-2026-1321",
+    "handling_id": "h-2026-16947",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att regeringen bör verka för att förändra EU:s migrationspakt i syfte att skapa ett regelverk som värnar asylrätten och grundläggande mänskliga rättigheter samt fördelar ansvaret jämnare mellan EU:s medlemsländer, och detta tillkännager riksdagen för regeringen."
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Motionen yrkar att regeringen ska verka för att förändra EU:s migrationspakt för att värna asylrätten, vilket direkt stödjer löftet att försvara asylrätten.",
+    "confidence": 0.95,
+    "skapad": "2026-08-30T14:55:19.307Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-30"
+    }
+  },
+  {
+    "promise_id": "p-2026-1321",
+    "handling_id": "h-2026-5202",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att regeringen i förhandlingar om en ny migrationspolitik inom EU bör stå upp för asylrätten och dess andemening och tillkännager detta för regeringen."
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Motionen yrkar att regeringen i EU-förhandlingar ska stå upp för asylrätten, vilket direkt motsvarar löftet att försvara asylrätten.",
+    "confidence": 0.95,
+    "skapad": "2026-08-30T14:56:27.696Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-30"
+    }
+  },
+  {
+    "promise_id": "p-2026-1321",
+    "handling_id": "h-2026-8010",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Vilka generella initiativ avser statsrådet att vidta för att asylsökande från Gaza ska beviljas skydd i Sverige i enlighet med asylrätten?"
+    },
+    "method_note": "Interpellationen kräver att asylsökande från Gaza ska beviljas skydd i enlighet med asylrätten, vilket direkt stödjer löftet att försvara asylrätten.",
+    "confidence": 0.85,
+    "skapad": "2026-08-30T14:56:32.839Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-30"
+    }
+  },
+  {
+    "promise_id": "p-2026-1321",
+    "handling_id": "h-2026-12171",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att regeringen bör återkomma med förslag om att återgå till utlänningslagen som den såg ut innan begränsningslagen trädde i kraft och tillkännager detta för regeringen."
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Yrkandet vill återställa utlänningslagen till hur den såg ut innan begränsningslagen, vilket skulle ge ett starkare skydd för människor på flykt och därmed försvara asylrätten.",
+    "confidence": 0.9,
+    "skapad": "2026-08-30T15:00:11.595Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-30"
+    }
+  },
+  {
+    "promise_id": "p-2026-1321",
+    "handling_id": "h-2026-19548",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att regeringen bör återkomma med förslag om att återgå till utlänningslagen som den såg ut innan begränsningslagen trädde i kraft och tillkännager detta för regeringen."
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Motionen vill återgå till en tidigare utlänningslag som gav ett starkare skydd för asylsökande, vilket stödjer löftet att försvara asylrätten.",
+    "confidence": 0.9,
+    "skapad": "2026-08-30T15:02:13.627Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-30"
+    }
+  },
+  {
+    "promise_id": "p-2026-1325",
+    "handling_id": "h-2026-12124",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att överväga att stärka näringslivets möjlighet att i samverkan med lärosätena utveckla högre utbildningar och tillkännager detta för regeringen."
+    },
+    "motionstyp": "enskild",
+    "method_note": "Motionen föreslår att stärka samverkan mellan näringsliv och lärosäten för att utveckla högre utbildningar, vilket direkt syftar till att stärka människors kompetens utifrån arbetsmarknadens behov.",
+    "confidence": 0.9,
+    "skapad": "2026-08-30T15:11:19.992Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-30"
+    }
+  },
+  {
+    "promise_id": "p-2026-1325",
+    "handling_id": "h-2026-1200",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att överväga att införa ett stipendium för utbildningar där det råder arbetskraftsbrist eller är samhällsekonomiskt motiverat med fler sökande och tillkännager detta för regeringen."
+    },
+    "motionstyp": "enskild",
+    "method_note": "Yrkandet föreslår ett stipendium för utbildningar med arbetskraftsbrist, vilket direkt syftar till att stärka människors kompetens inom områden där arbetsmarknaden efterfrågar arbetskraft.",
+    "confidence": 0.9,
+    "skapad": "2026-08-30T15:12:38.860Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-30"
+    }
+  },
+  {
+    "promise_id": "p-2026-1325",
+    "handling_id": "h-2026-13378",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att överväga att införa ett stipendium för utbildningar inom yrken där det råder arbetskraftsbrist eller där det är samhällsekonomiskt motiverat med fler sökande och tillkännager detta för regeringen."
+    },
+    "motionstyp": "enskild",
+    "method_note": "Yrkandet föreslår ett stipendium för utbildningar inom yrken med arbetskraftsbrist, vilket direkt syftar till att stärka människors kompetens där arbetsmarknaden efterfrågar den.",
+    "confidence": 0.8,
+    "skapad": "2026-08-30T15:12:51.577Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-30"
+    }
+  },
+  {
+    "promise_id": "p-2026-1325",
+    "handling_id": "h-2026-12458",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att se över införandet av särskilda förberedande utbildningar för behörighet till yrkeshögskoleutbildningar och tillkännager detta för regeringen."
+    },
+    "motionstyp": "enskild",
+    "method_note": "Motionen syftar till att stärka människors kompetens genom att se över förberedande utbildningar för yrkeshögskola, vilket ligger i linje med löftet om att stärka kompetens utifrån arbetsmarknadens behov.",
+    "confidence": 0.9,
+    "skapad": "2026-08-30T15:15:16.549Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-30"
+    }
+  },
+  {
+    "promise_id": "p-2026-1325",
+    "handling_id": "h-2026-2001",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att se över införandet av en yrkesskola och tillkännager detta för regeringen."
+    },
+    "motionstyp": "enskild",
+    "method_note": "Motionen föreslår att se över införandet av en yrkesskola, vilket är en åtgärd för att utbilda människor för arbetsmarknadens behov, i linje med löftet att stärka kompetens utifrån arbetsmarknadens behov.",
+    "confidence": 0.8,
+    "skapad": "2026-08-30T15:15:54.310Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-30"
+    }
+  },
+  {
+    "promise_id": "p-2026-1325",
+    "handling_id": "h-2026-5149",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att se över införandet av särskilda förberedande utbildningar för behörighet till yrkeshögskoleutbildningar och tillkännager detta för regeringen."
+    },
+    "motionstyp": "enskild",
+    "method_note": "Yrkandet syftar direkt till att stärka människors kompetens utifrån arbetsmarknadens behov genom att underlätta för fler att nå yrkeshögskoleutbildningar.",
+    "confidence": 0.9,
+    "skapad": "2026-08-30T15:16:38.550Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-30"
+    }
+  },
+  {
+    "promise_id": "p-2026-1326",
+    "handling_id": "h-2026-7953",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Avser ministern att ta något initiativ för att utreda huruvida undervisning om psykisk hälsa bör införas som en åtgärd i strategin för psykisk hälsa?"
+    },
+    "method_note": "Interpellationen frågar om ministern avser att utreda undervisning om psykisk hälsa som åtgärd, vilket direkt svarar mot löftet att ta fram åtgärder mot psykisk ohälsa i skolan.",
+    "confidence": 0.8,
+    "skapad": "2026-08-30T15:22:49.874Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-30"
+    }
+  },
+  {
+    "promise_id": "p-2026-1330",
+    "handling_id": "h-2026-7247",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om behovet av tillgång på stabila och rimliga priser för elkonsumenter i hushåll, s.k. folkhemsel, och tillkännager detta för regeringen."
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Yrkande 4 i motionen tar specifikt upp folkhemsel och behovet av stabila och rimliga priser för hushåll, vilket direkt motsvarar löftet om att införa folkhemsel med låga och stabila elpriser.",
+    "confidence": 0.95,
+    "skapad": "2026-08-30T15:36:59.696Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-30"
+    }
+  },
+  {
+    "promise_id": "p-2026-1331",
+    "handling_id": "h-2026-2112",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att Svenska kraftnäts planerade insatser för anslutning av havsbaserad vindkraft ska fortsätta och tillkännager detta för regeringen."
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Citatet är ett yrkande om att fortsätta ansluta havsbaserad vindkraft, vilket ökar fossilfri elproduktion och därmed stödjer löftet.",
+    "confidence": 0.8,
+    "skapad": "2026-08-30T15:39:24.857Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-30"
+    }
+  },
+  {
+    "promise_id": "p-2026-1331",
+    "handling_id": "h-2026-6545",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att öka investeringar i fossilfria energislag i södra Sverige och tillkännager detta för regeringen."
+    },
+    "motionstyp": "enskild",
+    "method_note": "Yrkandet begär att riksdagen ställer sig bakom ökade investeringar i fossilfria energislag i södra Sverige, vilket motsvarar löftets mål att öka fossilfri elproduktion i södra Sverige.",
+    "confidence": 0.85,
+    "skapad": "2026-08-30T15:40:04.964Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-30"
+    }
+  },
+  {
+    "promise_id": "p-2026-1332",
+    "handling_id": "h-2026-20831",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att regeringen bör återkomma till riksdagen i enlighet med vad som anförs i motionen om behovet av flexiblare användning av de s.k. flaskhalsintäkterna och tillkännager detta för regeringen."
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Yrkandet kräver att regeringen ska verka för flexiblare användning av flaskhalsintäkter, vilket är samma konkreta åtgärd som löftet vill möjliggöra för att stötta elkunder.",
+    "confidence": 0.9,
+    "skapad": "2026-08-30T15:45:44.333Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-30"
+    }
+  },
+  {
+    "promise_id": "p-2026-1332",
+    "handling_id": "h-2026-20344",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om regeringens ansvar att försvara mekanismer i EU:s regelverk som möjliggör flexibel användning av s.k. flaskhalsintäkter och tillkännager detta för regeringen."
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Motionen kräver att regeringen försvarar EU-regler som tillåter flexibel användning av flaskhalsintäkter, vilket är samma sak som löftet att använda flaskhalsintäkter för att stötta elkunder.",
+    "confidence": 0.9,
+    "skapad": "2026-08-30T15:46:03.299Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-30"
+    }
+  },
+  {
+    "promise_id": "p-2026-1333",
+    "handling_id": "h-2026-1026",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att regeringen bör utreda hur ensamföretag ska kunna få ett skydd som är mer likt det anställda har vid arbetslöshet och tillkännager detta för regeringen."
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Yrkandet föreslår en utredning för att ge ensamföretagare ett arbetslöshetsskydd liknande anställdas, vilket direkt stärker ensamföretagares sociala skydd.",
+    "confidence": 1,
+    "skapad": "2026-08-30T15:48:31.007Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-30"
+    }
+  },
+  {
+    "promise_id": "p-2026-1334",
+    "handling_id": "h-2026-22397",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Vilka åtgärder avser ministern att vidta för att på kort sikt sänka elkostnaderna för företag och konsumenter i Halland och övriga Sverige?"
+    },
+    "method_note": "Frågan efterfrågar åtgärder för att sänka elkostnaderna, vilket direkt motsvarar löftet att sänka elräkningar genom att stoppa effekt- och elnätsavgifter. Dokumentet tar upp båda avgiftstyperna som orsaker till höga elräkningar.",
+    "confidence": 0.9,
+    "skapad": "2026-08-30T15:56:55.387Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-30"
+    }
+  },
+  {
+    "promise_id": "p-2026-1338",
+    "handling_id": "h-2026-20508",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att utreda skatteregler för att underlätta för trygghetsboenden, kollektivboenden och generationsboenden och uppmuntra inrättande av gemensamhetslokaler i flerbostadshus och tillkännager detta för regeringen."
+    },
+    "motionstyp": "enskild",
+    "method_note": "Motionen föreslår att underlätta för trygghetsboenden och gemensamhetslokaler, vilket direkt syftar till att öka gemenskap och motverka ofrivillig ensamhet bland äldre.",
+    "confidence": 0.9,
+    "skapad": "2026-08-30T16:04:46.285Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-30"
+    }
+  },
+  {
+    "promise_id": "p-2026-1338",
+    "handling_id": "h-2026-10449",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att uppmuntra inrättande av gemensamhetslokaler i flerbostadshus och tillkännager detta för regeringen."
+    },
+    "motionstyp": "enskild",
+    "method_note": "Motionen föreslår en konkret åtgärd – att uppmuntra gemensamhetslokaler i flerbostadshus – som i motiveringen direkt kopplas till att motverka ofrivillig ensamhet bland seniorer, vilket är löftets sakfråga.",
+    "confidence": 0.95,
+    "skapad": "2026-08-30T16:06:42.891Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-30"
+    }
+  },
+  {
+    "promise_id": "p-2026-1339",
+    "handling_id": "h-2026-2112",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att Svenska kraftnäts planerade insatser för anslutning av havsbaserad vindkraft ska fortsätta och tillkännager detta för regeringen."
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Yrkandet handlar om att fortsätta insatserna för att ansluta havsbaserad vindkraft, vilket direkt stödjer löftet att snabba på utbyggnaden av vindkraft till havs.",
+    "confidence": 0.8,
+    "skapad": "2026-08-30T16:11:03.035Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-30"
+    }
+  },
+  {
+    "promise_id": "p-2026-1340",
+    "handling_id": "h-2026-19546",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att ta ett större statligt ansvar för att öka investeringstakten i ett robust elnät för industriell elektrifiering och tillkännager detta för regeringen."
+    },
+    "motionstyp": "enskild",
+    "method_note": "Löftet om att stärka elnäten motsvaras direkt av yrkandet om att öka investeringstakten i ett robust elnät för industriell elektrifiering.",
+    "confidence": 0.95,
+    "skapad": "2026-08-30T16:14:24.247Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-30"
+    }
+  },
+  {
+    "promise_id": "p-2026-1341",
+    "handling_id": "h-2026-7303",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att justera i inkomstskattelagen för att utöka skattereduktionen i jobbskatteavdraget särskilt för låga och medelhöga inkomster och tillkännager detta för regeringen."
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Yrkandet avser att utöka jobbskatteavdraget för låga och medelhöga inkomster, vilket direkt motsvarar löftet om bred skattesänkning för låga och normala inkomster.",
+    "confidence": 0.95,
+    "skapad": "2026-08-30T16:15:45.803Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-30"
+    }
+  },
+  {
+    "promise_id": "p-2026-1341",
+    "handling_id": "h-2026-20587",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att ytterligare sänka skatten särskilt för låg- och medelinkomsttagare enligt Centerpartiets modell och tillkännager detta för regeringen."
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Motionens yrkande avser en ytterligare skattesänkning särskilt för låg- och medelinkomsttagare, vilket direkt motsvarar löftet om en bred skattesänkning för låga och normala inkomster.",
+    "confidence": 1,
+    "skapad": "2026-08-30T16:16:26.739Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-30"
+    }
+  },
+  {
+    "promise_id": "p-2026-1342",
+    "handling_id": "h-2026-20612",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om bredare, mer omfattande och permanenta sänkningar av arbetsgivaravgiften och tillkännager detta för regeringen."
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Yrkandet kräver bredare, mer omfattande och permanenta sänkningar av arbetsgivaravgiften, vilket direkt motsvarar löftet om sänkta arbetsgivaravgifter för att underlätta anställning.",
+    "confidence": 1,
+    "skapad": "2026-08-30T16:18:10.538Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-30"
+    }
+  },
+  {
+    "promise_id": "p-2026-1342",
+    "handling_id": "h-2026-3491",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Kommer ministern att agera för att leva upp till regeringens vallöften om att inte höja skatter och samtidigt säkra att kostnaden för Sveriges företag att anställa sänks?"
+    },
+    "method_note": "Frågan rör samma sakfråga som löftet: den efterfrågar att kostnaden för företag att anställa sänks, vilket ligger i linje med löftet om sänkta arbetsgivaravgifter för att underlätta anställning.",
+    "confidence": 0.8,
+    "skapad": "2026-08-30T16:18:25.737Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-30"
+    }
+  },
+  {
+    "promise_id": "p-2026-1347",
+    "handling_id": "h-2026-18365",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att stärka folkbildningen och studieförbunden och tillkännager detta för regeringen."
+    },
+    "motionstyp": "enskild",
+    "method_note": "Motionen yrkar att riksdagen ställer sig bakom att stärka folkbildningen och studieförbunden, vilket ligger i linje med löftet om förstärkt statsbidrag till studieförbunden.",
+    "confidence": 0.85,
+    "skapad": "2026-08-30T16:41:07.531Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-30"
+    }
+  },
+  {
+    "promise_id": "p-2026-1348",
+    "handling_id": "h-2026-17295",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att säkerställa uppbyggnaden av strategiska lager av baslivsmedel och tillkännager detta för regeringen."
+    },
+    "motionstyp": "enskild",
+    "method_note": "Motionen yrkar på att bygga upp strategiska lager av baslivsmedel, vilket är samma konkreta åtgärd som löftet om att återupprätta beredskapslager för livsmedel.",
+    "confidence": 0.9,
+    "skapad": "2026-08-30T16:46:49.714Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-30"
+    }
+  },
+  {
+    "promise_id": "p-2026-1348",
+    "handling_id": "h-2026-6262",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att överväga möjligheterna att ta fram en strategi för ett beredskapslager för insatsvaror och tillkännager detta för regeringen."
+    },
+    "motionstyp": "enskild",
+    "method_note": "Motionen vill att regeringen tar fram en strategi för beredskapslager, vilket ligger i linje med löftet att återupprätta beredskapslager för förnödenheter.",
+    "confidence": 0.65,
+    "skapad": "2026-08-30T16:49:02.560Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-30"
+    }
+  },
+  {
+    "promise_id": "p-2026-1348",
+    "handling_id": "h-2026-1232",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att ett beredskapslager med mediciner och medicinsk utrustning upprättas i Sverige och tillkännager detta för regeringen."
+    },
+    "motionstyp": "enskild",
+    "method_note": "Motionen yrkar att regeringen ska upprätta ett beredskapslager med mediciner, vilket är samma konkreta sakfråga som löftet att återupprätta beredskapslager för bland annat mediciner.",
+    "confidence": 0.95,
+    "skapad": "2026-08-30T16:49:08.209Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-30"
+    }
+  },
+  {
+    "promise_id": "p-2026-1348",
+    "handling_id": "h-2026-1537",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att regeringen bör överväga att se över möjligheten att upprätta permanenta beredskapslager för att tillse att tillgång till avgörande sjukvårdsmaterial och läkemedel finns till handa oavsett vilken situation som kan uppstå och tillkännager detta för regeringen."
+    },
+    "motionstyp": "enskild",
+    "method_note": "Yrkandet verkar för permanenta beredskapslager för avgörande sjukvårdsmaterial och läkemedel, vilket ligger i linje med löftet om att återupprätta beredskapslager för prioriterade förnödenheter.",
+    "confidence": 0.82,
+    "skapad": "2026-08-30T16:49:30.079Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-30"
+    }
+  },
+  {
+    "promise_id": "p-2026-1349",
+    "handling_id": "h-2026-6579",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att se över möjligheten att nybyggnation av skyddsrum skulle kunna återupptas med statlig ersättning och att en gynnsammare ersättning övervägs till fastighetsägare som renoverar befintliga skyddsrum, och detta tillkännager riksdagen för regeringen."
+    },
+    "motionstyp": "enskild",
+    "method_note": "Yrkandet rör nybyggnation och renovering av skyddsrum, vilket direkt motsvarar löftet om att införa ett nytt system för befolkningsskydd och se över upprustningen av befintliga skyddsrum.",
+    "confidence": 0.9,
+    "skapad": "2026-08-30T16:50:31.299Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-30"
+    }
+  },
+  {
+    "promise_id": "p-2026-1351",
+    "handling_id": "h-2026-15128",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Hur allvarligt ser ministern på att Skatteverket inte ges rätt förutsättningar att utföra tillräckligt med kontroller av svartabete, och vilka åtgärder är ministern beredd att vidta?"
+    },
+    "method_note": "Frågan rör Skatteverkets resurser för kontroller mot svartarbete, vilket direkt knyter an till löftet om fler skattekontroller mot fusk.",
+    "confidence": 0.95,
+    "skapad": "2026-08-30T16:54:33.667Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-30"
+    }
+  },
+  {
+    "promise_id": "p-2026-1351",
+    "handling_id": "h-2026-15937",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Vilka åtgärder avser ministern att vidta med anledning av Riksrevisionens granskning, som visar på stora behov av att stärka insatserna mot svartarbete?"
+    },
+    "method_note": "Frågan driver på för stärkta insatser mot svartarbete, vilket ligger i linje med löftet om fler skattekontroller mot fusk.",
+    "confidence": 0.8,
+    "skapad": "2026-08-30T16:58:47.902Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-30"
+    }
+  },
+  {
+    "promise_id": "p-2026-1357",
+    "handling_id": "h-2026-14574",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Avser statsrådet att verka för åtgärder och satsningar som gör det billigare och mer attraktivt att resa hållbart med kollektivtrafik?"
+    },
+    "method_note": "Interpellationen driver på för att göra det billigare och mer attraktivt att resa hållbart med kollektivtrafik, vilket är samma sakfråga som löftet om billigare och enklare hållbart resande.",
+    "confidence": 0.85,
+    "skapad": "2026-08-30T17:18:22.769Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-30"
+    }
+  },
+  {
+    "promise_id": "p-2026-1357",
+    "handling_id": "h-2026-20628",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att en schablon som omfattar laddning av bil i anslutning till bostaden bör införas i lagstiftningen och tillkännager detta för regeringen."
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Motionen föreslår en åtgärd som gör det billigare och enklare att ladda elbil hemma, vilket direkt stödjer löftet om att göra hållbart resande med elbilar billigare och enklare.",
+    "confidence": 0.8,
+    "skapad": "2026-08-30T17:19:16.690Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-30"
+    }
+  },
+  {
+    "promise_id": "p-2026-1357",
+    "handling_id": "h-2026-1028",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att regeringen bör återkomma till riksdagen med förslag på avskaffad förmånsbeskattning för kollektivtrafikkort och tillkännager detta för regeringen."
+    },
+    "motionstyp": "parti",
+    "method_note": "Motionen föreslår att förmånsbeskattningen för kollektivtrafikkort avskaffas, vilket gör det billigare att resa kollektivt och därmed stödjer löftet om billigare hållbart resande.",
+    "confidence": 0.85,
+    "skapad": "2026-08-30T17:23:01.052Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-30"
+    }
+  },
+  {
+    "promise_id": "p-2026-1357",
+    "handling_id": "h-2026-19530",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att regeringen bör återkomma till riksdagen med förslag på avskaffad förmånsbeskattning för kollektivtrafikkort och tillkännager detta för regeringen."
+    },
+    "motionstyp": "parti",
+    "method_note": "Förslaget att avskaffa förmånsbeskattningen för kollektivtrafikkort gör det billigare att resa kollektivt, vilket direkt stödjer löftet om billigare hållbart resande.",
+    "confidence": 0.9,
+    "skapad": "2026-08-30T17:25:04.877Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-30"
+    }
+  },
+  {
+    "promise_id": "p-2026-1357",
+    "handling_id": "h-2026-6899",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om att regeringen bör utreda införandet av Sverigebiljett som en del av det nationella biljettsystemet för kollektivtrafiken och tillkännager detta för regeringen."
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Motionen yrkar att regeringen ska utreda en Sverigebiljett för kollektivtrafiken, vilket direkt syftar till att göra hållbart resande billigare och enklare.",
+    "confidence": 0.9,
+    "skapad": "2026-08-30T17:26:08.227Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-30"
+    }
+  },
+  {
+    "promise_id": "p-2026-1357",
+    "handling_id": "h-2026-6896",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen ställer sig bakom det som anförs i motionen om riktat stöd till elbilar och reformerad klimatbonus och tillkännager detta för regeringen."
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Motionen föreslår riktat stöd till elbilar och en reformerad klimatbonus, vilket gör det billigare för människor att välja hållbart resande med elbil, precis som löftet efterfrågar.",
+    "confidence": 0.85,
+    "skapad": "2026-08-30T17:26:16.511Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-30"
+    }
+  },
+  {
+    "promise_id": "p-2026-1358",
+    "handling_id": "h-2026-13598",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen avslår proposition 2024/25:109 Förändrade skattesubventioner för solceller och mikroproduktion av el."
+    },
+    "motionstyp": "kommitte",
+    "method_note": "Motionen yrkar att riksdagen avslår propositionen, vilket innebär att nuvarande stöd för solceller och mikroproduktion behålls, vilket främjar investeringar i lokal förnybar elproduktion.",
+    "confidence": 0.9,
+    "skapad": "2026-08-30T17:26:55.295Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-30"
+    }
+  },
+  {
+    "promise_id": "p-2026-1358",
+    "handling_id": "h-2026-1075",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen anvisar anslagen för 2023 inom utgiftsområde 21 Energi enligt förslaget i tabell 1 i motionen."
+    },
+    "motionstyp": "parti",
+    "method_note": "Yrkandet avser att anvisa anslag enligt tabell 1, som inkluderar anslag 99:2 för investeringar till lokal förnybar elproduktion, vilket stödjer löftet.",
+    "confidence": 0.9,
+    "skapad": "2026-08-30T17:27:44.857Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-30"
+    }
+  },
+  {
+    "promise_id": "p-2026-1358",
+    "handling_id": "h-2026-6891",
+    "riktning": "stodjer",
+    "bevis": {
+      "citat": "Riksdagen anvisar anslagen för 2024 inom utgiftsområde 21 Energi enligt förslaget i tabell 1 i motionen."
+    },
+    "motionstyp": "parti",
+    "method_note": "Motionens yrkande anvisar anslag enligt tabell 1, där Vänsterpartiet avsätter 1 miljard kronor till ett nytt anslag för investeringar i lokal förnybar elproduktion, vilket genomför löftet att investera i lokal förnybar elproduktion.",
+    "confidence": 0.9,
+    "skapad": "2026-08-30T17:29:37.015Z",
+    "extraction": {
+      "model": "deepseek-v4-flash-0731",
+      "verified_by": null,
+      "run_id": "foreslag-2026-08-30"
+    }
+  }
+]

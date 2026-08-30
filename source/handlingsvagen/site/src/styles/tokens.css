@@ -1,0 +1,31 @@
+/*
+ * Handlingsvågen bär samma kostym som resten av utlovat.se.
+ *
+ * Formspråket ("Diarienummer möter löpsedel") är beslutat en gång och bor på
+ * ett ställe: site/src/styles/tokens.css och site/src/styles/base.css. De
+ * importeras av Layout.astro — här finns INGA egna kulörer, mått eller
+ * fontnamn. Ändra formen där, inte här.
+ *
+ * Den här filen gör en enda sak: översätter Handlingsvågens gamla tokennamn
+ * till den delade paletten, så att sidornas egna style-block följer med utan
+ * att skrivas om ett och ett. Formreglerna själva ligger i rutnat.css.
+ */
+:root {
+  /* ── Brygga: gamla namn → den delade paletten ──
+   * Ytor görs med hårlinjer, inte med bakgrundsfärg. Därför pekar både
+   * bakgrunden och "ytorna" på samma papper: en ruta syns på sin ram. */
+  --bg: var(--papper);
+  --yta: var(--papper);
+  --yta-2: var(--papper);
+  --text: var(--svarta);
+  --text-svag: var(--dis);
+  --linje: var(--linje-svag);
+  --fokus: var(--svarta);
+
+  /* Trycket är kantigt och stilla: inga rundade hörn, inga skuggor. */
+  --radie: 0;
+  --skugga: none;
+
+  /* Ingen egen fontstack — brödtexten är den delade serifen. */
+  --font: var(--font-brod);
+}

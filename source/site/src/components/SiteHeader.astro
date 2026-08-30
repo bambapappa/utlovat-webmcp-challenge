@@ -1,0 +1,75 @@
+---
+interface Props {
+  hash: string;
+  lastRun: string;
+  parties: Array<{ code: string; name: string }>;
+}
+const { hash, lastRun, parties } = Astro.props;
+const path = Astro.url.pathname.replace(/\/$/, "") || "/";
+const current = (href: string) => href === "/" ? path === "/" : path === href || path.startsWith(`${href}/`);
+---
+<header class="siteheader">
+  <div class="siteheader__inner">
+    <div class="siteheader__top">
+      <div class="siteheader__brand">
+        <a href="/" class="siteheader__title">
+          UTLOVAT<span class="markering">.SE</span>
+        </a>
+        <div class="etikett siteheader__meta">
+          Tre sätt att granska politiken · Uppdaterad {new Date(lastRun).toLocaleDateString("sv-SE")} · Akt {hash.slice(0, 8)}
+        </div>
+      </div>
+      <a href="/sok" class="knapp siteheader__search">Sök hela utlovat.se</a>
+    </div>
+    <nav aria-label="Huvudnavigation" class="siteheader__nav">
+      <ul class="siteheader__menu">
+        <li><a href="/" class="etikett siteheader__link" aria-current={current("/") ? "page" : undefined}>Löften och kostnader</a></li>
+        <li><a href="/fragor" class="etikett siteheader__link" aria-current={current("/fragor") || current("/fraga") ? "page" : undefined}>Frågor och ståndpunkter</a></li>
+        <li><a href="/handlingsvagen/" class="etikett siteheader__link" aria-current={current("/handlingsvagen") ? "page" : undefined}>Handlingar i riksdagen</a></li>
+        <li><a href="/jamfor" class="etikett siteheader__link" aria-current={current("/jamfor") ? "page" : undefined}>Jämför</a></li>
+        <li><a href="/topplistor" class="etikett siteheader__link" aria-current={current("/topplistor") ? "page" : undefined}>Topplistor</a></li>
+        <li><a href="/svangningar" class="etikett siteheader__link" aria-current={current("/svangningar") ? "page" : undefined}>Svängregistret</a></li>
+        <li><a href="/metod" class="etikett siteheader__link" aria-current={current("/metod") ? "page" : undefined}>Metod och transparens</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .siteheader__title {
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    letter-spacing: var(--sparrning-display);
+    font-size: var(--steg-3);
+    text-decoration: none;
+  }
+  .siteheader { border-bottom: var(--linje-sektion); }
+  .siteheader__inner { max-width: var(--matt-data); margin: 0 auto; padding: 0 1rem 0.75rem; }
+  .siteheader__top { display: flex; align-items: flex-end; justify-content: space-between; gap: 1rem; }
+  .siteheader__search { flex: 0 0 auto; text-decoration: none; min-height: 44px; display: inline-flex; align-items: center; }
+  .siteheader__nav {
+    border-top: var(--linje-sektion);
+    padding-top: 0.5rem;
+    margin-top: 0.5rem;
+  }
+  .siteheader__menu {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 1.25rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .siteheader__link {
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
+  .siteheader__link[aria-current="page"] { font-weight: 700; text-decoration: underline; text-decoration-thickness: 2px; }
+  @media (max-width: 44rem) {
+    .siteheader__top { align-items: flex-start; flex-direction: column; }
+    .siteheader__search { width: 100%; justify-content: center; }
+    .siteheader__menu { gap: 0 1rem; }
+  }
+</style>

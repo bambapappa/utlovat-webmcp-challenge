@@ -1,0 +1,53 @@
+# Atkomst — bevakar AI-agenter och ämnessökningens anrop till Riksdagen.
+#
+# Kontrollen läser den LEVERERADE robots.txt:en, inte repots. Skälet står i
+# ops/ai-atkomst.mjs: 2026-08-01 stängdes Gemini, Claude och GPTBot ute av ett
+# block som Cloudflare la in i filen på vägen ut. Inget syntes i repot, och
+# ingenting i bygget hade fångat det — bara ett anrop mot skarp adress gör det.
+name: ai-atkomst
+on:
+  schedule:
+    - cron: "20 5 * * *"   # dagligen 05:20 UTC, före arbetsdagen
+  workflow_dispatch: {}
+permissions:
+  contents: read
+  issues: write
+concurrency: { group: ai-atkomst, cancel-in-progress: false }
+jobs:
+  kontroll:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38  # v6.5.0
+        with:
+          node-version: 22
+      - name: Kontrollera extern atkomst
+        run: node ops/ai-atkomst.mjs https://utlovat.se
+        timeout-minutes: 5
+
+  # Larmet låg förut som ett eget steg här med sin egen dedupe-logik. Det är nu
+  # samma implementation som alla andra körningar använder (larm.yml) — texten
+  # om Cloudflares managed robots.txt följde med hit och är det enda som skiljer.
+  larm:
+    needs: [kontroll]
+    if: failure()
+    permissions:
+      contents: read
+      issues: write
+    uses: ./.github/workflows/larm.yml
+    with:
+      rubrik: "Den externa atkomstkontrollen"
+      etikett: "larm-ai-atkomst"
+      atgard: |
+        Sajten kan ha slutat vara läsbar för AI-agenter, eller ämnessökningen
+        kan ha förlorat åtkomsten till Riksdagens söktjänst. Det kan bero på
+        en levererad Cloudflare-inställning som inte syns i repot.
+
+        Vanligaste orsaken är att Cloudflares *managed robots.txt* har slagits
+        på igen på zonen. Den lägger ett eget block överst i robots.txt som
+        förbjuder Google-Extended, GPTBot, ClaudeBot med flera, oavsett vad vi
+        skriver i `site/public/robots.txt`.
+
+        Kör `node ops/ai-atkomst.mjs https://utlovat.se` för att se exakt vad
+        som brister, och se avsnitten om AI-atkomst och ämnessökning i
+        `ops/RUNBOOK.md`.

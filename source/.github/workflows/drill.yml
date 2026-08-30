@@ -1,0 +1,40 @@
+name: drill
+on:
+  schedule:
+    - cron: "0 4 1 * *"   # Första dagen i månaden, 04:00 UTC
+  workflow_dispatch: {}
+permissions:
+  contents: read
+  issues: write
+jobs:
+  drill:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+      # Drillen bygger från en ren klon men behöver ändå toolchain (node + pnpm)
+      # i miljön — annars faller pnpm install på "command not found" (exit 127).
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38  # v6.5.0
+        with:
+          node-version: 22
+      - name: Run drill
+        run: bash ops/drill.sh
+        timeout-minutes: 15
+
+  # Larmet låg förut som ett eget steg här. Delad implementation i larm.yml.
+  larm:
+    needs: [drill]
+    if: failure()
+    permissions:
+      contents: read
+      issues: write
+    uses: ./.github/workflows/larm.yml
+    with:
+      rubrik: "Månadsdrillen"
+      etikett: "larm-drill"
+      atgard: |
+        Drillen bygger sajten från en ren klon. Faller den vet vi inte längre
+        att repot går att bygga från noll — vilket är hela poängen med den.
+        Kör `bash ops/drill.sh` lokalt och läs var det brister.

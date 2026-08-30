@@ -1,0 +1,93 @@
+# Frågevågen — engångs-backfill av ståndpunkter ur partiernas politiksidor
+# och manifest (page-källorna i sources.yaml). Endast manuell start.
+#
+# Isolerat från löftesflödet: rör aldrig seen.json/promises.json/
+# needs_review.json och publicerar aldrig — allt hamnar i
+# data/stances_review.json för granskning (pnpm stances:review).
+name: stances-backfill
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Dry-run (rapportera enbart, committa inget)"
+        type: boolean
+        default: false
+permissions:
+  contents: write
+concurrency: { group: stances-backfill, cancel-in-progress: false }
+jobs:
+  backfill:
+    if: ${{ vars.STANCES_ENABLED != 'false' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Mint bot app token
+        id: app-token
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1  # v3.2.0
+        with:
+          app-id: ${{ secrets.BOT_APP_ID }}
+          private-key: ${{ secrets.BOT_APP_KEY }}
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          token: ${{ steps.app-token.outputs.token }}
+          # INGA sparade uppgifter — se commit-steget nedan.
+          persist-credentials: false
+      - uses: pnpm/action-setup@v4  # samma pin-undantag som pipeline.yml (2026-06-15)
+        with:
+          version: 9
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38  # v6.5.0
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: pipeline/pnpm-lock.yaml
+      - name: Install pipeline deps
+        run: pnpm install --frozen-lockfile
+        working-directory: pipeline
+      - name: Backfill ståndpunkter (endast granskningskön)
+        run: pnpm stances:backfill ${{ inputs.dry_run && '--dry-run' || '' }}
+        working-directory: pipeline
+        env:
+          LLM_BASE_URL: ${{ vars.LLM_BASE_URL }}
+          LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          LLM_FALLBACK_BASE_URL: ${{ vars.LLM_FALLBACK_BASE_URL || secrets.LLM_FALLBACK_BASE_URL }}
+          LLM_FALLBACK_API_KEY: ${{ secrets.LLM_FALLBACK_API_KEY }}
+          MODEL_EXTRACT: ${{ vars.MODEL_EXTRACT }}
+          MODEL_VERIFY: ${{ vars.MODEL_VERIFY }}
+          MODEL_COPY: ${{ vars.MODEL_COPY }}
+      # App-tokens lever en timme, och en backfill över granskningskön är ett
+      # LLM-jobb som kan ta längre. Mynta därför en FÄRSK token efter
+      # LLM-steget, precis före commit och push — annars är jobbstart-tokenen
+      # död när det är dags att pusha, och hela körningens arbete går
+      # förlorat. Samma mönster som pipeline, arkiv, foreslag och nyckelord.
+      - name: Mint fresh push token
+        id: push-token
+        if: ${{ !inputs.dry_run }}
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1  # v3.2.0
+        with:
+          app-id: ${{ secrets.BOT_APP_ID }}
+          private-key: ${{ secrets.BOT_APP_KEY }}
+      - name: Commit data if changed
+        if: ${{ !inputs.dry_run }}
+        env:
+          PUSH_TOKEN: ${{ steps.push-token.outputs.token }}
+        run: |
+          git config user.name "utlovat-bot" && git config user.email "bot@utlovat.se"
+          # Checkouten sparar inga uppgifter, så origin-URL:en är det enda
+          # git har att gå på — och den bär den färska tokenen.
+          git remote set-url origin "https://x-access-token:${PUSH_TOKEN}@github.com/${{ github.repository }}.git"
+          git add data/stances.json data/stances_review.json
+          if git diff --cached --quiet; then
+            echo "Inga ändringar — inget att committa."
+            exit 0
+          fi
+          git commit -m "data: stances backfill (run ${{ github.run_id }})"
+          for attempt in 1 2 3 4 5; do
+            if git pull --rebase origin main && git push; then
+              echo "Push lyckades (försök $attempt)."
+              exit 0
+            fi
+            echo "Push-försök $attempt misslyckades. Försöker igen..."
+            sleep $((attempt * 5))
+          done
+          echo "Push misslyckades efter 5 försök."
+          exit 1

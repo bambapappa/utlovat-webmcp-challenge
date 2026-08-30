@@ -1,0 +1,39 @@
+---
+import Layout from "../layouts/Layout.astro";
+
+// Neutralitetskontraktet publiceras i sin helhet (spec §7: reglerna
+// publicerade före lansering). Punkterna följer NEUTRALITET.md.
+const punkter: Array<[string, string]> = [
+  ["Samma regler för alla", "Samma regler för alla åtta partier, utan undantag. Reglerna publiceras innan vi visar det första omdömet."],
+  ["Ett program räknar, ingen tycker", "Ingen skriver ett omdöme för hand. Det räknas fram av ett program ur de kopplingar som godkänts, och samma underlag ger alltid samma svar. En språkmodell får bara föreslå vad som kan höra ihop; om det håller avgörs av kontroller i kod och av en människa."],
+  ["Ordagrant bevis eller ingenting", "För att koppla ett löfte till något ett parti gjort krävs ett citat ur riksdagens eget dokument, kontrollerat tecken för tecken mot källan. Räcker citatet inte till blir det ingen koppling, och rutan står tom. Tomt är ärligare än en gissning."],
+  ["Spårbart hela vägen", "Allt går att klicka sig igenom, hela vägen: från omdömet till kopplingarna, vidare till citatet, och därifrån till riksdagens eget dokument. Där vi sparat en kopia av sidan står citatet i själva kopian."],
+  ["Olika verktyg, samma stränghet", "Ett regeringsparti och ett oppositionsparti arbetar på olika sätt, och mäts därför på olika saker: regeringen på sina lagförslag och sin budget, oppositionen på sina egna förslag och sina röster. Ingen bedöms efter något den inte har möjlighet att göra."],
+  ["Frånvaro är inte ett ställningstagande", "Partierna kommer ofta överens om att lika många från varje sida stannar hemma vid en omröstning. Frånvaro är därför sällan ett ställningstagande, och vi räknar bara ja, nej och nedlagd röst."],
+  ["Neutralt språk", "Vi visar vad som hänt och låter dig dra slutsatsen. Inga betyg, inga rubriker som hänger ut någon. Orden vi märker rutorna med är bestämda i förväg, och kommer nya så sker det öppet."],
+  ["Öppen logg över hur vi valt", "Varje val vi gör om metoden skrivs ner med datum, skäl och vilka andra vägar vi valde bort — också de val vi ångrade. Loggen ligger öppet i kodförrådet, tillsammans med koden den beskriver."],
+  ["Tyst rättelse är förbjuden", "Hittar vi ett fel rättar vi det så att alla ser det: en not på den berörda sidan och en rad i rättelselistan. Vi ändrar aldrig något i tysthet."],
+  ["Prövad på båda blocken före publicering", "Innan något publiceras provas metoden på exempel från båda politiska blocken, för att se att den behandlar dem lika. Utfallet skrivs ner i kodförrådet, öppet att läsa."],
+];
+---
+<Layout title="Neutralitetskontraktet — Handlingsvågen" canonicalPath="/neutralitet">
+  <div class="prosa">
+    <h1>Neutralitetskontraktet</h1>
+    <p class="ingress">
+      Vi granskar dem som har makt. Då måste det gå att lita på hur vi mäter.
+      Här står tio löften om hur vi arbetar — hela listan, inget undanhållet.
+      Ändrar vi något av dem skriver vi öppet vad vi ändrade och varför.
+    </p>
+    <ol class="kontrakt">
+      {punkter.map(([rubrik, text]) => (
+        <li><b>{rubrik}.</b> {text}</li>
+      ))}
+    </ol>
+  </div>
+</Layout>
+
+<style>
+  .prosa { max-width: 68ch; }
+  .kontrakt { padding-left: 1.2rem; }
+  .kontrakt li { margin: 0.7rem 0; }
+</style>

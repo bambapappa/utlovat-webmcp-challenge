@@ -1,0 +1,102 @@
+name: review-apply
+# Etikettbeslut ("knappen"/bulk): beslut:godkänn eller beslut:avvisa på
+# review-kö-issues exekveras här. Etiketter kan bulk-appliceras i issuelistans
+# vy — markera många issues → Label → beslut:godkänn — och kan bara sättas av
+# användare med triage-behörighet (= ägaren), så etiketten ÄR auktorisationen.
+#
+# Svepet är idempotent (tar ALLA etikettbeslut varje körning) — därför är
+# concurrency-koalesceringen ofarlig: slängda köade körningar förlorar inget,
+# det överlevande svepet tar allt. Datamutation sker FÖRE push (och görs om
+# från färsk main tills pushen lyckas); issue-kommentarer/stängningar sker
+# EFTER lyckad push, så ett beslut kan aldrig se bekräftat ut utan att datan
+# faktiskt landat.
+on:
+  issues:
+    types: [labeled]
+  workflow_dispatch: {}
+permissions:
+  contents: read
+  issues: write
+concurrency:
+  group: review-apply
+  cancel-in-progress: false
+jobs:
+  sweep:
+    if: github.event_name == 'workflow_dispatch' || startsWith(github.event.label.name, 'beslut:')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Mint bot app token
+        id: app-token
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1  # v3.2.0
+        with:
+          app-id: ${{ secrets.BOT_APP_ID }}
+          private-key: ${{ secrets.BOT_APP_KEY }}
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          ref: main
+          token: ${{ steps.app-token.outputs.token }}
+          persist-credentials: true
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38  # v6.5.0
+        with:
+          node-version: 22
+      - name: Install pipeline deps
+        run: pnpm install --frozen-lockfile
+        working-directory: pipeline
+      - name: Apply decisions and push (omgörs från färsk main tills push lyckas)
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          NOTIFY_FILE: ${{ runner.temp }}/notify.json
+        run: |
+          git config user.name "utlovat-bot"
+          git config user.email "bot@utlovat.se"
+          for attempt in 1 2 3 4 5; do
+            # Hämtningen MÅSTE lyckas. Går den inte fram står vi kvar på ett
+            # gammalt träd, och då kan en misslyckad push se ut som
+            # "inget nytt att committa" — grön körning, tom push.
+            if ! git fetch origin main; then
+              echo "försök $attempt: kunde inte hämta main"
+              sleep $((attempt * 5))
+              continue
+            fi
+            git reset --hard origin/main
+            (cd pipeline && node --import tsx/esm scripts/apply-labeled-decisions.mts apply)
+            # LÄSKOPIAN FÖLJER LÖFTENA, OCH SVEPET PUBLICERAR LÖFTEN.
+            # Handlingsvågen läser sin egen kopia av Fläskvågens löften, och
+            # `vendorkopia.test.ts` fäller den så snart den glidit. Svepet
+            # byggde den aldrig om: varje bunt godkännanden lämnade main röd,
+            # och den schemalagda pipelinen kör sina prov FÖRE sin egen
+            # ombyggnad — så den föll på en kopia svepet gjort gammal.
+            # Mätt 2026-08-30, efter fyra bunter på en dag.
+            #
+            # Bygget är billigt och idempotent: gör svepet ingenting ändras
+            # ingenting, och `git diff --cached` nedan avgör som förut om något
+            # ska committas.
+            node --experimental-strip-types handlingsvagen/pipeline/scripts/bygg-vendor.mts
+            git add data/ handlingsvagen/data/
+            if git diff --cached --quiet; then
+              echo "Inga dataändringar (inga etikettbeslut att exekvera)."
+              exit 0
+            fi
+            git commit -m "data: review etikettbeslut (svep)"
+            if git push; then
+              echo "Push lyckades (försök $attempt)."
+              exit 0
+            fi
+            echo "Push-försök $attempt misslyckades (main gick vidare) — gör om från färsk main..."
+            sleep $((attempt * 5))
+          done
+          echo "Push misslyckades efter 5 försök."
+          exit 1
+      - name: Notify issues (efter lyckad push)
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          NOTIFY_FILE: ${{ runner.temp }}/notify.json
+        run: |
+          if [ -s "$NOTIFY_FILE" ]; then
+            (cd pipeline && node --import tsx/esm scripts/apply-labeled-decisions.mts notify)
+          else
+            echo "Inga notifieringar planerade."
+          fi

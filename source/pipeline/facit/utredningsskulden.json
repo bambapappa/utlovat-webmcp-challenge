@@ -1,0 +1,15 @@
+{
+  "syfte": "Löften som utredningskontrollen fäller men som en läsning frikänt. Listan är ett facit, inte ett undantag: den får bara krympa, och varje id bär skälet till att det står här.",
+  "matt": "2026-08-28",
+  "count": 2,
+  "poster": [
+    {
+      "id": "p-2026-0907",
+      "skal": "Citatet lovar mer än en översyn. «Maximera investeraravdragets möjligheter … så att det går att använda även för mindre investerare som äger tillsammans med andra som juridisk person» är en breddning av avdraget, och uträkningen prissätter den uteblivna skatten — inte en utredning. Kontrollen ser «se över» men inte «maximera»."
+    },
+    {
+      "id": "p-2026-3021",
+      "skal": "Ordet «utreda» betyder här brottsutredning. Citatet lovar att INRÄTTA en nationell nätpolis «med resurser och verktyg för att identifiera, utreda och åtala kriminalitet, hatbrott och gängrekrytering på nätet» — en ny polisfunktion med personal och verktyg, och den kostar. Kontrollen läser verbet, inte vad som utreds."
+    }
+  ]
+}

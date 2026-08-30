@@ -1,0 +1,219 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Rattelsenot from "../../components/Rattelsenot.astro";
+import { buildPartiSida, partiKoder } from "../../lib/vyer.ts";
+import { rattelserForPath } from "../../lib/data.ts";
+import type { PartiLofteRad } from "../../lib/vyer.ts";
+
+export function getStaticPaths() {
+  return partiKoder().map((kod) => ({ params: { kod } }));
+}
+
+const { kod } = Astro.params;
+const sida = buildPartiSida(kod!);
+if (!sida) return Astro.redirect("/");
+const base = import.meta.env.BASE_URL.replace(/\/?$/, "/");
+
+/**
+ * Täckningsstapelns fyra fält, som x/bredd i löftesenheter.
+ *
+ * Måtten står i svg-attribut och inte i style, därför att sajtens
+ * säkerhetspolicy kastar bort inline-stilar — de hade sett rätt ut lokalt och
+ * varit borta i drift. Provet `test-stil.mts` vaktar det, och pekar självt ut
+ * svg:ns width-attribut som vägen när talet är data.
+ */
+const st = sida.summa;
+const stapelfalt = [
+  { klass: "s-vagd", n: st.vagda },
+  { klass: "s-traff", n: st.sokt_utan_traff },
+  { klass: "s-ingen", n: st.ingen_liknande },
+  { klass: "s-ko", n: st.vantar_pa_sokning },
+].filter((f) => f.n > 0);
+let lopande = 0;
+const stapel = stapelfalt.map((f) => {
+  const x = lopande;
+  lopande += f.n;
+  return { ...f, x };
+});
+
+const KIND: Record<string, string> = {
+  votering: "votering", motion: "motion", proposition: "proposition",
+  interpellation: "interpellation", skriftlig_fraga: "skriftlig fråga",
+};
+const UTSLAGORD: Record<string, string> = { i_linje: "i linje", emot: "emot", avstod: "avstod", franvarande: "frånvarande" };
+const UTSLAGKLASS: Record<string, string> = { i_linje: "status--linje", emot: "status--emot", avstod: "status--avstod", franvarande: "status--tom" };
+
+function statusVy(l: PartiLofteRad): { klass: string; ord: string } {
+  if (l.status === "bade_och") return { klass: "status--bade", ord: "både och" };
+  if (l.status === "agerat_i_linje") return { klass: "status--linje", ord: "i linje" };
+  if (l.status === "agerat_emot") return { klass: "status--emot", ord: "emot" };
+  if (l.n_avstod > 0) return { klass: "status--avstod", ord: "avstod" };
+  return { klass: "status--tom", ord: "ingen ren koppling ännu" };
+}
+/** "Moderaternas löfte" / "M och KD:s löfte" — raden ska säga vems det var. */
+function lofteAgare(h: { lofte_partinamn: string[] }): string {
+  const n = h.lofte_partinamn;
+  if (n.length === 0) return "löftet";
+  if (n.length === 1) return `${n[0]}s löfte`;
+  return `${n.slice(0, -1).join(", ")} och ${n[n.length - 1]}s delade löfte`;
+}
+function statusToken(l: PartiLofteRad): string {
+  if (l.status === "bade_och") return "bade-och";
+  if (l.status === "agerat_i_linje") return "i-linje";
+  if (l.status === "agerat_emot") return "emot";
+  if (l.n_avstod > 0) return "avstod";
+  return "ingen";
+}
+---
+<Layout title={`${sida.namn} — Handlingsvågen`} canonicalPath={`/parti/${kod}`}>
+  <p class="brodsmula"><a href={base}>Rutnätet</a> · <a href={`${base}partier`}>Partier</a></p>
+  <h1>{sida.namn}</h1>
+  <Rattelsenot rattelser={rattelserForPath(`/parti/${kod}`)} />
+  <p class="ingress">Partiets löften, bredvid det partiet självt gjort i riksdagen. Står en rad tom har vi inte granskat den ännu — det är inget omdöme om partiet.</p>
+
+  <p class="grupprubrik">Vad vi vägt</p>
+  <div class="summa" role="group" aria-label="Vad vi vägt">
+    <div><b>{sida.summa.total_loften}</b><span>löften totalt</span></div>
+    <div><b>{sida.summa.vagda}</b><span>vägda mot handling</span></div>
+    <div><b>{sida.summa.i_linje}</b><span>i linje med egna löften</span></div>
+    <div><b>{sida.summa.emot}</b><span>emot egna löften</span></div>
+    {sida.summa.bade_och > 0 && <div><b>{sida.summa.bade_och}</b><span>både och</span></div>}
+    {sida.summa.avstod > 0 && <div><b>{sida.summa.avstod}</b><span>avstod</span></div>}
+  </div>
+  <p class="summanot">
+    Talen ovan gäller <b>partiets egna löften</b>. Vad partiet gjort när andra
+    partier lovat något står längre ner och räknas för sig — det är där
+    <b>emot</b> nästan alltid hamnar, eftersom ett parti sällan handlar mot sitt
+    eget löfte.
+  </p>
+
+  <p class="grupprubrik">Hur långt vi hunnit</p>
+  <div class="matare" role="group" aria-label="Hur långt vi hunnit">
+    <div class="matare-rad">
+      <p class="matare-tal">
+        {sida.summa.genomsokta} <small>av {sida.summa.total_loften} genomsökta</small>
+      </p>
+      <p class="matare-pct">{sida.summa.genomsokt_procent}&nbsp;%</p>
+    </div>
+    <svg
+      class="stapel"
+      viewBox={`0 0 ${Math.max(sida.summa.total_loften, 1)} 10`}
+      preserveAspectRatio="none"
+      role="img"
+      aria-label={`${sida.summa.genomsokta} av ${sida.summa.total_loften} löften genomsökta`}
+    >
+      {stapel.map((f) => (
+        <rect class={f.klass} x={f.x} y="0" width={f.n} height="10" />
+      ))}
+    </svg>
+    <ul class="nyckel">
+      {sida.summa.vagda > 0 && <li><i class="sw sw--vagd"></i>{sida.summa.vagda} vägda</li>}
+      {sida.summa.sokt_utan_traff > 0 && <li><i class="sw sw--traff"></i>{sida.summa.sokt_utan_traff} sökta utan träff</li>}
+      {sida.summa.ingen_liknande > 0 && <li><i class="sw sw--ingen"></i>{sida.summa.ingen_liknande} ingen liknande handling</li>}
+      {sida.summa.vantar_pa_sokning > 0 && <li><i class="sw sw--ko"></i>{sida.summa.vantar_pa_sokning} väntar på sökning</li>}
+    </ul>
+    <p class="matare-not">
+      {sida.summa.vantar_pa_sokning > 0 && (
+        <>
+          {sida.summa.vantar_pa_sokning} av löftena har sökningen ännu inte gått
+          över — talet faller när den körs.{" "}
+        </>
+      )}
+      Hur långt vi hunnit skiljer sig kraftigt mellan partierna. <b>Jämför dem
+      inte på det här talet.</b>
+    </p>
+  </div>
+  <p class="summanot">
+    De tre sista talen betyder olika saker. <b>Sökta utan träff</b> är löften vi
+    letat efter handlingar till utan att hitta något som håller. <b>Ingen
+    liknande handling</b> betyder att sökningen varit där och inte funnit ett
+    enda dokument som liknar löftet tillräckligt — det är en mätning, och
+    metodsidan förklarar gränsen. <b>Väntar på sökning</b> är löften vi inte
+    hunnit leta på, och där säger tomheten ingenting alls.
+  </p>
+
+  <div class="vy-verktyg">
+    <h2>Partiets löften</h2>
+    <label class="vy-filter"><span class="verktyg-etikett">Status</span>
+      <select data-listfilter="parti-loften" data-nyckel="status" aria-label="Filtrera löften på status">
+        <option value="">alla</option>
+        <option value="i-linje">i linje</option>
+        <option value="emot">emot</option>
+        <option value="bade-och">både och</option>
+        <option value="avstod">avstod</option>
+        <option value="ingen">utan handling ännu</option>
+      </select>
+    </label>
+  </div>
+  <ul class="vy-lista" id="parti-loften">
+    {sida.loften.map((l) => {
+      const v = statusVy(l);
+      return (
+        <li data-status={statusToken(l)}>
+          <a class="vy-titel" href={`${base}?lofte=${l.id}`}>{l.titel}</a>
+          <span class="vy-kat">{l.kategori}</span>
+          <span class={`status ${v.klass}`}>{v.ord}</span>
+        </li>
+      );
+    })}
+  </ul>
+  <script is:inline src={`${base}hv-listfilter.js`}></script>
+
+  <h2>Det partiet gjort om sina egna löften <span class="rakn">({sida.handlingar.length})</span></h2>
+  {sida.handlingar.length === 0 ? (
+    <p class="tom-not">Inga granskade kopplingar har ännu gett utslag mot {sida.namn}s egna löften.</p>
+  ) : (
+    <ul class="vy-lista">
+      {sida.handlingar.map((h) => (
+        <li>
+          <span class="vy-meta">{KIND[h.handling.kind] ?? h.handling.kind}{h.handling.datum ? ` · ${h.handling.datum}` : ""}{h.handling.organ ? ` · ${h.handling.organ}` : ""}</span>
+          {h.handling.url ? <a class="vy-titel" href={h.handling.url} rel="noopener" target="_blank">{h.handling.titel || h.handling.id}</a> : <span class="vy-titel">{h.handling.titel || h.handling.id}</span>}
+          <span class="vy-lofte">för {lofteAgare(h)}: <a href={`${base}?lofte=${h.lofte_id}`}>{h.lofte_titel}</a></span>
+          <span class={`status ${UTSLAGKLASS[h.utslag]}`}>{UTSLAGORD[h.utslag]}</span>
+        </li>
+      ))}
+    </ul>
+  )}
+
+  <h2>Det partiet gjort om andra partiers löften <span class="rakn">({sida.handlingar_andras.length})</span></h2>
+  <p class="avsnittsnot">
+    Här räknas inte om {sida.namn} håller vad partiet lovat, utan vad partiet
+    gjort när någon annan lovat något. Ett <b>emot</b> här är inte ett brutet
+    löfte — det är oenighet, och den hör inte hemma i talen högst upp.
+  </p>
+  {sida.handlingar_andras.length === 0 ? (
+    <p class="tom-not">Inga granskade kopplingar har ännu gett utslag för {sida.namn} mot andra partiers löften.</p>
+  ) : (
+    <ul class="vy-lista">
+      {sida.handlingar_andras.map((h) => (
+        <li>
+          <span class="vy-meta">{KIND[h.handling.kind] ?? h.handling.kind}{h.handling.datum ? ` · ${h.handling.datum}` : ""}{h.handling.organ ? ` · ${h.handling.organ}` : ""}</span>
+          {h.handling.url ? <a class="vy-titel" href={h.handling.url} rel="noopener" target="_blank">{h.handling.titel || h.handling.id}</a> : <span class="vy-titel">{h.handling.titel || h.handling.id}</span>}
+          <span class="vy-lofte">för {lofteAgare(h)}: <a href={`${base}?lofte=${h.lofte_id}`}>{h.lofte_titel}</a></span>
+          <span class={`status ${UTSLAGKLASS[h.utslag]}`}>{UTSLAGORD[h.utslag]}</span>
+        </li>
+      ))}
+    </ul>
+  )}
+</Layout>
+
+<style>
+  .brodsmula { color: var(--text-svag); font-size: 0.9rem; margin: 0 0 0.3rem; }
+  .brodsmula a { color: var(--fokus); }
+  h2 { margin-top: 2rem; font-size: 1.25rem; }
+  .vy-verktyg { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; margin-top: 2rem; }
+  .vy-verktyg h2 { margin: 0; }
+  .vy-filter { display: inline-flex; align-items: center; gap: 0.35rem; }
+  .vy-filter select { padding: 0.4rem 0.6rem; border: 1px solid var(--linje); border-radius: var(--radie); background: var(--yta); color: var(--text); }
+  .rakn { color: var(--text-svag); font-weight: 400; }
+  .tom-not { color: var(--text-svag); font-style: italic; }
+  /* Talen högst upp och listorna under mäter olika saker. Noterna säger vilket
+     — utan dem läste en nolla över en lista med emot-rader som ett räknefel. */
+  .summanot, .avsnittsnot {
+    color: var(--text-svag);
+    font-size: 0.9rem;
+    max-width: var(--matt-prosa);
+    margin: 0.6rem 0 0;
+  }
+  .avsnittsnot { margin: 0.3rem 0 0.8rem; }
+</style>

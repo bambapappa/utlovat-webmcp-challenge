@@ -1,0 +1,46 @@
+{
+  "name": "handlingsvagen-pipeline",
+  "type": "module",
+  "version": "0.1.0",
+  "scripts": {
+    "harvest": "node --import tsx/esm scripts/harvest.mts",
+    "test": "node --import tsx/esm --test \"tests/**/*.test.ts\"",
+    "typecheck": "tsc --noEmit",
+    "foreslag": "node --import tsx/esm scripts/foreslag.mts",
+    "granska": "node --import tsx/esm scripts/koppling-granska.mts",
+    "roster": "node --import tsx/esm scripts/roster.mts",
+    "vendor": "node --import tsx/esm scripts/bygg-vendor.mts",
+    "arkiv": "node --import tsx/esm scripts/arkiv.mts",
+    "domar": "node --import tsx/esm scripts/domar.mts",
+    "organ-backfill": "node --import tsx/esm scripts/organ-backfill.mts",
+    "motionstyp-backfill": "node --import tsx/esm scripts/motionstyp-backfill.mts",
+    "nyckelord": "node --import tsx/esm scripts/nyckelord-index.mts",
+    "ko-kontrollera": "node --import tsx/esm scripts/ko-kontrollera.mts",
+    "godkann-lista": "node --import tsx/esm scripts/koppling-godkann-lista.mts",
+    "avvisa-lista": "node --import tsx/esm scripts/koppling-avvisa-lista.mts",
+    "avslag-backfill": "node --import tsx/esm scripts/avslag-backfill.mts",
+    "bevis-byt": "node --import tsx/esm scripts/bevis-byt.mts",
+    "anslag-tabell": "node --import tsx/esm scripts/anslag-tabell.mts",
+    "handlingsklass": "node --import tsx/esm scripts/handlingsklass.mts",
+    "yrkandeslag-svep": "node --import tsx/esm scripts/yrkandeslag-svep.mts",
+    "anslagsbararen": "node --import tsx/esm scripts/anslagsbararen.mts",
+    "inkomst-tabell": "node --import tsx/esm scripts/inkomst-tabell.mts",
+    "inkomstbararen": "node --import tsx/esm scripts/inkomstbararen.mts",
+    "dra-in": "node --import tsx/esm scripts/koppling-dra-in.mts",
+    "peka-om": "node --import tsx/esm scripts/koppling-peka-om.mts",
+    "utvardera-kandidater": "node --import tsx/esm scripts/utvardera-kandidater.mts",
+    "utvardera-modell": "node --import tsx/esm scripts/utvardera-modell.mts",
+    "brodtext-backfill": "node --import tsx/esm scripts/brodtext-backfill.mts",
+    "motivering": "node --import tsx/esm scripts/koppling-motivering.mts",
+    "h2-svep": "node --import tsx/esm scripts/h2-svep.mts",
+    "glapplista": "node --import tsx/esm scripts/glapplista.mts"
+  },
+  "dependencies": {
+    "ajv": "^8.17.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.20.1",
+    "tsx": "^4.23.0",
+    "typescript": "^5.0.0"
+  }
+}

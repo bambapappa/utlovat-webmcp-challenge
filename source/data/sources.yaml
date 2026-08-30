@@ -1,0 +1,491 @@
+allowlist_domains:
+  - riksdagen.se
+  - data.riksdagen.se
+  - regeringen.se
+  - socialdemokraterna.se
+  - moderaterna.se
+  - sd.se
+  - centerpartiet.se
+  - val2026.centerpartiet.se
+  - vansterpartiet.se
+  - kristdemokraterna.se
+  # Underdomän: G2 kräver exakt domänmatch, så pressrummet måste stå för sig.
+  - press.kristdemokraterna.se
+  - liberalerna.se
+  - mp.se
+  - dn.se
+  - svd.se
+  - svt.se
+  # Underdomän: G2 kräver exakt domänmatch. Valkompassen är partiernas egna
+  # svar och egna motiveringstexter på frågor SVT ställt likadant till alla
+  # åtta — inte SVT:s referat av vad partierna tycker. Den bär därför besked
+  # som partiernas egna sidor kan sakna, och den är likformig över partierna.
+  # Mänskligt beslut 2026-08-13.
+  - valkompass.svt.se
+  - sverigesradio.se
+  - tt.se
+  - altinget.se
+  - expressen.se
+  - aftonbladet.se
+  - gp.se
+  - di.se
+
+# Partiernas egna domäner. Enda effekten: ett citat som är en HEL, unik punkt
+# på partiets egen sida får vara kortare än fem ord ("Skrota enprocentsregeln").
+# På en nyhetssida gäller alltid femordsgolvet — där är en kort rad en rubrik
+# eller en bildtext, inte ett löfte.
+parti_domaner:
+  - socialdemokraterna.se
+  - moderaterna.se
+  - sd.se
+  - centerpartiet.se
+  - val2026.centerpartiet.se
+  - vansterpartiet.se
+  - kristdemokraterna.se
+  - press.kristdemokraterna.se
+  - liberalerna.se
+  - mp.se
+
+feeds:
+  # --- Partier (verifierade 2026-06-12 via live HTTP) ---
+  - id: moderaterna
+    type: rss
+    url: "https://moderaterna.se/feed/"
+    verified: "2026-06-12 — 200, RSS 2.0, WordPress"
+
+  - id: sverigedemokraterna
+    type: rss
+    url: "https://www.sd.se/feed/"
+    verified: "2026-06-12 — 200, RSS 2.0, WordPress"
+
+  - id: vansterpartiet
+    type: rss
+    url: "https://www.vansterpartiet.se/feed/"
+    verified: "2026-06-12 — 200, RSS 2.0, WordPress"
+
+  - id: liberalerna
+    type: rss
+    url: "https://www.liberalerna.se/feed/"
+    verified: "2026-06-12 — 200, RSS 2.0, WordPress"
+
+  # Frågetecknet är INTE dekoration. Ändpunkten svarar 200 med tio poster i
+  # båda fallen, men den PARAMETERLÖSA adressen serverar en cachad kopia:
+  # mätt 2026-08-03 slutade den på 2026-06-26 medan sajten var uppe på 08-03.
+  # Vilken parameter som helst går förbi cachen (?limit=, ?x=1, ?cb= — alla gav
+  # samma färska innehåll), så det är cachenyckeln som skiljer, inte limit.
+  # Utan den här raden tappade vi fem veckors MP-nyheter tyst: flödet såg friskt
+  # ut hela tiden. Byt aldrig tillbaka till den nakna adressen.
+  - id: miljopartiet
+    type: rss
+    url: "https://www.mp.se/wp-content/themes/mp/assets/php/rss/rss-news.php?limit=50"
+    verified: "2026-08-03 — 200, RSS, custom PHP endpoint; nyaste post 2026-08-03 MED parameter, 2026-06-26 utan"
+
+  # Socialdemokraterna och Centerpartiet: INGEN RSS finns. Omprövat 2026-08-03
+  # — varken /rss, /feed, /nyheter/rss, MyNewsdesk eller ett pressrum svarar,
+  # och sidorna pekar inte ut något flöde via <link rel="alternate">. Båda kör
+  # SiteVision och renderar nyhetslistan utan flödesstöd.
+  #
+  # DET KOSTAR TÄCKNING, och det är mätt 2026-08-03: sedan vårt nyaste
+  # S-löfte (2026-07-17) har S publicerat minst tre nyheter, två av dem samma
+  # dag — bl.a. "Socialdemokraterna går till val på en nationell modell för…".
+  # C har publicerat fem sedan dess, bl.a. totalförbud mot PFAS och åldersgräns
+  # på sociala medier. Ingen av dem har nått oss.
+  #
+  # De två partierna utan flöde är alltså precis de två med äldst egen-täckning.
+  # Att fånga dem kräver att en nyhetslista får följas till artiklarna — samma
+  # sorts steg som auto-följningen av manifest-PDF:er, fast för HTML. Se
+  # HANDOFF.md; det är ett eget spår och ett mänskligt beslut.
+  # Kristdemokraterna: ingen RSS på egna sajten (SiteVision), men pressrummet
+  # (Notified) har ett riktigt flöde — se kd-press nedan.
+
+  - id: kd-press
+    type: rss
+    url: "https://api.client.notified.com/api/rss/publish/view/18224?type=press"
+    verified: "2026-08-03 — 200, text/xml, RSS 2.0, 50 poster, nyaste 2026-07-16; artiklarna ligger på press.kristdemokraterna.se och serveras med text i HTML (≈1 500 tecken), alltså över min_chars"
+    # Flödet självt ligger hos Notified, men VARJE artikel pekar tillbaka på
+    # press.kristdemokraterna.se — och det är artikelns domän G2 prövar.
+    # Utan den här källan hade KD bara 22 löften, 18 av dem ur ett SVT-program
+    # och 2 från egna sajten, med nyaste löfte 2026-07-04 medan M, SD, L och MP
+    # var aktuella till 2026-08-03.
+
+  # --- Nyhetslistor för partier utan flöde (type: index) ---
+  # S, C och KD kör SiteVision och publicerar varken RSS eller Atom. Deras
+  # artikeladresser bär däremot datum, och "index"-typen följer listan till
+  # artiklarna. Mätt 2026-08-03: listan gav 3, 5 respektive 3 artiklar, och
+  # varje artikel serverar 2 200–4 000 tecken text — långt över min_chars.
+  #
+  # M, SD, V, L och MP saknas här med flit: deras adresser är odaterade slugar,
+  # så datumkravet ger noll träffar. De har fungerande RSS i stället, och att
+  # gissa artikellänkar utan datum hade dragit in menyer och taggsidor.
+
+  # S — /nyheter renderas med skript och ger noll länkar; startsidan listar de
+  # senaste artiklarna i HTML och är därför ingången.
+  - id: s-nyheter
+    type: index
+    url: "https://www.socialdemokraterna.se/"
+    verified: "2026-08-03 — 200, 3 daterade artiklar (nyaste 2026-08-03), 3 400–4 000 tecken per artikel"
+
+  - id: c-nyheter
+    type: index
+    url: "https://www.centerpartiet.se/nyheter"
+    verified: "2026-08-03 — 200, 5 daterade artiklar (nyaste 2026-07-31), ca 2 800 tecken per artikel"
+
+  # KD har pressrummet ovan; startsidan är en andra väg in till partiets egna
+  # nyheter, som inte ligger i pressflödet.
+  - id: kd-nyheter
+    type: index
+    url: "https://kristdemokraterna.se/"
+    verified: "2026-08-03 — 200, 3 daterade artiklar"
+
+  # KD:s "Vår politik" är en MENY, inte en politiksida: 4 670 tecken, nästan
+  # bara länketiketter. Den har hämtats fyra gånger och gett noll kandidater —
+  # inte ens en avvisad. Politiken ligger på undersidorna, och utan dem kom 18
+  # av KD:s 24 löften ur ett enda SVT-program medan bara 21 % kom från partiets
+  # egen kanal (mätt 2026-08-04; övriga partier låg på 61–100 %).
+  #
+  # Mönstret utesluter fyra undersidor som inte bär politik: teckenspråk,
+  # lättläst och andra språk är samma innehåll i annan form, och
+  # rapporter-och-dokument är en länklista.
+  - id: kd-politik-index
+    type: index
+    url: "https://kristdemokraterna.se/var-politik"
+    article_pattern: "^/var-politik/(?!teckensprak|lattlast|kd-pa-andra-sprak|rapporter-och-dokument)"
+    verified: "2026-08-04 — 200, 12 undersidor varav 8 efter mönstret; politikomraden 11 336 tecken, politik-a-till-o 17 166, en-budget-for-familjen 4 951"
+
+  # KD:s A–Ö är en KATALOG, inte en nyhetslista: 220 undersidor, en per
+  # sakfråga, och det är där partiets faktiska ställningstaganden står.
+  # Källan ovan följer den bara som EN sida — själva registret, alltså
+  # länketiketter utan politik.
+  #
+  # Det kostade oss ett publicerat vallöfte, och det upptäcktes av en läsare
+  # och inte av oss: KD gick 2026-05-07 till val på att stegvis avskaffa
+  # reavinstskatten på bostäder. Beskedet kom före vårt skördefönster, så
+  # nyheten fanns aldrig i något flöde vi läser — men politiken står kvar på
+  # /var-politik/politik-a-till-o/reavinstskatt och har gjort det hela tiden.
+  # Vi hämtade registret som pekade dit fyra gånger utan att någon gång öppna
+  # sidan.
+  #
+  # max_articles finns för den här sortens källa. Tolvtaket är byggt för
+  # färskvara; mot en katalog i bokstavsordning blir det inte en fördröjning
+  # utan ett hårt tak vid "arbetsratt". 250 rymmer alla 220 med marginal för
+  # att KD lägger till fler. LLM-budgeten skyddas av maxNewArticles i
+  # runPipeline, inte av det här talet: oförändrade sidor faller på dedup.
+  - id: kd-politik-a-till-o
+    type: index
+    url: "https://kristdemokraterna.se/var-politik/politik-a-till-o"
+    article_pattern: "^/var-politik/politik-a-till-o/."
+    max_articles: 250
+    verified: "2026-08-10 — 200, 184 937 tecken, 220 undersidor efter mönstret; reavinstskatt 1 006 tecken text"
+
+  # --- Politiksidor via partiernas egna sitemaps (type: sitemap) ---
+  #
+  # VARFÖR DEN HÄR GRUPPEN FINNS. KD:s A–Ö ovan gav 193 publicerade löften ur
+  # 241 lästa undersidor. Det var rätt — politiken stod där, och vi missade ett
+  # publicerat vallöfte för att vi inte läste den. Men ingen ANNAN partis
+  # politikavdelning var registrerad på samma sätt, och 2026-08-17 mättes vad
+  # det blivit: 232 av 801 löften var KD:s mot 42 för SD, och av de 212 senast
+  # tillagda var 193 KD:s. Vi hade läst 270 sidor hos KD och 22 hos SD.
+  #
+  # Beslutet från tidigare sa redan att listorna skulle vara SYMMETRISKA. Det
+  # blev de aldrig. De här fyra källorna är symmetrin, och `pnpm test:symmetri`
+  # faller numera om ett parti får en politikkälla och ett annat blir utan.
+  #
+  # VARFÖR SITEMAP OCH INTE INDEX. M, MP och V bygger sina politikmenyer med
+  # skript: hämtar man deras politiksida får man noll länkar till politik, bara
+  # distriktsavdelningarna i sidfoten. Mätt 2026-08-17. Deras sitemap listar
+  # däremot varje sida, och den är dessutom vad partiet SJÄLVT pekar ut som
+  # sina sidor — alltså samma mekanism för alla, i stället för ett gissat
+  # länkmönster per parti.
+  #
+  # MÖNSTREN PRÖVAS MOT HELA ADRESSEN, inte mot sökvägen. Lokalavdelningarna
+  # ligger under samma domän som rikspolitiken: MP:s sitemap har 4 116 träffar
+  # på "/politik/" men 98 på rikspolitiken, resten är mp.se/ale/politik och
+  # dess likar. Samma sak hos C. Ett sökvägsmönster kan inte skilja dem åt.
+
+  # V — 111 rikspolitiksidor, 0 lästa (2026-08-17). Mönstret utesluter
+  # euval2024/politik: det är förra EU-valets politik, inte 2026 års.
+  - id: v-politik-sitemap
+    type: sitemap
+    url: "https://www.vansterpartiet.se/sitemap.xml"
+    article_pattern: "^https://www\\.vansterpartiet\\.se/var-politik/"
+    verified: "2026-08-17 — sitemapindex, 2 035 adresser totalt, 111 på /var-politik/ efter mönstret"
+
+  # MP — 98 rikspolitiksidor, 1 läst (2026-08-17).
+  - id: mp-politik-sitemap
+    type: sitemap
+    url: "https://www.mp.se/sitemap.xml"
+    article_pattern: "^https://www\\.mp\\.se/politik/"
+    verified: "2026-08-17 — 27 004 adresser totalt, 4 116 på /politik/ varav 98 rikspolitik efter mönstret"
+
+  # M — 87 rikspolitiksidor, 1 läst (2026-08-17).
+  - id: m-politik-sitemap
+    type: sitemap
+    url: "https://moderaterna.se/sitemap.xml"
+    article_pattern: "^https://moderaterna\\.se/var-politik/"
+    verified: "2026-08-17 — sitemapindex med 12 delar, 2 534 adresser totalt, 87 på /var-politik/"
+
+  # SD — 6 politiksidor, 0 lästa (2026-08-17). Att det är sex och inte hundra
+  # är SD:s eget val av hur mycket de skriver ut, inte vår täckning: hela
+  # /vad-vi-vill/ är sex sidor. Källan står här ändå, för symmetrins skull och
+  # för att den fångar det de lägger till.
+  - id: sd-politik-sitemap
+    type: sitemap
+    url: "https://sd.se/sitemap.xml"
+    article_pattern: "^https://(www\\.)?sd\\.se/vad-vi-vill/"
+    verified: "2026-08-17 — sitemapindex, 407 adresser totalt, 6 på /vad-vi-vill/"
+
+  # L — 126 politiksidor, 0 lästa (2026-08-17). En riktig A–Ö: a-kassa,
+  # abort, ai, ålderism, äldreomsorg … Sidan /politik-a-o/ som menyn pekar på
+  # byggs med skript och gav noll länkar; sidorna ligger under /politik/.
+  - id: l-politik-sitemap
+    type: sitemap
+    url: "https://www.liberalerna.se/sitemap.xml"
+    article_pattern: "^https://www\\.liberalerna\\.se/politik/"
+    verified: "2026-08-17 — sitemapindex, 3 207 adresser totalt, 126 på /politik/ efter mönstret; a-kassa 6 849 tecken"
+
+  # C — 208 politiksidor, 0 lästa (2026-08-17). Rikspolitiken ligger under
+  # /centerpartiets-politik/, inte under /politik/ — det senare matchar bara
+  # lokalavdelningarnas sidor, som är 14 186 av sajtens 37 254 adresser.
+  # Katalogen har två våningar (…/politik-a-o/bostader/bostadsbyggande), och
+  # sitemapen listar båda, så ingen följning behövs.
+  - id: c-politik-sitemap
+    type: sitemap
+    url: "https://www.centerpartiet.se/sitemap.xml"
+    article_pattern: "^https://www\\.centerpartiet\\.se/centerpartiets-politik/"
+    verified: "2026-08-17 — 37 254 adresser totalt, 208 på /centerpartiets-politik/; bostadsbyggande 4 601 tecken"
+
+  # --- Katalog i två våningar (type: index, follow_depth: 2) ---
+
+  # S — 121 politiksidor, 0 lästa (2026-08-17). Socialdemokraterna har ingen
+  # sitemap: SiteVision svarar 404 på /sitemap.xml, precis som hos KD. Deras
+  # A–Ö är däremot serverrenderad, men i TVÅ våningar: /var-politik listar
+  # fjorton ämnesområden, och de enskilda ståndpunkterna ligger en nivå in.
+  # Nivå ett ensam ger fjorton sidor; nivå ett plus två ger 121.
+  #
+  # Områdessidorna hämtas som artiklar de också — de bär 6 000 tecken egen
+  # text, inte bara länkar.
+  #
+  # Adressen är /var-politik (utan a-till-o): själva A–Ö-registret renderas
+  # med skript och ger noll länkar, medan sidan ovanför listar områdena i HTML.
+  - id: s-politik-index
+    type: index
+    url: "https://www.socialdemokraterna.se/var-politik"
+    article_pattern: "^/var-politik/a-till-o/"
+    follow_depth: 2
+    max_articles: 200
+    verified: "2026-08-17 — 200, 14 områden på nivå ett, 121 sidor med nivå två; ekonomi 6 067 tecken, banker 5 157"
+
+  # KD saknas i de här två grupperna med flit: partiets A–Ö täcks redan av
+  # kd-politik-a-till-o ovan, som är samma sorts katalogkälla.
+
+  # --- Nyhetslistor för partier SOM HAR flöde (andra vägen in) ---
+  # Efter att MP:s flöde visade sig servera en fem veckor gammal cache utan att
+  # något syntes är en enda väg in per parti inte betryggande. De här källorna
+  # är redundans: går flödet tyst fortsätter nyheterna komma. Adresserna är
+  # odaterade slugar, så varje källa pekar ut sitt eget artikelprefix i stället
+  # för att luta sig mot datumkravet.
+
+  - id: m-nyheter
+    type: index
+    url: "https://moderaterna.se/nyheter/"
+    article_pattern: "^/nyhet/"
+    verified: "2026-08-03 — 200, 11 artiklar; datum ur article:published_time i artikeln"
+
+  - id: v-nyheter
+    type: index
+    url: "https://www.vansterpartiet.se/nyheter/"
+    article_pattern: "^/nyheter/(?!page/)"
+    verified: "2026-08-03 — 200, 9 artiklar"
+
+  - id: l-nyheter
+    type: index
+    url: "https://www.liberalerna.se/nyheter/"
+    article_pattern: "^/nyheter/(?!page/)"
+    verified: "2026-08-03 — 200, 8 artiklar"
+
+  - id: mp-nyheter
+    type: index
+    url: "https://www.mp.se/just-nu/"
+    article_pattern: "^/just-nu/"
+    verified: "2026-08-03 — 200, 12 artiklar; datum ur <time datetime> i artikeln"
+
+  # SD saknas här: både /nyheter/ och startsidan bygger artikellistan med
+  # skript, så HTML:en bär bara paginering (/nyheter/page/2/ …). Ingenting att
+  # följa. SD:s RSS fungerar och var aktuell 2026-08-01 — kontrollerat samma
+  # dag. Blir listan någon gång serverrenderad går den att lägga till här med
+  # samma mönster som V och L.
+
+  # --- Riksdagen API (verifierade 2026-06-12 via live HTTP) ---
+  - id: riksdagen-motioner
+    type: riksdagen_api
+    url: "https://data.riksdagen.se/dokumentlista/?doktyp=mot&utformat=json&sort=datum&a=S%C3%A5Sedan"
+    verified: "2026-06-12 — 200, JSON, 257928 träffar, sidor 12897"
+
+  - id: riksdagen-anforanden
+    type: riksdagen_api
+    url: "https://data.riksdagen.se/anforandelista/?utformat=json&a=S%C3%A5Sedan"
+    verified: "2026-06-12 — 200, JSON, separat endpoint (ej dokumentlista)"
+
+  # --- Medier (verifierade 2026-06-12 via live HTTP) ---
+  - id: dn-politik
+    type: rss
+    url: "https://www.dn.se/rss/politik"
+    verified: "2026-06-12 — 200, RSS 2.0, dedikerad svensk politik"
+
+  - id: sr-ekot
+    type: rss
+    url: "https://api.sr.se/api/rss/program/4540"
+    verified: "2026-06-12 — 200, Atom, Ekot program 4540"
+
+  - id: svt-nyheter
+    type: rss
+    url: "https://www.svt.se/rss.xml"
+    verified: "2026-06-12 — 200, RSS 2.0, bred nyhetstäckning med politik"
+
+  - id: di
+    type: rss
+    url: "https://www.di.se/rss"
+    verified: "2026-06-12 — 200, RSS 2.0, ekonomi/politik-overlap"
+
+  # SvD: INGEN offentlig RSS hittad (404 på /rss, /feed, /nyheter/rss).
+  # Expressen, Aftonbladet, GP, Altinget, TT: ej testade i denna omgång;
+  # kan läggas till efter verifiering.
+
+  # --- Skrivna manifest/policysidor (page) ---
+  # Partiernas skrivna löften finns inte som RSS. "page"-typen hämtar en HTML-sida
+  # ELLER PDF, extraherar text och kör LLM-extraktion + grindarna. Sidorna
+  # ändringsbevakas (contentHash i seen) och manifest-PDF:er länkade från en sida
+  # auto-följs (samma domän, .pdf + manifest/valplattform/valprogram i sökvägen).
+  # DÄRFÖR ska VARJE parti ha minst en valsida här även innan manifestet släppts:
+  # den dag partiet länkar sin manifest-PDF fångas den automatiskt.
+  # Läge 2026-07-03: fullt manifest publicerat av C (96 s.), L (40 s.);
+  # valplattform av S (4 s.), V (4 s.); MP har HTML-utkast; M/SD/KD ej ännu.
+
+  # C — fullt manifest (PDF) + sammanfattningssida
+  - id: c-valmanifest
+    type: page
+    url: "https://val2026.centerpartiet.se/"
+    verified: "2026-07-02 — 200, Centerpartiets valmanifest 2026 (sammanfattningssida; länkar PDF:en)"
+  - id: c-valmanifest-pdf
+    type: page
+    url: "https://val2026.centerpartiet.se/wp-content/uploads/2026/06/Valmanifest-2026.pdf"
+    verified: "2026-07-03 — 200, application/pdf, 96 s. — hela valmanifestet (sha256 69013e13c1ab…)"
+
+  # S — valplattform (PDF) + val-2026-sida (länkar PDF:en; ingen RSS)
+  - id: s-valmanifest
+    type: page
+    url: "https://www.socialdemokraterna.se/val-2026"
+    verified: "2026-07-03 — 200, S:s val-2026-sida; länkar Valplattform.pdf"
+  - id: s-valplattform-pdf
+    type: page
+    url: "https://www.socialdemokraterna.se/download/18.68544bb219c4794c4a4684c/1771599906618/Valplattform.pdf"
+    verified: "2026-07-03 — 200, application/pdf, 4 s., CreationDate 2026-02-04"
+
+  # M — inget valmanifest publicerat ännu; politiksidan bevakas (auto-följ tar PDF:en när den släpps)
+  - id: m-politik
+    type: page
+    url: "https://moderaterna.se/var-politik/"
+    verified: "2026-08-03 — 200, M:s politiksida; valmanifest 2026 ej publicerat (/valmanifest/ svarar 200 men serverar samma politiksida)"
+
+  # SD — inget valmanifest publicerat ännu; politiksidan bevakas
+  - id: sd-vadvivill
+    type: page
+    url: "https://sd.se/vad-vi-vill/"
+    verified: "2026-08-03 — 200, SD:s politik; valmanifest 2026 ej publicerat. OBS: /valmanifest/ leder vidare till 2022 års manifest-PDF — stoppas av årsspärren"
+
+  # V — valplattform beslutad på kongressen 2026 (PDF) + valsida
+  - id: v-val2026
+    type: page
+    url: "https://www.vansterpartiet.se/val2026/"
+    verified: "2026-07-03 — 200, V:s valsida"
+  - id: v-valplattform-pdf
+    type: page
+    url: "https://www.vansterpartiet.se/wp-content/uploads/2026/04/Preliminar-Valplattform-efter-beslut-pa-kongressen-2026.pdf"
+    verified: "2026-07-03 — 200, application/pdf, 4 s., CreationDate 2026-04-19"
+
+  # KD — inget valmanifest publicerat ännu; politiksidan bevakas.
+  # OBS: sidan länkar 'Manifesto_2024.pdf' från EU-valet. Den matchar
+  # nyckelorden för auto-följning men stoppas av årsspärren (VALAR i fetch.ts).
+  - id: kd-politik
+    type: page
+    url: "https://kristdemokraterna.se/var-politik"
+    verified: "2026-08-03 — 200, KD:s politiksida; valmanifest 2026 ej publicerat (/valmanifest ger 404)"
+
+  # L — fullt valmanifest 'För din frihet' (PDF) + manifestsida (länkar PDF:en)
+  - id: l-valmanifest
+    type: page
+    url: "https://www.liberalerna.se/liberalernas-valmanifest-2026"
+    verified: "2026-07-03 — 200, L:s manifestsida; länkar PDF:en"
+  - id: l-valmanifest-pdf
+    type: page
+    url: "https://www.liberalerna.se/wp-content/uploads/liberalernas-valmanifest-2026-40s-komprimerad.pdf"
+    verified: "2026-07-03 — 200, application/pdf, 40 s., CreationDate 2026-06-02"
+
+  # MP — valmanifest 2026 ännu ej offentligt (utkastsidan är lösenordsskyddad);
+  # politiksidan bevakas + politiskt handlingsprogram 2026–2030 (beslutat, PDF)
+  - id: mp-politik
+    type: page
+    url: "https://www.mp.se/politik/"
+    verified: "2026-08-03 — 200, MP:s politiksida; valmanifest 2026 ej publicerat. OBS: /valmanifest/ är sidan 'Valmanifest 2022' — dess PDF stoppas av årsspärren"
+  - id: mp-handlingsprogram-pdf
+    type: page
+    url: "https://www.mp.se/wp-content/uploads/2026/04/politiskt-handlingsprogram-2026-2030.pdf"
+    verified: "2026-07-03 — 200, application/pdf — politiskt handlingsprogram 2026–2030"
+  - id: mp-almedalstal
+    type: page
+    url: "https://www.mp.se/just-nu/daniel-helldens-almedalstal/"
+    verified: "2026-07-02 — 200, Daniel Helldéns Almedalstal (skriven)"
+  - id: mp-matstrategi
+    type: page
+    url: "https://www.mp.se/just-nu/miljopartiet-ny-strategi-for-fossilfri-matproduktion-starker-sveriges-beredskap/"
+    verified: "2026-07-02 — 200, MP fossilfri matproduktion"
+
+limits:
+  # Höjt från 20 till 45 den 2026-08-17, av samma skäl som kadensen i
+  # pipeline.yml: sju partiers politikavdelningar kopplades in samtidigt och
+  # låg nästan olästa. Med alla åtta partier inkopplade är eftersläpet 757
+  # sidor (C 208, KD 220 lästa, S 121, L 126, V 111, MP 98, M 87, SD 6), och
+  # 6 körningar × 45 ger 270 per dygn — alltså knappt tre dygn.
+  #
+  # Varför inte högre: körningen tog 73–87 minuter med taket 20, och en stor
+  # del av den tiden är LLM-arbete per sida. 45 landar grovt på 2,5–3 timmar,
+  # vilket ryms inom fyrtimmarskadensen. Går taket så högt att en körning inte
+  # hinner bli klar innan nästa köas avbryts den köade — då skördar vi mindre,
+  # inte mer.
+  #
+  # Taket skyddar två saker: LLM-kostnaden per körning, och granskningskön —
+  # varje sida som ger en kandidat hamnar hos en människa. Kön är den riktiga
+  # flaskhalsen i en ikappkörning; skörden går alltid fortare än granskningen.
+  #
+  # Vem som får de 45 platserna avgörs av skordeordning.ts: det parti vi läst
+  # minst på går först. Utan den ordningen gör en höjning här bara att det
+  # redan bäst täckta partiet skördas ännu fortare.
+  # Höjt 45 → 120 den 2026-08-18, när körningen gjordes samtidig. De två talen
+  # hänger ihop: budgeten ska vara så stor som körtiden tål, och körtiden
+  # bestäms numera av takten nedan och inte av hur många sidor det är.
+  #
+  # Vad som mättes innan höjningen: körningarna tog 201, 296 och 325 minuter —
+  # inte 73–87 som kommentaren i pipeline.yml påstod — och med kadens var
+  # fjärde timme köade de bakom varandra. 6 × 45 blev därför aldrig 270 sidor
+  # om dygnet i praktiken. Med 6 × 120 och körningar som ryms i sitt fönster
+  # tar eftersläpet på 757 sidor ungefär ett dygn i stället för tre.
+  #
+  # Ordningen som avgör VEM som får budgeten ligger i skordeordning.ts och rörs
+  # inte av höjningen: partiet vi läst minst på går fortfarande först.
+  max_articles_per_run: 120
+  min_chars: 400
+
+  # Takten. Båda talen ändrar bara hur fort körningen går, aldrig vad den
+  # producerar — sammanfogningen sker i indataordning och `samtidighet.test.ts`
+  # mäter att tak 1 och tak 6 ger samma kö, post för post.
+  #
+  # Varför just 6: leverantörernas taktspärr är den verkliga gränsen. Blir det
+  # 429-svar går de till reservkontot och syns i loggen (kedjans varning), så
+  # ett för högt tal märks i stället för att tyst kosta kvot. Sänk hit om det
+  # börjar synas.
+  samtidiga_artiklar: 6
+  # Hämtningen är snällare räknad: 6 sidor i taget INOM en källa, och källorna
+  # tas fortfarande en i taget. Det gör att en partisajt aldrig ser mer än sex
+  # samtidiga frågor från oss. robots.txt hämtas en gång per värd även när sex
+  # sidor startar samtidigt.
+  samtidiga_hamtningar: 6

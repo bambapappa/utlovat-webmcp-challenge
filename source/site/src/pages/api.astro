@@ -1,0 +1,127 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { getPromises, getParties } from "../lib/data";
+
+const promises = getPromises();
+const parties = getParties();
+
+const jsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Dataset",
+    "name": "utlovat.se — vallöften 2026",
+    "description": "Oberoende, källspårad sammanställning av svenska riksdagspartiers vallöften inför valet 2026.",
+    "url": "https://utlovat.se/api",
+    "license": "https://creativecommons.org/licenses/by/4.0/",
+    "creator": {
+      "@type": "Organization",
+      "name": "utlovat.se",
+    },
+    "distribution": [
+      { "@type": "DataDownload", "name": "summary.json", "contentUrl": "https://utlovat.se/api/v1/summary.json", "encodingFormat": "application/json" },
+      { "@type": "DataDownload", "name": "promises.json", "contentUrl": "https://utlovat.se/api/v1/promises.json", "encodingFormat": "application/json" },
+      { "@type": "DataDownload", "name": "parties.json", "contentUrl": "https://utlovat.se/api/v1/parties.json", "encodingFormat": "application/json" },
+      { "@type": "DataDownload", "name": "issues.json", "contentUrl": "https://utlovat.se/api/v1/issues.json", "encodingFormat": "application/json" },
+      { "@type": "DataDownload", "name": "stances.json", "contentUrl": "https://utlovat.se/api/v1/stances.json", "encodingFormat": "application/json" },
+      { "@type": "DataDownload", "name": "promise-traces.json", "contentUrl": "https://utlovat.se/api/v1/promise-traces.json", "encodingFormat": "application/json" },
+      { "@type": "DataDownload", "name": "constants.json", "contentUrl": "https://utlovat.se/api/v1/constants.json", "encodingFormat": "application/json" },
+    ],
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Hem", "item": "https://utlovat.se/" },
+      { "@type": "ListItem", "position": 2, "name": "API", "item": "https://utlovat.se/api" },
+    ],
+  },
+];
+---
+<Layout title="API-dokumentation — utlovat.se" description="Öppet statiskt JSON-API för utlovat.se. Maskinläsbara data under CC BY 4.0." jsonLd={jsonLd} canonicalPath="/api">
+  <div class="page-content">
+    <div class="prosa-content prosa-content--centered">
+      <h1>API</h1>
+      <p>Den här sidan är till för dig som bygger något — en app, en tjänst eller en AI. Vill du bara läsa siffrorna räcker resten av sajten. Här kan en dator i stället hämta all vår data automatiskt och fritt. Det enda vi ber om är att du anger "utlovat.se" som källa (licens CC BY 4.0). Resten av sidan är tekniska detaljer.</p>
+
+      <h2>Endpoints</h2>
+      <div class="datavy datavy--scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>Endpoint</th>
+              <th>Beskrivning</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>/api/v1/summary.json</code></td>
+              <td>Sammanfattning: totalsumma, antal löften, finansieringsgap per parti</td>
+            </tr>
+            <tr>
+              <td><code>/api/v1/promises.json</code></td>
+              <td>Alla löften (kompletta postformat med generated_at och data_hash)</td>
+            </tr>
+            <tr>
+              <td><code>/api/v1/parties.json</code></td>
+              <td>Partimetadata: kod, namn, färg, mandat, röster, block</td>
+            </tr>
+            <tr>
+              <td><code>/api/v1/comparisons.json</code></td>
+              <td>Jämförelsetal per löfte (enbart fysiska: myntstapel mot avstånd)</td>
+            </tr>
+            <tr>
+              <td><code>/api/v1/constants.json</code></td>
+              <td>Jämförelsekonstanter: myntets tjocklek, avstånd (månen, Mars), reformutrymme</td>
+            </tr>
+            <tr>
+              <td><code>/api/v1/changelog.json</code></td>
+              <td>Pipeline-körningslogg: tillagda, uppdaterade, tillbakadragna löften</td>
+            </tr>
+            <tr>
+              <td><code>/api/v1/issues.json</code></td>
+              <td>Frågevågen: valets stora frågor med delfrågor och urvalsbevis (Novus + SOM)</td>
+            </tr>
+            <tr>
+              <td><code>/api/v1/stances.json</code></td>
+              <td>Frågevågen: partiernas besked per delfråga — append-only med citat, arkiv och ändringar</td>
+            </tr>
+            <tr>
+              <td><code>/api/v1/integrity.json</code></td>
+              <td>Dataintegritet: sha256 av kanonisk promises.json + per fil (stances, issues)</td>
+            </tr>
+            <tr>
+              <td><code>/api/v1/promise-traces.json</code></td>
+              <td>Granskade kedjor från löfte till riksdagshandling, med källor och arkivkopior när de finns — utan dom om löftet hölls eller bröts</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>Format</h2>
+      <p>JSON, UTF-8. Varje svar innehåller <code>generated_at</code> och <code>data_hash</code>.</p>
+
+      <h2>CORS</h2>
+      <p><code>Access-Control-Allow-Origin: *</code> — fritt att använda från alla domäner.</p>
+
+      <h2>Schemas</h2>
+      <p>JSON Schemas (draft 2020-12) finns i <code>pipeline/schemas/</code> i repot.</p>
+
+      <h2>Byggt med datat</h2>
+      <p>Två spel hämtar sina löften härifrån. De är egna projekt med egen kod och egen licens, byggda av samma person som driver utlovat.se — men de är spel, inte granskning. Ingenting i dem är en bedömning av något parti, och de rör inte siffrorna på den här sajten.</p>
+      <ul>
+        <li><a href="https://valtris.utlovat.se/" target="_blank" rel="noopener">Valtris<span aria-hidden="true"> ↗</span><span class="visually-hidden"> (öppnas i en ny flik)</span></a> — ett Tetris där varje kloss är ett verkligt vallöfte. Kategorin bestämmer formen och kostnaden bestämmer poängen; partiet syns bara på färgen och påverkar ingenting.</li>
+        <li><a href="https://rostfiske.utlovat.se/" target="_blank" rel="noopener">Röstfiske<span aria-hidden="true"> ↗</span><span class="visually-hidden"> (öppnas i en ny flik)</span></a> — ett arkadspel där du fiskar väljarröster på valdagen, med partiernas egna löften som bete.</li>
+      </ul>
+      <p>Bygger du något själv på datat får du gärna höra av dig på <a href="mailto:hej@utlovat.se">hej@utlovat.se</a>. Det enda kravet är att du anger "utlovat.se" som källa.</p>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .prosa-content--centered {
+    margin: 0 auto;
+  }
+  .datavy--scroll {
+    overflow-x: auto;
+  }
+</style>

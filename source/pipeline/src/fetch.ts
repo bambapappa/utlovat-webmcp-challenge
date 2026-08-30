@@ -1,0 +1,1555 @@
+import { readFileSync, writeFileSync, mkdirSync, readdirSync } from "node:fs";
+import { createHash } from "node:crypto";
+import { gunzipSync } from "node:zlib";
+import { DATE_WINDOW_DAYS, type NormalizedArticle } from "./gates.ts";
+import { kartaSamtidigt } from "./samtidigt.ts";
+
+/* ──────────────────────── ArticleSource (M2 injicerbart gränssnitt) ── */
+
+export interface ArticleSource {
+  fetch(): Promise<NormalizedArticle[]>;
+}
+
+export class MemorySource implements ArticleSource {
+  constructor(private articles: NormalizedArticle[]) {}
+  async fetch(): Promise<NormalizedArticle[]> {
+    return this.articles;
+  }
+}
+
+export class FixtureSource implements ArticleSource {
+  constructor(private fixtureDir: string) {}
+  async fetch(): Promise<NormalizedArticle[]> {
+    const files = readdirSync(this.fixtureDir)
+      .filter((f) => f.endsWith(".json"))
+      .sort();
+    return files.map((f) => {
+      const raw = readFileSync(`${this.fixtureDir}/${f}`, "utf8");
+      const parsed = JSON.parse(raw) as { article: NormalizedArticle };
+      return parsed.article;
+    });
+  }
+}
+
+/* ──────────────────────── Källkonfiguration (sources.yaml) ── */
+
+export interface SourceFeed {
+  id: string;
+  type: "rss" | "riksdagen_api" | "page" | "index" | "sitemap";
+  url: string;
+  /**
+   * Bara för "index" och "sitemap": mönster som en artikeladress SÖKVÄG måste matcha.
+   * Utan det krävs ett datum i sökvägen. De fem WordPress-partierna daterar
+   * inte sina adresser men samlar artiklarna under ett eget prefix —
+   * `/nyhet/`, `/nyheter/`, `/just-nu/` — och det är precisare än att gissa.
+   */
+  article_pattern?: string;
+  /**
+   * Bara för "index": eget tak på antalet följda adresser, i stället för
+   * MAX_INDEX_ARTICLES. Finns för KATALOGER, inte för nyhetslistor.
+   *
+   * En nyhetslista är färskvara: tolv poster räcker, och det som inte hann med
+   * i dag är gammalt i morgon. En A–Ö-katalog är motsatsen — den är stabil,
+   * står kvar och har 220 poster hos KD. Med tolvtaket följs bara de tolv
+   * första i bokstavsordning ("a-kassa" … "arbetsratt") varje körning, och
+   * "reavinstskatt" nås aldrig, hur många gånger vi än hämtar. Taket blev alltså
+   * inte en fördröjning utan ett hårt tak på hur långt in i alfabetet vi kan se.
+   *
+   * Höjt tak kostar inte en LLM-körning per sida: budgeten på NYA artiklar
+   * ligger i runPipeline, dedup fäller det som är oförändrat, och bara det som
+   * faktiskt behandlats markeras sett. Överskottet tas nästa körning.
+   */
+  max_articles?: number;
+  /**
+   * Bara för "index": hur många länksteg katalogen får följas.
+   *
+   * 1 (förval) är en nyhetslista — listan pekar direkt på artiklarna.
+   *
+   * 2 behövs för kataloger i två våningar. Socialdemokraternas A–Ö är en
+   * sådan: `/var-politik` listar fjorton ÄMNESOMRÅDEN, och de enskilda
+   * ståndpunkterna ligger en nivå längre in. Mätt 2026-08-17 ger nivå ett
+   * fjorton sidor och nivå ett plus två 121 — och S har ingen sitemap att
+   * gena via, för SiteVision svarar 404 på /sitemap.xml.
+   *
+   * Sidorna på mellannivån hämtas som artiklar de också: hos S bär en
+   * områdessida 6 000 tecken egen text, inte bara länkar. Bär den bara
+   * länkar faller den ändå på min_chars.
+   *
+   * Djupare än 2 finns inte, och ska inte finnas: tre steg utan datumkrav
+   * är en genomsökning av hela sajten, inte en katalog.
+   */
+  follow_depth?: 1 | 2;
+  verified?: string;
+}
+
+export interface SourceConfig {
+  allowlist_domains: string[];
+  /** Partiernas egna domäner — styr det lägre citatgolvet i G3. */
+  parti_domaner?: string[];
+  feeds: SourceFeed[];
+  limits: {
+    max_articles_per_run: number;
+    min_chars: number;
+    /**
+     * Hur många artiklar som bearbetas samtidigt (LLM-anropen). Odefinierat = 1.
+     * Se samtidigt.ts för varför talet aldrig får ändra utfallet.
+     */
+    samtidiga_artiklar?: number;
+    /** Hur många sidor som hämtas samtidigt inom en källa. Odefinierat = 1. */
+    samtidiga_hamtningar?: number;
+  };
+}
+
+/* ──────────────────────── HTTP-injicerbar klient ── */
+
+export type HttpFetchFn = (url: string, init?: RequestInit) => Promise<Response>;
+
+/* ──────────────────────── ETag/IMS-cache ── */
+
+export interface CacheEntry {
+  etag?: string;
+  lastModified?: string;
+  lastFetched: string;
+}
+
+export function loadEtagCache(cacheDir: string | null): Map<string, CacheEntry> {
+  if (!cacheDir) return new Map();
+  try {
+    const raw = readFileSync(`${cacheDir}/etag-cache.json`, "utf8");
+    return new Map(Object.entries(JSON.parse(raw) as Record<string, CacheEntry>));
+  } catch {
+    return new Map();
+  }
+}
+
+export function saveEtagCache(cacheDir: string | null, cache: Map<string, CacheEntry>): void {
+  if (!cacheDir) return;
+  try {
+    mkdirSync(cacheDir, { recursive: true });
+    const obj: Record<string, CacheEntry> = {};
+    for (const [k, v] of cache) obj[k] = v;
+    writeFileSync(`${cacheDir}/etag-cache.json`, JSON.stringify(obj, null, 2) + "\n");
+  } catch {
+    // best-effort
+  }
+}
+
+/* ──────────────────────── Robots.txt-respekt ── */
+
+export interface RobotsRule {
+  path: string;
+  allow: boolean;
+}
+
+export function parseRobotsTxt(text: string, userAgent: string): RobotsRule[] {
+  const lines = text.split("\n");
+
+  const groups: Array<{ ua: string; rules: RobotsRule[] }> = [];
+  let currentUa = "";
+  let currentRules: RobotsRule[] = [];
+
+  for (const raw of lines) {
+    const line = raw.trim();
+    if (line.startsWith("#") || line === "") continue;
+
+    const lower = line.toLowerCase();
+    if (lower.startsWith("user-agent:")) {
+      if (currentUa && currentRules.length > 0) {
+        groups.push({ ua: currentUa, rules: currentRules });
+      }
+      currentUa = line.slice("user-agent:".length).trim().toLowerCase();
+      currentRules = [];
+      continue;
+    }
+
+    if (lower.startsWith("disallow:")) {
+      const path = line.slice("disallow:".length).trim();
+      if (path) currentRules.push({ path, allow: false });
+    } else if (lower.startsWith("allow:")) {
+      const path = line.slice("allow:".length).trim();
+      if (path) currentRules.push({ path, allow: true });
+    }
+  }
+
+  if (currentUa && currentRules.length > 0) {
+    groups.push({ ua: currentUa, rules: currentRules });
+  }
+
+  const uaLower = userAgent.toLowerCase();
+  let bestGroup = groups.find((g) => g.ua !== "*" && uaLower.includes(g.ua));
+  if (!bestGroup) {
+    bestGroup = groups.find((g) => g.ua === "*");
+  }
+
+  return bestGroup?.rules ?? [];
+}
+
+export function isPathAllowed(path: string, rules: RobotsRule[]): boolean {
+  let bestMatch = "";
+  let bestAllow = true;
+
+  for (const rule of rules) {
+    if (path.startsWith(rule.path) && rule.path.length > bestMatch.length) {
+      bestMatch = rule.path;
+      bestAllow = rule.allow;
+    }
+  }
+
+  return bestAllow;
+}
+
+/* ──────────────────────── HTML-stripping (fulltext extraktion) ── */
+
+const HTML_ENTITIES: Record<string, string> = {
+  "&amp;": "&", "&lt;": "<", "&gt;": ">", "&quot;": '"', "&apos;": "'",
+  "&nbsp;": " ", "&shy;": "",
+  // Svenska + typografiska namngivna entiteter — måste avkodas, annars matchar
+  // inte det verbatim-extraherade citatet källtexten i G3 (t.ex. sidor som
+  // serverar &auml; i stället för ä).
+  "&auml;": "ä", "&ouml;": "ö", "&aring;": "å",
+  "&Auml;": "Ä", "&Ouml;": "Ö", "&Aring;": "Å",
+  "&eacute;": "é", "&egrave;": "è", "&uuml;": "ü",
+  "&ndash;": "–", "&mdash;": "—", "&hellip;": "…",
+  "&rsquo;": "’", "&lsquo;": "‘", "&rdquo;": "”", "&ldquo;": "“",
+};
+
+export function stripHtml(html: string): string {
+  return html
+    // script/style/noscript-INNEHÅLL bort (inte bara taggarna): JS-kod är brus
+    // för LLM A, en injektionsyta, och gör sidans innehålls-hash instabil när
+    // inline-skript bär nonces/tidsstämplar.
+    .replace(/<script\b[\s\S]*?<\/script>/gi, "\n")
+    .replace(/<style\b[\s\S]*?<\/style>/gi, "\n")
+    .replace(/<noscript\b[\s\S]*?<\/noscript>/gi, "\n")
+    .replace(/<!--[\s\S]*?-->/g, "")
+    .replace(/<br\s*\/?>/gi, "\n")
+    .replace(/<\/p>/gi, "\n")
+    .replace(/<\/div>/gi, "\n")
+    .replace(/<\/li>/gi, "\n")
+    .replace(/<[^>]+>/g, "")
+    .replace(/&#(\d+);/g, (_, code: string) => String.fromCharCode(parseInt(code, 10)))
+    .replace(/&#x([0-9a-fA-F]+);/g, (_, hex: string) => String.fromCharCode(parseInt(hex, 16)))
+    .replace(/&[a-zA-Z]+;/g, (m) => HTML_ENTITIES[m] ?? m)
+    .replace(/\n{3,}/g, "\n\n")
+    .replace(/[ \t]+/g, " ")
+    .trim();
+}
+
+/* ──────────────────────── PDF-extraktion (skrivna manifest som PDF) ── */
+
+/**
+ * Antal PDF-sidor per artikel-chunk. Ett helt manifest (≈100 s.) som EN artikel
+ * skulle kapas till ≤5 löften av A1/G5 — chunkning ger LLM A upp till 5 löften
+ * per sidintervall i stället. Varje chunk får url `…pdf#page=N` (klickbart
+ * djuplänk-ankare) så dedup/seen behandlar dem som separata artiklar.
+ */
+export const PDF_PAGES_PER_CHUNK = 10;
+
+let pdfjsModule: typeof import("pdfjs-dist/legacy/build/pdf.mjs") | null = null;
+
+async function getPdfjs(): Promise<typeof import("pdfjs-dist/legacy/build/pdf.mjs")> {
+  if (!pdfjsModule) {
+    pdfjsModule = await import("pdfjs-dist/legacy/build/pdf.mjs");
+  }
+  return pdfjsModule;
+}
+
+export function looksLikePdf(contentType: string | null, bytes: Uint8Array): boolean {
+  if (contentType && contentType.toLowerCase().includes("application/pdf")) return true;
+  // Magisk signatur "%PDF-" — vissa CDN:er serverar PDF som octet-stream.
+  return bytes.length >= 5
+    && bytes[0] === 0x25 && bytes[1] === 0x50 && bytes[2] === 0x44
+    && bytes[3] === 0x46 && bytes[4] === 0x2d;
+}
+
+/**
+ * Slår ihop textrader från en PDF-sida till löpande text, med dehyphenering av
+ * radslutsavstavningar: "arbets-" + "marknaden" → "arbetsmarknaden". Utan detta
+ * faller G3 verbatim på varje citat som råkar korsa ett avstavat radbryt (G3
+ * kollapsar whitespace men syr aldrig ihop ord). Två specialfall:
+ *  - versal/siffra före strecket ("EU-" + "medel") är ett äkta bindestreck i
+ *    sammansättningen — raderna sys ihop men strecket behålls: "EU-medel";
+ *  - hängande bindestreck i uppräkningar ("vård- och omsorg") lämnas orörda:
+ *    fortsättningsraden börjar då med en konjunktion, aldrig en ordfortsättning.
+ */
+export function joinPdfLines(lines: string[]): string {
+  let text = "";
+  let prevSoftBreak = false;
+  for (const raw of lines) {
+    const trimmed = raw.trim();
+    // Mjukt bindestreck (U+00AD) SIST på raden = avstavning utan synligt streck
+    // (InDesign gör så): nästa rad är alltid en ordfortsättning. Inuti raden är
+    // det bara en osynlig brytpunktsmarkör och strippas.
+    const softBreak = /­$/u.test(trimmed);
+    const line = trimmed.replace(/­/gu, "");
+    if (line === "") continue;
+    const continuesWord = /^[a-zåäöé]/u.test(line) && !/^(och|eller|samt)\b/u.test(line);
+    if (prevSoftBreak && /\p{L}$/u.test(text) && /^\p{L}/u.test(line)) {
+      text = text + line; // avstavad med mjukt streck: sy ihop rakt av
+    } else if (continuesWord && /[a-zåäöé]-$/u.test(text)) {
+      text = text.slice(0, -1) + line; // avstavning: strecket bort
+    } else if (continuesWord && /[A-ZÅÄÖ0-9]-$/u.test(text)) {
+      text = text + line; // sammansättning med äkta bindestreck: strecket kvar
+    } else {
+      text = text === "" ? line : `${text}\n${line}`;
+    }
+    prevSoftBreak = softBreak;
+  }
+  return text;
+}
+
+/** "D:20260604154527+02'00'" (PDF-datum) → ISO 8601, eller null. */
+export function parsePdfDate(raw: string): string | null {
+  const m = /^D:(\d{4})(\d{2})?(\d{2})?(\d{2})?(\d{2})?(\d{2})?(?:Z|([+-])(\d{2})'?(\d{2})?'?)?/u.exec(raw);
+  if (!m) return null;
+  const [, y, mo = "01", d = "01", h = "00", mi = "00", s = "00", sign, oh, om = "00"] = m;
+  const offset = sign ? `${sign}${oh}:${om}` : "Z";
+  const iso = `${y}-${mo}-${d}T${h}:${mi}:${s}${offset}`;
+  const parsed = Date.parse(iso);
+  return Number.isNaN(parsed) ? null : new Date(parsed).toISOString();
+}
+
+export interface PdfExtract {
+  title: string | null;
+  published: string | null;
+  /** Extraherad text per sida (1-indexerad i PDF:en, 0-indexerad här). */
+  pages: string[];
+}
+
+export async function extractPdfText(bytes: Uint8Array): Promise<PdfExtract> {
+  const pdfjs = await getPdfjs();
+  // Kopia: getDocument tar ägarskap över buffern (transfer).
+  const loadingTask = pdfjs.getDocument({
+    data: bytes.slice(),
+    disableFontFace: true,
+    // Textextraktion behöver inga fontfiler; utan denna varnar pdf.js om
+    // standardFontDataUrl för PDF:er som refererar de 14 standardfonterna.
+    useSystemFonts: true,
+  });
+  try {
+    const doc = await loadingTask.promise;
+
+    let title: string | null = null;
+    let published: string | null = null;
+    try {
+      const meta = await doc.getMetadata();
+      const info = meta.info as Record<string, unknown>;
+      if (typeof info.Title === "string" && info.Title.trim() !== "") title = info.Title.trim();
+      if (typeof info.CreationDate === "string") published = parsePdfDate(info.CreationDate);
+    } catch {
+      // metadata är valfri
+    }
+
+    const pages: string[] = [];
+    for (let p = 1; p <= doc.numPages; p++) {
+      const page = await doc.getPage(p);
+      const content = await page.getTextContent();
+      const lines: string[] = [];
+      let current = "";
+      for (const item of content.items) {
+        if (!("str" in item)) continue;
+        current += item.str;
+        if (item.hasEOL) {
+          lines.push(current);
+          current = "";
+        }
+      }
+      if (current !== "") lines.push(current);
+      pages.push(joinPdfLines(lines));
+    }
+
+    return { title, published, pages };
+  } finally {
+    await loadingTask.destroy();
+  }
+}
+
+/**
+ * Max antal manifest-PDF:er som auto-följs från EN page-feed per hämtning.
+ * Skydd mot länkfarmar; riktiga valsidor länkar 1–2 dokument.
+ */
+export const MAX_FOLLOWED_PDFS = 3;
+
+/**
+ * Valåret. En manifest-PDF vars sökväg bär ett ÄLDRE årtal följs inte.
+ *
+ * Skälet är mätt, inte hypotetiskt: 2026-08-03 pekade `sd.se/valmanifest/`
+ * vidare till `/wp-content/uploads/2022/08/valmanifest.pdf` och MP:s
+ * `/valmanifest/` var sidan "Valmanifest 2022". KD:s politiksida länkar
+ * `Manifesto_2024.pdf` från EU-valet. Alla tre matchar nyckelordsregeln nedan
+ * perfekt. Utan årsspärren hade fyra år gammal politik kunnat läsas in som
+ * 2026 års vallöften — och ett löfte med fel årtal är värre än ett saknat
+ * löfte, för det ser ut som ett belägg.
+ */
+export const VALAR = 2026;
+
+/**
+ * Max antal artiklar som följs från EN nyhetslista per hämtning.
+ *
+ * "index"-typen finns för partier UTAN flöde. Socialdemokraterna och
+ * Centerpartiet kör SiteVision och publicerar varken RSS eller Atom — mätt
+ * 2026-08-03 fanns varken /rss, /feed, /nyheter/rss, MyNewsdesk eller
+ * pressrum, och sidorna pekar inte ut något flöde. Samtidigt hade S publicerat
+ * minst tre nyheter och C fem sedan vårt nyaste löfte från dem. De två
+ * partierna utan flöde var alltså precis de två med äldst täckning.
+ *
+ * Taket gäller nyhetslistor. En katalogsida sätter sitt eget via
+ * `max_articles` i sources.yaml — se fältets kommentar ovan.
+ */
+export const MAX_INDEX_ARTICLES = 12;
+
+/**
+ * Plockar artikellänkar ur en nyhetslista: samma kanoniska domän, https, och
+ * ett datum i sökvägen. Datumkravet är vad som skiljer en artikel från
+ * menyer, taggsidor och paginering — båda partierna daterar sina adresser
+ * (`/nyheter/nyheter/2026-08-03-…`, `/nyheter/arkiv-2026/2026-07-31-…`).
+ *
+ * Nyast först, sedan kapat: en arkivsida kan lista år bakåt, och budgeten ska
+ * gå till det som är färskt. Ingen hård årsspärr här — ett löfte från slutet
+ * av 2025 är fortfarande ett löfte inför valet, och datumfönstret i G4 avgör
+ * den frågan på artikelns egna datum i stället för på dess adress.
+ */
+export function findArticleLinks(
+  html: string,
+  baseUrl: string,
+  articlePattern?: string,
+  maxArticles: number = MAX_INDEX_ARTICLES,
+): string[] {
+  let mönster: RegExp | null = null;
+  if (articlePattern) {
+    try {
+      mönster = new RegExp(articlePattern, "u");
+    } catch {
+      console.error(`[fetch] ogiltigt article_pattern: ${articlePattern}`);
+      return [];
+    }
+  }
+  let baseHost: string;
+  try {
+    baseHost = canonicalHost(new URL(baseUrl).hostname);
+  } catch {
+    return [];
+  }
+  const funna = new Map<string, string>();
+  for (const m of html.matchAll(/href="([^"]+)"/gi)) {
+    const raw = m[1]!.replace(/&amp;/g, "&");
+    let abs: URL;
+    try {
+      abs = new URL(raw, baseUrl);
+    } catch {
+      continue;
+    }
+    if (abs.protocol !== "https:") continue;
+    if (canonicalHost(abs.hostname) !== baseHost) continue;
+    if (/\.(pdf|jpg|jpeg|png|gif|svg|webp|mp4|zip|ico|css|js)$/iu.test(abs.pathname)) continue;
+    // En sökväg som inte ser ut som en sökväg kommer inte från en länk: flera
+    // sajter bygger adresser i JavaScript, och `href="` inne i en skriptsträng
+    // ger skräp som `/just-nu/'+a[s][2]+'`. Bara det en webbadress får bära.
+    if (!/^[\w\-./%~åäöÅÄÖéèü]*$/u.test(decodeURI(abs.pathname))) continue;
+    // Paginering är fler listor, inte artiklar. Följs de blir varje sida en
+    // artikel utan brödtext, och en lista med 117 sidor äter hela budgeten.
+    if (/\/(page|sida)\/\d+\/?$/iu.test(abs.pathname)) continue;
+
+    const datum = abs.pathname.match(/(\d{4}-\d{2}-\d{2})/u);
+    if (mönster) {
+      if (!mönster.test(abs.pathname)) continue;
+      // Prefixet självt är listan, inte en artikel: kräv något efter det.
+      if (/\/$/u.test(abs.pathname) && abs.pathname.split("/").filter(Boolean).length < 2) continue;
+    } else if (!datum) {
+      continue;
+    }
+
+    abs.hash = "";
+    if (abs.href === baseUrl) continue;
+    // Odaterade adresser sorteras sist men behåller sin inbördes ordning:
+    // listan står redan i redaktionell ordning, nyast överst.
+    if (!funna.has(abs.href)) funna.set(abs.href, datum ? datum[1]! : "");
+  }
+  return [...funna.entries()]
+    .sort((a, b) => b[1].localeCompare(a[1]) || a[0].localeCompare(b[0]))
+    .slice(0, Math.max(0, maxArticles))
+    .map(([url]) => url);
+}
+
+/**
+ * Max antal adresser som följs ur EN sitemap per hämtning.
+ *
+ * Högre än MAX_INDEX_ARTICLES av samma skäl som `max_articles` finns för
+ * kataloger: en sitemap är inte färskvara utan partiets hela sidregister, och
+ * ett lågt tak blir då inte en fördröjning utan ett hårt tak på hur långt in i
+ * registret vi någonsin ser. Kostar inga LLM-körningar — budgeten på NYA
+ * artiklar ligger i runPipeline och dedup fäller det oförändrade.
+ */
+export const MAX_SITEMAP_ARTICLES = 250;
+
+/**
+ * Max antal delregister som följs ur en `<sitemapindex>`. Mätt 2026-08-17
+ * delar partierna upp sitt register i 1–12 delar; 25 rymmer det med marginal
+ * utan att en felkonfigurerad sajt kan dra igång hundratals hämtningar.
+ */
+export const MAX_SITEMAP_DELAR = 25;
+
+/**
+ * Sitemaptext ur råa bytes, gzip-packad eller inte.
+ *
+ * Centerpartiets register ligger som `sitemap1.xml.gz` och serveras utan
+ * `Content-Encoding: gzip` — filen ÄR komprimerad, det är inte överföringen
+ * som är det, så webbläsarens och fetch:ens egen uppackning rör den inte.
+ * Avkodad som text blev den skräp utan en enda `<loc>`, och källan svarade
+ * «inga sidor efter mönstret» fast registret har 37 255 adresser och 208
+ * politiksidor. Ett tyst noll, alltså — det värsta slaget.
+ *
+ * Magiska talet 0x1f 0x8b är gzip-huvudet. Att pröva på bytes i stället för
+ * på filändelsen håller även för register som packas utan att heta .gz.
+ */
+export function sitemapText(bytes: Uint8Array): string {
+  const packad = bytes.length > 1 && bytes[0] === 0x1f && bytes[1] === 0x8b;
+  try {
+    return new TextDecoder("utf-8").decode(packad ? gunzipSync(bytes) : bytes);
+  } catch {
+    // En trasig gzip är inte en anledning att fälla hela körningen; källan
+    // rapporterar noll sidor och nästa körning provar igen.
+    return "";
+  }
+}
+
+/**
+ * Plockar sidadresser ur en sitemap.
+ *
+ * Varför den här vägen alls behövs: `index`-typen följer `href` i HTML, och
+ * det fungerar bara på sajter som renderar sin meny på servern. Moderaterna,
+ * Miljöpartiet och Vänsterpartiet bygger sina politikmenyer med skript —
+ * hämtar man deras politiksida får man 0 länkar till politik, bara
+ * länkar till distriktsavdelningarna i sidfoten. Mätt 2026-08-17.
+ *
+ * Deras sitemap listar däremot varje sida: V 111, MP 98, M 87 rikspolitiksidor.
+ * Sitemap är dessutom det partiet SJÄLVT pekar ut som sina sidor, alltså den
+ * symmetriska vägen in — samma mekanism för alla åtta, i stället för ett
+ * gissat länkmönster per parti.
+ *
+ * `<sitemapindex>` följs ett steg (de flesta partier delar upp registret per
+ * innehållstyp). Djupare än så går vi inte: ingen av de åtta behöver det, och
+ * en obegränsad följning är en genomsökning av hela sajten.
+ */
+export function sitemapLinks(
+  xml: string,
+  articlePattern?: string,
+  maxArticles: number = MAX_SITEMAP_ARTICLES,
+): { urls: string[]; index: boolean } {
+  const locs = [...xml.matchAll(/<loc>\s*([^<\s]+)\s*<\/loc>/giu)].map((m) =>
+    m[1]!.replace(/&amp;/gu, "&"),
+  );
+  // Ett register över register: adresserna ÄR sitemaps och ska hämtas, inte
+  // filtreras mot artikelmönstret — det matchar aldrig en sitemap-adress.
+  // Eget tak: de åtta partierna delar upp registret i 1–12 delar, och taket
+  // för SIDOR har inget att göra med hur många delregister vi får hämta.
+  if (/<sitemapindex/iu.test(xml)) {
+    return {
+      urls: locs.filter((u) => u.startsWith("https://")).slice(0, MAX_SITEMAP_DELAR),
+      index: true,
+    };
+  }
+
+  let mönster: RegExp | null = null;
+  if (articlePattern) {
+    try {
+      mönster = new RegExp(articlePattern, "u");
+    } catch {
+      console.error(`[fetch] ogiltigt article_pattern: ${articlePattern}`);
+      return { urls: [], index: false };
+    }
+  }
+
+  const funna = new Set<string>();
+  for (const raw of locs) {
+    let abs: URL;
+    try {
+      abs = new URL(raw);
+    } catch {
+      continue;
+    }
+    if (abs.protocol !== "https:") continue;
+    if (/\.(pdf|jpg|jpeg|png|gif|svg|webp|mp4|zip|ico|css|js|xml)$/iu.test(abs.pathname)) continue;
+    // Mönstret prövas mot HELA adressen, inte bara sökvägen. Partiernas
+    // lokalavdelningar ligger under samma domän som rikspolitiken
+    // (mp.se/ale/politik, centerpartiet.se/centerpartiet-lokalt/…/politik),
+    // och ett sökvägsmönster kan inte skilja dem åt. MP:s sitemap har 4 116
+    // träffar på "/politik/" men 98 på rikspolitiken.
+    if (mönster && !mönster.test(abs.href)) continue;
+    abs.hash = "";
+    funna.add(abs.href);
+  }
+  // Bokstavsordning: en sitemap har ingen redaktionell ordning att bevara, och
+  // determinism gör körningarna jämförbara.
+  return { urls: [...funna].sort().slice(0, Math.max(0, maxArticles)), index: false };
+}
+
+/** Första träffen bland mönstren som ger ett giltigt datum, som ISO-tid. */
+function forstaGiltigaDatum(html: string, monster: readonly RegExp[]): string | null {
+  for (const r of monster) {
+    const m = html.match(r);
+    if (!m) continue;
+    const d = new Date(m[1]!);
+    if (!Number.isNaN(d.getTime())) return d.toISOString();
+  }
+  return null;
+}
+
+/**
+ * Uppdateringsdatum ur artikelns egen HTML, när sidan bär ett.
+ *
+ * En partisida om abort eller djurskydd skapas en gång och skrivs om inför
+ * varje val. Miljöpartiets djursida bär `datePublished` 2021-11-19 och
+ * `dateModified` 2026-06-23; Liberalernas abortsida `datePublished` 2015-06-24
+ * och `article:modified_time` 2026-05-26. Läser man bara skapandedatumet ser
+ * partiets nu gällande politik ut att vara fem år gammal, och G4:s datumfönster
+ * avvisar den. Den text som står på sidan i dag är den version partiet svarar
+ * för — därför gäller uppdateringsdatumet när det finns. Mänskligt beslut
+ * 2026-08-19.
+ *
+ * `<time>`-formen läses bara när taggen själv säger att den bär en
+ * uppdatering (`class="updated"` eller `aria-label="Uppdaterad"`). Ett
+ * omärkt `<time>` duger inte: MP:s djursida har fyra stycken, och det
+ * första hör till en puff i en artikellista, inte till sidan.
+ */
+export function uppdateringsdatumUrHtml(html: string): string | null {
+  const metadata = forstaGiltigaDatum(html, [
+    /<meta[^>]+property="article:modified_time"[^>]+content="([^"]+)"/i,
+    /<meta[^>]+content="([^"]+)"[^>]+property="article:modified_time"/i,
+    /<meta[^>]+property="og:updated_time"[^>]+content="([^"]+)"/i,
+    /<meta[^>]+content="([^"]+)"[^>]+property="og:updated_time"/i,
+    /"dateModified"\s*:\s*"([^"]+)"/i,
+  ]);
+  if (metadata) return metadata;
+
+  for (const tagg of html.match(/<time[^>]*>/gi) ?? []) {
+    if (!/class="[^"]*\bupdated\b[^"]*"|aria-label="[Uu]ppdaterad"/.test(tagg)) continue;
+    const m = tagg.match(/datetime="([^"]+)"/i);
+    if (!m) continue;
+    const d = new Date(m[1]!);
+    if (!Number.isNaN(d.getTime())) return d.toISOString();
+  }
+
+  // Synlig text är sista utvägen: Liberalerna skriver "(Senast uppdaterad:
+  // 26.05.2026)" i brödtexten, andra skriver ISO-form.
+  const synlig = html.match(
+    /[Ss]enast uppdaterad:?\s*(?:(\d{4}-\d{2}-\d{2})|(\d{2})\.(\d{2})\.(\d{4}))/u,
+  );
+  if (synlig) {
+    const iso = synlig[1] ?? `${synlig[4]}-${synlig[3]}-${synlig[2]}`;
+    const d = new Date(`${iso}T12:00:00.000Z`);
+    if (!Number.isNaN(d.getTime())) return d.toISOString();
+  }
+  return null;
+}
+
+/**
+ * Artikelns datum ur dess egen HTML. Behövs för de partier vars adresser
+ * saknar datum: utan det skulle varje gammal artikel se färsk ut och G4:s
+ * datumfönster pröva fel sak. Alla fem WordPress-partierna publicerar
+ * antingen `article:published_time`, JSON-LD:s `datePublished` eller ett
+ * `<time datetime>` — kontrollerat 2026-08-03.
+ *
+ * Uppdateringsdatumet går före skapandedatumet när sidan bär ett, se
+ * `uppdateringsdatumUrHtml`. Saknas det är skapandedatumet den enda version
+ * som finns, och då gäller det.
+ */
+export function datumUrHtml(html: string): string | null {
+  return (
+    uppdateringsdatumUrHtml(html) ??
+    forstaGiltigaDatum(html, [
+      /<meta[^>]+property="article:published_time"[^>]+content="([^"]+)"/i,
+      /<meta[^>]+content="([^"]+)"[^>]+property="article:published_time"/i,
+      /"datePublished"\s*:\s*"([^"]+)"/i,
+      /<time[^>]+datetime="([^"]+)"/i,
+    ])
+  );
+}
+
+/** Datumet ur en artikeladress, som ISO-tid. G4 prövar publiceringsdatumet,
+ *  och adressens datum är sannare än hämtningstiden för en gammal artikel. */
+export function datumUrAdress(url: string): string | null {
+  const m = url.match(/(\d{4})-(\d{2})-(\d{2})/u);
+  if (!m) return null;
+  const d = new Date(`${m[1]}-${m[2]}-${m[3]}T12:00:00.000Z`);
+  return Number.isNaN(d.getTime()) ? null : d.toISOString();
+}
+
+/**
+ * Sant om sökvägen bevisligen hör till ett tidigare val. Saknas årtal helt
+ * släpps länken igenom: spärren ska stoppa det vi KAN se är gammalt, aldrig
+ * gissa bort ett manifest vars adress inte råkar bära något år.
+ */
+export function harForegaendeValsAr(pathname: string): boolean {
+  // Årtalet måste stå som ett eget tal, inte inuti en lång sifferkedja: en
+  // nedladdningsadress som ".../1771599906618/Valplattform.pdf" bär inget år.
+  const ar = [...pathname.matchAll(/(?<![0-9])(?:19|20)\d{2}(?![0-9])/gu)].map((m) => Number(m[0]));
+  if (ar.length === 0) return false;
+  return Math.max(...ar) < VALAR;
+}
+
+/**
+ * Sant om dokumentets adress pekar ut region-, kommun- eller landstingspolitik.
+ *
+ * Sajten granskar riksdagsvalet och prissätter statens nya nettokostnad. Ett
+ * regionmanifest lovar vad regionerna ska göra, och regionerna har en egen
+ * kassa — löftena hör inte hemma i samma summa. Vi tog in Sverigedemokraternas
+ * regionmanifest 2026-08-04 utan att märka det, och det var det enda regionala
+ * dokumentet i hela registret. Att döma dokument för dokument är dessutom
+ * lättare att förklara för en läsare än att döma löfte för löfte: samma
+ * sakfråga kan avgöras både nationellt och regionalt.
+ */
+export function arRegionEllerKommundokument(pathname: string): boolean {
+  // Stammen måste stå först i ett ord — "interregional" och "rekommunalisera"
+  // är inte träffar — men får fortsätta i en sammansättning, för så heter
+  // dokumenten: "landstingsprogram", "kommunalt-valmanifest", "regionpolitik".
+  // Undantaget efter "kommun" håller kommunikation, kommuniké och kommunicera
+  // utanför; de delar sina sex första bokstäver med kommunen och ingenting mer.
+  return /(^|[^a-zåäöé])(region|kommun(?!ika|iké|ice)|landsting)/iu.test(pathname);
+}
+
+/**
+ * Hittar länkar till manifest-PDF:er i en HTML-sida: href som pekar på .pdf
+ * på SAMMA kanoniska domän och vars sökväg ser ut som ett valdokument.
+ * Detta är B:s "automatisk täckning": partier länkar sina manifest som PDF
+ * från valsidan (S/L/C gör redan så), och partier som ännu inte publicerat
+ * (M/SD/KD i juli 2026) fångas den dag PDF-länken dyker upp — utan att någon
+ * behöver registrera en ny feed. Externa domäner följs aldrig (och G2
+ * allowlist-grindar dessutom varje artikel nedströms).
+ */
+export function findManifestPdfLinks(html: string, baseUrl: string): string[] {
+  let baseHost: string;
+  try {
+    baseHost = canonicalHost(new URL(baseUrl).hostname);
+  } catch {
+    return [];
+  }
+  const links = new Set<string>();
+  for (const m of html.matchAll(/href="([^"]+)"/gi)) {
+    const raw = m[1]!.replace(/&amp;/g, "&");
+    let abs: URL;
+    try {
+      abs = new URL(raw, baseUrl);
+    } catch {
+      continue;
+    }
+    if (abs.protocol !== "https:") continue;
+    if (!/\.pdf$/iu.test(abs.pathname)) continue;
+    if (!/(manifest|valplattform|valprogram|handlingsprogram)/iu.test(abs.pathname)) continue;
+    if (canonicalHost(abs.hostname) !== baseHost) continue;
+    // Ett manifest från ett tidigare val är inte ett vallöfte 2026.
+    if (harForegaendeValsAr(abs.pathname)) continue;
+    // Ett regionmanifest lovar vad regionerna ska göra, inte staten.
+    if (arRegionEllerKommundokument(abs.pathname)) continue;
+    abs.hash = "";
+    links.add(abs.href);
+    if (links.size >= MAX_FOLLOWED_PDFS) break;
+  }
+  return [...links];
+}
+
+function canonicalHost(hostname: string): string {
+  let host = hostname.replace(/\.$/u, "");
+  if (host.startsWith("www.")) host = host.slice(4);
+  return host;
+}
+
+/* ──────────────────────── RSS/Atom-parsning ── */
+
+interface ParsedFeedItem {
+  title: string;
+  link: string;
+  pubDate: string;
+  description: string;
+  content: string;
+}
+
+let xmlParserModule: typeof import("fast-xml-parser") | null = null;
+
+async function getXmlParser(): Promise<typeof import("fast-xml-parser")> {
+  if (!xmlParserModule) {
+    xmlParserModule = await import("fast-xml-parser");
+  }
+  return xmlParserModule;
+}
+
+export async function parseRssXml(xml: string): Promise<ParsedFeedItem[]> {
+  const { XMLParser } = await getXmlParser();
+  const parser = new XMLParser({
+    ignoreAttributes: false,
+    attributeNamePrefix: "@_",
+    textNodeName: "#text",
+    isArray: (name: string) => name === "item" || name === "entry",
+  });
+  const parsed = parser.parse(xml);
+
+  if (parsed.rss?.channel?.item) {
+    return parsed.rss.channel.item.map((it: Record<string, unknown>) => ({
+      title: String(it.title ?? ""),
+      link: extractRssLink(it.link),
+      pubDate: String(it.pubDate ?? it["dc:date"] ?? ""),
+      description: String(it.description ?? ""),
+      content: String(it["content:encoded"] ?? it.description ?? ""),
+    }));
+  }
+
+  if (parsed.feed?.entry) {
+    return parsed.feed.entry.map((it: Record<string, unknown>) => ({
+      title: String(it.title ?? ""),
+      link: extractAtomLink(it.link),
+      pubDate: String(it.published ?? it.updated ?? ""),
+      description: String(it.summary ?? ""),
+      content: String(it.content ?? it.summary ?? ""),
+    }));
+  }
+
+  return [];
+}
+
+function extractRssLink(link: unknown): string {
+  if (typeof link === "string") return link;
+  if (typeof link === "object" && link !== null) {
+    const obj = link as Record<string, unknown>;
+    if (typeof obj.href === "string") return obj.href;
+    if (typeof obj["#text"] === "string") return obj["#text"];
+  }
+  return "";
+}
+
+function extractAtomLink(link: unknown): string {
+  if (Array.isArray(link)) {
+    const alt = link.find((l: Record<string, unknown>) => l["@_rel"] === "alternate");
+    if (alt) return String(alt["@_href"] ?? "");
+    return link.length > 0 ? String(link[0]?.["@_href"] ?? "") : "";
+  }
+  if (typeof link === "object" && link !== null) {
+    return String((link as Record<string, unknown>)["@_href"] ?? "");
+  }
+  return String(link ?? "");
+}
+
+/* ──────────────────────── Riksdagen API-parsning ── */
+
+export function parseRiksdagenDokumentlista(json: Record<string, unknown>): Array<{
+  dok_id: string;
+  titel: string;
+  datum: string;
+  dokument_url_text: string;
+  url: string;
+}> {
+  const lista = json.dokumentlista as Record<string, unknown> | undefined;
+  if (!lista) return [];
+
+  const raw = lista.dokument;
+  if (!raw) return [];
+
+  const docs = Array.isArray(raw) ? raw : [raw];
+  return docs.map((d: Record<string, unknown>) => ({
+    dok_id: String(d.dok_id ?? ""),
+    titel: String(d.titel ?? ""),
+    datum: String(d.datum ?? ""),
+    dokument_url_text: String(d.dokument_url_text ?? ""),
+    url: `https://data.riksdagen.se/dokument/${d.dok_id}`,
+  }));
+}
+
+export function parseRiksdagenAnforandelista(json: Record<string, unknown>): Array<{
+  anforande_id: string;
+  avsnittsrubrik: string;
+  talare: string;
+  parti: string;
+  dok_datum: string;
+  anforande_url_xml: string;
+  url: string;
+}> {
+  const lista = json.anforandelista as Record<string, unknown> | undefined;
+  if (!lista) return [];
+
+  const raw = lista.anforande;
+  if (!raw) return [];
+
+  const items = Array.isArray(raw) ? raw : [raw];
+  return items.map((a: Record<string, unknown>) => ({
+    anforande_id: String(a.anforande_id ?? ""),
+    avsnittsrubrik: String(a.avsnittsrubrik ?? ""),
+    talare: String(a.talare ?? ""),
+    parti: String(a.parti ?? ""),
+    dok_datum: String(a.dok_datum ?? ""),
+    anforande_url_xml: String(a.anforande_url_xml ?? ""),
+    url: String(a.anforande_url_html ?? `https://data.riksdagen.se/anforande/${a.anforande_id}`),
+  }));
+}
+
+/* ──────────────────────── SHA-256 & dedup ── */
+
+export function sha256(input: string): string {
+  return createHash("sha256").update(input).digest("hex");
+}
+
+/**
+ * Seen-nyckel för en artikel. RSS/API: sha256(url) — en URL är en artikel.
+ * Page-artiklar bär contentHash: nyckeln blir sha256(url + "\n" + contentHash),
+ * så samma sida med NYTT innehåll får ny nyckel och processas om (B:s löpande
+ * bevakning av manifest), medan oförändrat innehåll är sett och hoppas över.
+ * Ompublicering av redan fångade löften stoppas nedströms av dublettkollen
+ * (findPossibleDuplicate → review med duplicateOf), aldrig av seen.
+ */
+export function seenKey(article: Pick<NormalizedArticle, "url" | "contentHash">): string {
+  return article.contentHash
+    ? sha256(`${article.url}\n${article.contentHash}`)
+    : sha256(article.url);
+}
+
+export function dedup(
+  articles: NormalizedArticle[],
+  existingSeen: ReadonlyMap<string, string>,
+): { newArticles: NormalizedArticle[]; seen: Map<string, string> } {
+  const newArticles: NormalizedArticle[] = [];
+  const seen = new Map(existingSeen);
+  for (const article of articles) {
+    const hash = seenKey(article);
+    if (!seen.has(hash)) {
+      newArticles.push(article);
+      seen.set(hash, article.url);
+    }
+  }
+  return { newArticles, seen };
+}
+
+export function loadSeen(path: string): Map<string, string> {
+  try {
+    const raw = readFileSync(path, "utf8");
+    const obj = JSON.parse(raw) as Record<string, string>;
+    return new Map(Object.entries(obj));
+  } catch {
+    return new Map();
+  }
+}
+
+/* ──────────────────────── LiveSource (skarp fetch) ── */
+
+const USER_AGENT = "UtlovatBot/1.0 (+https://utlovat.se/om)";
+
+/**
+ * Jämförbar form av en adress. Katalogen och våra egna listor är oense om
+ * avslutande snedstreck — samma sida skrivs `…/politik/jakt` på ett ställe och
+ * `…/politik/jakt/` på ett annat. Utan den här utjämningen missar ett riktat
+ * urval sidan det pekar på, tyst.
+ */
+function kalUrl(url: string): string {
+  return url.trim().replace(/\/+$/u, "");
+}
+
+export class LiveSource implements ArticleSource {
+  private feeds: SourceFeed[];
+  private limits: SourceConfig["limits"];
+  private httpFetch: HttpFetchFn;
+  private cacheDir: string | null;
+  private userAgent: string;
+  private robotsCache: Map<string, RobotsRule[]>;
+  /**
+   * Pågående robots-hämtningar. Utan den skulle de första samtidiga sidorna på
+   * en värd alla missa cachen och be om robots.txt var för sig — sex frågor
+   * där en räcker, och ovänligt mot en sajt vi ändå ber om hundratals sidor.
+   */
+  private robotsPagaende: Map<string, Promise<RobotsRule[]>>;
+  private stats: Map<string, number>;
+  /**
+   * Adresserna körningen ska begränsas till, eller null för alla.
+   *
+   * Filtret sätts INTE på artiklarna efteråt utan på länklistan, innan
+   * sidkropparna hämtas: att läsa 127 sidor för att sedan kasta 125 är ingen
+   * riktad körning. Se `hamtaSidor`.
+   */
+  private urlar: ReadonlySet<string> | null;
+
+  private now: () => Date;
+
+  constructor(opts: {
+    feeds: SourceFeed[];
+    limits: SourceConfig["limits"];
+    httpFetch?: HttpFetchFn;
+    cacheDir?: string | null;
+    userAgent?: string;
+    /** Begränsar körningen till exakta adresser. Tom/utelämnad = alla. */
+    urlar?: readonly string[];
+    /** Injicerbar klocka (test-determinism för färskhetsspärren på följda PDF:er). */
+    now?: () => Date;
+  }) {
+    this.feeds = opts.feeds;
+    this.limits = opts.limits;
+    this.urlar = opts.urlar && opts.urlar.length > 0
+      ? new Set(opts.urlar.map(kalUrl))
+      : null;
+    this.httpFetch = opts.httpFetch ?? globalThis.fetch.bind(globalThis);
+    this.cacheDir = opts.cacheDir ?? null;
+    this.userAgent = opts.userAgent ?? USER_AGENT;
+    this.now = opts.now ?? (() => new Date());
+    this.robotsCache = new Map();
+    this.robotsPagaende = new Map();
+    this.stats = new Map();
+  }
+
+  getStats(): Map<string, number> {
+    return new Map(this.stats);
+  }
+
+  async fetch(): Promise<NormalizedArticle[]> {
+    const articles: NormalizedArticle[] = [];
+    const etagCache = loadEtagCache(this.cacheDir);
+
+    // Hämta ALLA feeds (ingen global kapning här). Annars äter feeds högt upp i
+    // listan — partiernas RSS — upp budgeten innan riksdagen/media ens hämtas.
+    // Processbudgeten (på NYA artiklar) tillämpas i runPipeline efter dedup.
+    for (const feed of this.feeds) {
+      try {
+        const feedArticles = feed.type === "riksdagen_api"
+          ? await this.fetchRiksdagen(feed, etagCache)
+          : feed.type === "page"
+            ? await this.fetchPage(feed, etagCache)
+            : feed.type === "index"
+              ? await this.fetchIndex(feed, etagCache)
+              : feed.type === "sitemap"
+                ? await this.fetchSitemap(feed, etagCache)
+                : await this.fetchRss(feed, etagCache);
+
+        for (const article of feedArticles) {
+          if (article.text.length < this.limits.min_chars) continue;
+          // RSS, page och riksdagen går inte genom `hamtaSidor` och har alltså
+          // inte mött filtret än. Utan den här raden skulle ett riktat urval
+          // tyst släppa igenom allt från just de källtyperna.
+          if (this.urlar && !this.urlar.has(kalUrl(article.url))) continue;
+          articles.push({ ...article, feedType: feed.type });
+        }
+
+        this.stats.set(feed.id, feedArticles.length);
+      } catch (e) {
+        console.error(`[fetch] feed ${feed.id} failed: ${e instanceof Error ? e.message : e}`);
+        this.stats.set(feed.id, 0);
+      }
+    }
+
+    saveEtagCache(this.cacheDir, etagCache);
+    // INGEN slice här — den globala kapningen stred mot kommentaren ovan och
+    // svalt page-feedsen (sist i sources.yaml): partiernas RSS + riksdagen
+    // fyllde alltid max_articles_per_run innan manifesten ens nådde dedup.
+    // Budgeten på NYA artiklar ligger i runPipeline (maxNewArticles).
+    return articles;
+  }
+
+  private async robotsRegler(robotsUrl: string): Promise<RobotsRule[]> {
+    const klart = this.robotsCache.get(robotsUrl);
+    if (klart) return klart;
+    let pagaende = this.robotsPagaende.get(robotsUrl);
+    if (!pagaende) {
+      pagaende = (async (): Promise<RobotsRule[]> => {
+        try {
+          const res = await this.httpFetch(robotsUrl, {
+            headers: { "User-Agent": this.userAgent },
+            signal: AbortSignal.timeout(5000),
+          });
+          if (!res.ok) return [];
+          return parseRobotsTxt(await res.text(), this.userAgent);
+        } catch {
+          return [];
+        }
+      })();
+      this.robotsPagaende.set(robotsUrl, pagaende);
+    }
+    const regler = await pagaende;
+    this.robotsCache.set(robotsUrl, regler);
+    return regler;
+  }
+
+  private async checkRobots(feedUrl: string): Promise<boolean> {
+    const url = new URL(feedUrl);
+    const rules = await this.robotsRegler(`${url.protocol}//${url.host}/robots.txt`);
+    if (rules.length === 0) return true;
+    return isPathAllowed(url.pathname, rules);
+  }
+
+  /**
+   * Hämtar en lista sidor och gör en artikel av var och en.
+   *
+   * Samtidigt sedan 2026-08-18, med tak ur `limits.samtidiga_hamtningar`. Det
+   * här är den ena av körningens två sekventiella flaskhalsar: hämtningen läser
+   * ~1 500 sidor genom 43 källor, en i taget, varje gång. Ordningen ut är
+   * adressernas ordning oavsett takt — `kartaSamtidigt` håller den — så vilka
+   * sidor som blir artiklar och i vilken ordning ändras inte av talet.
+   *
+   * En sida som faller loggas och hoppas över, precis som förut: en trasig
+   * undersida får aldrig ta med sig resten av källan.
+   */
+  private async hamtaSidor(
+    allaLankar: readonly string[],
+    feedId: string,
+    ordet: string,
+    etagCache: Map<string, CacheEntry>,
+  ): Promise<NormalizedArticle[]> {
+    // Riktad körning: skär bort adresserna innan de hämtas, inte efteråt.
+    const lankar = this.urlar
+      ? allaLankar.filter((l) => this.urlar!.has(kalUrl(l)))
+      : allaLankar;
+    const svar = await kartaSamtidigt(
+      lankar,
+      this.limits.samtidiga_hamtningar ?? 1,
+      async (lank): Promise<NormalizedArticle | null> => {
+        try {
+          if (!(await this.checkRobots(lank))) return null;
+          const res = await this.fetchRawWithCache(lank, etagCache, {
+            Accept: "text/html,application/xhtml+xml",
+          });
+          if (!res) return null;
+          const html = new TextDecoder("utf-8").decode(res.bytes);
+          const titleMatch = html.match(/<title[^>]*>([^<]*)<\/title>/i);
+          const text = stripHtml(html);
+          return {
+            url: lank,
+            domain: extractDomain(lank),
+            title: titleMatch ? stripHtml(titleMatch[1]!) : lank,
+            text,
+            // Adressens datum är sannast när det finns; annars artikelns eget.
+            // Hämtningstiden är sista utvägen och gör en gammal artikel färsk.
+            published: datumUrAdress(lank) ?? datumUrHtml(html) ?? new Date().toISOString(),
+            contentHash: sha256(text),
+          };
+        } catch (e) {
+          console.error(
+            `[fetch] ${feedId}: ${ordet} ${lank} föll: ${e instanceof Error ? e.message : e}`,
+          );
+          return null;
+        }
+      },
+    );
+    return svar.filter((a): a is NormalizedArticle => a !== null);
+  }
+
+  private async fetchWithCache(
+    url: string,
+    etagCache: Map<string, CacheEntry>,
+    extraHeaders?: Record<string, string>,
+  ): Promise<{ text: string; status: number } | null> {
+    const raw = await this.fetchRawWithCache(url, etagCache, extraHeaders);
+    if (!raw) return null;
+    return { text: new TextDecoder("utf-8").decode(raw.bytes), status: raw.status };
+  }
+
+  /** Som fetchWithCache men lämnar kroppen rå — page-källan avgör HTML/PDF själv. */
+  private async fetchRawWithCache(
+    url: string,
+    etagCache: Map<string, CacheEntry>,
+    extraHeaders?: Record<string, string>,
+  ): Promise<{ bytes: Uint8Array; contentType: string | null; status: number } | null> {
+    const headers: Record<string, string> = {
+      "User-Agent": this.userAgent,
+      ...extraHeaders,
+    };
+
+    const cached = etagCache.get(url);
+    if (cached) {
+      if (cached.etag) headers["If-None-Match"] = cached.etag;
+      if (cached.lastModified) headers["If-Modified-Since"] = cached.lastModified;
+    }
+
+    const res = await this.httpFetch(url, {
+      headers,
+      signal: AbortSignal.timeout(30000),
+      redirect: "follow",
+    });
+
+    if (res.status === 304) return null;
+
+    if (!res.ok) {
+      throw new Error(`HTTP ${res.status} for ${url}`);
+    }
+
+    const entry: CacheEntry = { lastFetched: new Date().toISOString() };
+    const etag = res.headers.get("etag");
+    const lm = res.headers.get("last-modified");
+    if (etag) entry.etag = etag;
+    if (lm) entry.lastModified = lm;
+    etagCache.set(url, entry);
+
+    return {
+      bytes: new Uint8Array(await res.arrayBuffer()),
+      contentType: res.headers.get("content-type"),
+      status: res.status,
+    };
+  }
+
+  private async fetchRss(
+    feed: SourceFeed,
+    etagCache: Map<string, CacheEntry>,
+  ): Promise<NormalizedArticle[]> {
+    const allowed = await this.checkRobots(feed.url);
+    if (!allowed) {
+      console.log(`[fetch] robots.txt blockerar ${feed.id}`);
+      return [];
+    }
+
+    const result = await this.fetchWithCache(feed.url, etagCache, {
+      Accept: "application/rss+xml, application/atom+xml, application/xml, text/xml",
+    });
+    if (!result) return [];
+
+    const items = await parseRssXml(result.text);
+    const articles: NormalizedArticle[] = [];
+
+    for (const item of items) {
+      if (!item.link) continue;
+      const text = stripHtml(item.content || item.description);
+      const domain = extractDomain(item.link);
+      const published = parseRssDate(item.pubDate);
+
+      articles.push({
+        url: item.link,
+        domain,
+        title: item.title,
+        text,
+        published,
+      });
+    }
+
+    return articles;
+  }
+
+  /**
+   * "index"-källa: hämtar en nyhetslista och följer den till ARTIKLARNA.
+   *
+   * Listan blir aldrig själv en artikel — den är rubriker utan brödtext och
+   * hade bara gett grindarna skräp att avvisa. Varje artikel hämtas som eget
+   * dokument, med publiceringsdatum ur adressen i stället för hämtningstiden,
+   * så G4:s datumfönster prövar när partiet sa något och inte när vi läste det.
+   *
+   * En trasig artikel fäller aldrig de andra: den loggas och hoppas över.
+   */
+  private async fetchIndex(
+    feed: SourceFeed,
+    etagCache: Map<string, CacheEntry>,
+  ): Promise<NormalizedArticle[]> {
+    if (!(await this.checkRobots(feed.url))) {
+      console.log(`[fetch] robots.txt blockerar ${feed.id}`);
+      return [];
+    }
+    const listResult = await this.fetchRawWithCache(feed.url, etagCache, {
+      Accept: "text/html,application/xhtml+xml",
+    });
+    if (!listResult) return [];
+
+    const listHtml = new TextDecoder("utf-8").decode(listResult.bytes);
+    const tak = feed.max_articles ?? MAX_INDEX_ARTICLES;
+    let lankar = findArticleLinks(listHtml, feed.url, feed.article_pattern, tak);
+    if (lankar.length === 0) {
+      console.log(`[fetch] ${feed.id}: nyhetslistan gav inga daterade artikellänkar`);
+      return [];
+    }
+
+    // Andra våningen. Sidorna från nivå ett hämtas som artiklar nedan ändå;
+    // här läses de en gång till för sina egna länkar. Det kostar ingen extra
+    // hämtning i praktiken — fetchRawWithCache svarar ur etag-cachen andra
+    // gången — och det är det enda sättet in i en katalog som S:s, där
+    // ståndpunkterna ligger en nivå under ämnesområdena.
+    if (feed.follow_depth === 2) {
+      const djupare = new Set(lankar);
+      for (const gren of lankar) {
+        if (djupare.size >= tak) break;
+        try {
+          if (!(await this.checkRobots(gren))) continue;
+          const res = await this.fetchRawWithCache(gren, etagCache, {
+            Accept: "text/html,application/xhtml+xml",
+          });
+          if (!res) continue;
+          const html = new TextDecoder("utf-8").decode(res.bytes);
+          for (const l of findArticleLinks(html, gren, feed.article_pattern, tak)) {
+            if (djupare.size >= tak) break;
+            djupare.add(l);
+          }
+        } catch (e) {
+          console.error(
+            `[fetch] ${feed.id}: grenen ${gren} föll: ${e instanceof Error ? e.message : e}`,
+          );
+        }
+      }
+      lankar = [...djupare].sort();
+      console.log(`[fetch] ${feed.id}: två våningar gav ${lankar.length} sidor`);
+    }
+
+    return this.hamtaSidor(lankar, feed.id, "artikeln", etagCache);
+  }
+
+  /**
+   * "sitemap"-källa: läser partiets eget sidregister och hämtar de sidor vars
+   * adress matchar mönstret. Se `sitemapLinks` för varför vägen behövs.
+   *
+   * Sidorna saknar datum i adressen och är sällan daterade i HTML — en
+   * politiksida är inte en nyhet. Faller båda vägarna används hämtningstiden,
+   * precis som i `fetchIndex`. Det är rätt sak för den här sortens källa:
+   * sidan beskriver vad partiet tycker NU, och G4:s datumfönster ska inte
+   * fälla en aktuell politiksida för att den låg still ett år.
+   */
+  private async fetchSitemap(
+    feed: SourceFeed,
+    etagCache: Map<string, CacheEntry>,
+  ): Promise<NormalizedArticle[]> {
+    if (!(await this.checkRobots(feed.url))) {
+      console.log(`[fetch] robots.txt blockerar ${feed.id}`);
+      return [];
+    }
+    const tak = feed.max_articles ?? MAX_SITEMAP_ARTICLES;
+    const rot = await this.fetchRawWithCache(feed.url, etagCache, {
+      Accept: "application/xml,text/xml",
+    });
+    if (!rot) return [];
+
+    const forsta = sitemapLinks(sitemapText(rot.bytes), feed.article_pattern, tak);
+    let adresser = forsta.urls;
+    if (forsta.index) {
+      const ur: string[] = [];
+      for (const under of forsta.urls) {
+        const res = await this.fetchRawWithCache(under, etagCache, {
+          Accept: "application/xml,text/xml",
+        });
+        if (!res) continue;
+        const del = sitemapLinks(sitemapText(res.bytes), feed.article_pattern, tak);
+        // Ett register som pekar på ett register pekar på ett tredje steg vi
+        // inte följer. `del.index` sant här betyder att sajten är djupare
+        // nästlad än de åtta partierna är — då hoppas grenen över tyst.
+        if (!del.index) ur.push(...del.urls);
+      }
+      adresser = [...new Set(ur)].sort().slice(0, tak);
+    }
+
+    if (adresser.length === 0) {
+      console.log(`[fetch] ${feed.id}: sitemapen gav inga sidor efter mönstret`);
+      return [];
+    }
+
+    return this.hamtaSidor(adresser, feed.id, "sidan", etagCache);
+  }
+
+  /**
+   * "page"-källa: hämtar ett enskilt dokument (t.ex. ett partis valmanifest eller
+   * policysida). HTML strippas till text och blir EN artikel. PDF (auto-detekterad
+   * på content-type eller %PDF-signatur — flera partier publicerar hela manifestet
+   * bara som PDF) textextraheras och chunkas per PDF_PAGES_PER_CHUNK sidor till en
+   * artikel per chunk med url `…#page=N`, eftersom A1/G5 tar max 5 löften per
+   * artikel. Extract-steget kör LLM A som vanligt. Så fångas skrivna manifest —
+   * som inte finns som RSS — automatiskt och löpande, i stället för manuell skörd.
+   */
+  private async fetchPage(
+    feed: SourceFeed,
+    etagCache: Map<string, CacheEntry>,
+  ): Promise<NormalizedArticle[]> {
+    const allowed = await this.checkRobots(feed.url);
+    if (!allowed) {
+      console.log(`[fetch] robots.txt blockerar ${feed.id}`);
+      return [];
+    }
+
+    const result = await this.fetchRawWithCache(feed.url, etagCache, {
+      Accept: "text/html,application/xhtml+xml,application/pdf",
+    });
+    if (!result) return [];
+
+    if (looksLikePdf(result.contentType, result.bytes)) {
+      return this.pdfToArticles(feed, result.bytes);
+    }
+
+    const html = new TextDecoder("utf-8").decode(result.bytes);
+    const titleMatch = html.match(/<title[^>]*>([^<]*)<\/title>/i);
+    const title = titleMatch ? stripHtml(titleMatch[1]!) : feed.id;
+    const text = stripHtml(html);
+
+    const articles: NormalizedArticle[] = [{
+      url: feed.url,
+      domain: extractDomain(feed.url),
+      title,
+      text,
+      published: new Date().toISOString(),
+      contentHash: sha256(text),
+    }];
+
+    // Auto-följ manifest-PDF:er länkade från sidan (samma domän). Ett trasigt
+    // dokument fäller aldrig sid-artikeln — det loggas och hoppas över.
+    for (const pdfUrl of findManifestPdfLinks(html, feed.url)) {
+      try {
+        if (!(await this.checkRobots(pdfUrl))) continue;
+        const pdfResult = await this.fetchRawWithCache(pdfUrl, etagCache, {
+          Accept: "application/pdf",
+        });
+        if (!pdfResult || !looksLikePdf(pdfResult.contentType, pdfResult.bytes)) continue;
+        // Färskhetsspärr ENBART för auto-följda dokument: valsidor länkar ofta
+        // FÖRRA valens manifest (SD/KD länkar 2022/2024-dokument). G4 hade ändå
+        // stoppat publicering (±548 d), men att hoppa här sparar LLM-anropen
+        // och håller review-kön ren. Kuraterade feeds behåller full grind-väg.
+        articles.push(...await this.pdfToArticles({ ...feed, url: pdfUrl }, pdfResult.bytes, {
+          skipStale: true,
+        }));
+      } catch (e) {
+        console.error(`[fetch] följd PDF ${pdfUrl} failed: ${e instanceof Error ? e.message : e}`);
+      }
+    }
+
+    return articles;
+  }
+
+  private async pdfToArticles(
+    feed: SourceFeed,
+    bytes: Uint8Array,
+    opts?: { skipStale?: boolean },
+  ): Promise<NormalizedArticle[]> {
+    const pdf = await extractPdfText(bytes);
+
+    if (opts?.skipStale && pdf.published) {
+      const ageDays = Math.abs(this.now().getTime() - Date.parse(pdf.published)) / 86_400_000;
+      if (ageDays > DATE_WINDOW_DAYS) {
+        console.log(`[fetch] följd PDF ${feed.url} är ${Math.round(ageDays)} dygn gammal (> ${DATE_WINDOW_DAYS}) — hoppas över`);
+        return [];
+      }
+    }
+
+    const domain = extractDomain(feed.url);
+    const baseTitle = pdf.title ?? feed.id;
+    const published = pdf.published ?? new Date().toISOString();
+
+    const articles: NormalizedArticle[] = [];
+    for (let start = 0; start < pdf.pages.length; start += PDF_PAGES_PER_CHUNK) {
+      const chunkPages = pdf.pages.slice(start, start + PDF_PAGES_PER_CHUNK);
+      const singleChunk = pdf.pages.length <= PDF_PAGES_PER_CHUNK;
+      const text = chunkPages.join("\n\n");
+      articles.push({
+        // #page=N är PDF:ens standard-djuplänk: klickbar källhänvisning till
+        // rätt sida, och gör chunkarnas url:er distinkta för dedup/seen.
+        url: singleChunk ? feed.url : `${feed.url}#page=${start + 1}`,
+        domain,
+        title: singleChunk
+          ? baseTitle
+          : `${baseTitle} (s. ${start + 1}–${start + chunkPages.length})`,
+        text,
+        published,
+        // Per chunk: en ny manifestversion omprocessar bara ändrade sidintervall.
+        contentHash: sha256(text),
+        // Per-sidtext följer med så publiceringen kan ankra källänken på
+        // citatets EXAKTA sida i stället för chunkens första (resolveQuotePage).
+        pdfPages: { firstPage: start + 1, texts: chunkPages },
+      });
+    }
+    return articles;
+  }
+
+  private async fetchRiksdagen(
+    feed: SourceFeed,
+    etagCache: Map<string, CacheEntry>,
+  ): Promise<NormalizedArticle[]> {
+    const result = await this.fetchWithCache(feed.url, etagCache, {
+      Accept: "application/json",
+    });
+    if (!result) return [];
+
+    const json = JSON.parse(result.text) as Record<string, unknown>;
+
+    if (json.dokumentlista) {
+      return this.processRiksdagenDokument(json, etagCache);
+    }
+    if (json.anforandelista) {
+      return this.processRiksdagenAnforanden(json, etagCache);
+    }
+
+    return [];
+  }
+
+  private async processRiksdagenDokument(
+    json: Record<string, unknown>,
+    etagCache: Map<string, CacheEntry>,
+  ): Promise<NormalizedArticle[]> {
+    const docs = parseRiksdagenDokumentlista(json);
+    const articles: NormalizedArticle[] = [];
+
+    for (const doc of docs) {
+      const textUrl = doc.dokument_url_text.startsWith("//")
+        ? `https:${doc.dokument_url_text}`
+        : doc.dokument_url_text;
+
+      let text = "";
+      try {
+        const textResult = await this.fetchWithCache(textUrl, etagCache);
+        if (textResult) text = textResult.text;
+      } catch {
+        text = doc.titel;
+      }
+
+      const date = doc.datum ? `${doc.datum}T00:00:00Z` : new Date().toISOString();
+
+      articles.push({
+        url: doc.url,
+        domain: "data.riksdagen.se",
+        title: doc.titel,
+        text: text || doc.titel,
+        published: date,
+      });
+    }
+
+    return articles;
+  }
+
+  private async processRiksdagenAnforanden(
+    json: Record<string, unknown>,
+    etagCache: Map<string, CacheEntry>,
+  ): Promise<NormalizedArticle[]> {
+    const items = parseRiksdagenAnforandelista(json);
+    const articles: NormalizedArticle[] = [];
+
+    for (const item of items) {
+      let textUrl = item.anforande_url_xml;
+      if (textUrl && !textUrl.startsWith("http")) {
+        textUrl = `https://data.riksdagen.se${textUrl.startsWith("/") ? "" : "/"}${textUrl}`;
+      }
+
+      let text = "";
+      try {
+        if (textUrl) {
+          const textResult = await this.fetchWithCache(textUrl, etagCache);
+          if (textResult) text = textResult.text;
+        }
+      } catch {
+        text = "";
+      }
+
+      const title = item.avsnittsrubrik
+        ? `${item.avsnittsrubrik} — ${item.talare}`
+        : `Anförande ${item.anforande_id} — ${item.talare}`;
+
+      const date = item.dok_datum ? `${item.dok_datum}T00:00:00Z` : new Date().toISOString();
+
+      articles.push({
+        url: `https://data.riksdagen.se/anforande/${item.anforande_id}`,
+        domain: "data.riksdagen.se",
+        title,
+        text: text || title,
+        published: date,
+      });
+    }
+
+    return articles;
+  }
+}
+
+/* ──────────────────────── Hjälpare ── */
+
+function extractDomain(urlStr: string): string {
+  try {
+    const url = new URL(urlStr);
+    let host = url.hostname.replace(/\.$/u, "");
+    if (host.startsWith("www.")) host = host.slice(4);
+    return host;
+  } catch {
+    return "";
+  }
+}
+
+function parseRssDate(dateStr: string): string {
+  if (!dateStr) return new Date().toISOString();
+  const parsed = Date.parse(dateStr);
+  if (!Number.isNaN(parsed)) return new Date(parsed).toISOString();
+  return dateStr;
+}

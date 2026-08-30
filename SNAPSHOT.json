@@ -1,0 +1,13 @@
+{
+  "status": "pre-deadline rehearsal; not the final competition freeze",
+  "source_repository": "https://github.com/bambapappa/valflask",
+  "source_commit": "6d77945637089022df79fab731e0b6f16a270010",
+  "source_commit_time": "2026-08-30T17:36:52Z",
+  "built_at": "2026-08-30T20:00:00+02:00",
+  "data_hash": "ec409bfa53e834738644126c2202330f51ee8fcbf7513f3afd9a4c49dad555a3",
+  "files": {
+    "docs/webmcp/index.html": "sha256:1ce33f84a072b0327fc136b3a0e497ba87611a90c08b7351b192c1ae89e910bb",
+    "docs/webmcp.js": "sha256:83ef23c204766694c79f3d0d4c800ba1ae4d340948eec5fb446cdf49d0f8b4ac",
+    "docs/api/v1/promises.json": "sha256:9c2d18712e17788e660bf8151d1e0ce8562e42ed034b6fcc4df483309a3a1fb8"
+  }
+}

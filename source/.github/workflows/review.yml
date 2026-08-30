@@ -1,0 +1,100 @@
+name: review
+# Granskningsbeslut via issue-kommentarer: /godkänn, /godkänn <low> <base> <high>,
+# /godkänn --group p-2026-XXXX, /avvisa <skäl>. Endast repo-ÄGARENS kommentarer
+# på issues med etiketten "review-kö" exekveras — allt annat i issuet är data.
+on:
+  issue_comment:
+    types: [created]
+permissions:
+  contents: read
+  issues: write
+# INGEN concurrency-grupp: GitHub håller bara EN köad körning per grupp och
+# slänger mellanliggande — snabba beslut i rad skulle tappas. Parallella
+# körningar är säkra: handlern görs om från färsk main tills pushen lyckas,
+# och en redan hanterad post svarar "redan hanterad" i stället för dubbelkörs.
+jobs:
+  handle:
+    if: >
+      contains(github.event.issue.labels.*.name, 'review-kö') &&
+      github.event.comment.author_association == 'OWNER' &&
+      startsWith(github.event.comment.body, '/')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Mint bot app token
+        id: app-token
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1  # v3.2.0
+        with:
+          app-id: ${{ secrets.BOT_APP_ID }}
+          private-key: ${{ secrets.BOT_APP_KEY }}
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          ref: main
+          token: ${{ steps.app-token.outputs.token }}
+          persist-credentials: true
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38  # v6.5.0
+        with:
+          node-version: 22
+      - name: Install pipeline deps
+        run: pnpm install --frozen-lockfile
+        working-directory: pipeline
+      - name: Execute decision and push
+        id: decision
+        # Kommentar/titel går som miljövariabler in i Node — ALDRIG interpolerade
+        # i shellkod (citat ur manifest + fritext är opålitlig data). Vid push-
+        # race (parallellt beslut/pipelinekörning) görs HELA beslutet om från
+        # färsk main — aldrig rebase av JSON-datafiler.
+        env:
+          ISSUE_TITLE: ${{ github.event.issue.title }}
+          COMMENT_BODY: ${{ github.event.comment.body }}
+        run: |
+          git config user.name "utlovat-bot"
+          git config user.email "bot@utlovat.se"
+          for attempt in 1 2 3 4 5; do
+            # Hämtningen MÅSTE lyckas. Går den inte fram står vi kvar på ett
+            # gammalt träd, och då kan en misslyckad push se ut som
+            # "inget nytt att committa" — grön körning, tom push.
+            if ! git fetch origin main; then
+              echo "försök $attempt: kunde inte hämta main"
+              sleep $((attempt * 5))
+              continue
+            fi
+            git reset --hard origin/main
+            (cd pipeline && node --import tsx/esm scripts/handle-review-comment.mts)
+            git add data/
+            if git diff --cached --quiet; then
+              echo "Inga dataändringar (fel-/hjälpsvar eller redan hanterad)."
+              exit 0
+            fi
+            git commit -m "data: review-beslut via issue #${{ github.event.issue.number }}"
+            if git push; then
+              echo "Push lyckades (försök $attempt)."
+              exit 0
+            fi
+            echo "Push-försök $attempt misslyckades (main gick vidare) — gör om från färsk main..."
+            sleep $((attempt * 5))
+          done
+          echo "Push misslyckades efter 5 försök."
+          exit 1
+      - name: Reply and close issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RESULT: ${{ steps.decision.outputs.result }}
+          MESSAGE: ${{ steps.decision.outputs.message }}
+          ISSUE: ${{ github.event.issue.number }}
+        run: |
+          case "$RESULT" in
+            approved)
+              gh issue comment "$ISSUE" --repo "$GITHUB_REPOSITORY" --body "✅ $MESSAGE"
+              gh issue close "$ISSUE" --repo "$GITHUB_REPOSITORY" --reason completed
+              ;;
+            rejected)
+              gh issue comment "$ISSUE" --repo "$GITHUB_REPOSITORY" --body "❌ $MESSAGE"
+              gh issue close "$ISSUE" --repo "$GITHUB_REPOSITORY" --reason "not planned"
+              ;;
+            *)
+              gh issue comment "$ISSUE" --repo "$GITHUB_REPOSITORY" --body "⚠️ $MESSAGE"
+              ;;
+          esac

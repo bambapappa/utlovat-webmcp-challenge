@@ -1,0 +1,69 @@
+---
+/**
+ * Veckans fläsk — avpublicerad.
+ *
+ * Krönikorna togs bort från sajten 2026-08-14 genom ett mänskligt beslut.
+ * Sidan står kvar med en enda uppgift: att säga att de funnits och var de
+ * finns nu. Att ta bort ett helt avsnitt utan spår vore en tyst rättelse, och
+ * tysta rättelser är förbjudna — därför den här noten och posten i
+ * rättelseloggen.
+ *
+ * Texterna ligger kvar i `data/chronicles.json` i kodförrådet, samtliga
+ * märkta `archived`, och renderas inte av något. Ska en krönika publiceras
+ * igen skrivs den för hand, och då tas frågan om hur talen hålls färska på
+ * nytt.
+ */
+import Layout from "../../layouts/Layout.astro";
+
+const canonicalPath = "/veckans-flask";
+const jsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Hem", "item": "https://utlovat.se/" },
+      { "@type": "ListItem", "position": 2, "name": "Veckans fläsk", "item": "https://utlovat.se/veckans-flask" },
+    ],
+  },
+];
+---
+<Layout
+  title="Veckans fläsk — avpublicerad — utlovat.se"
+  description="Veckokrönikorna är borttagna från utlovat.se. Texterna finns kvar i kodförrådet."
+  jsonLd={jsonLd}
+  canonicalPath={canonicalPath}
+>
+  <div class="page-content">
+    <div class="prosa-content prosa-content--centered">
+      <h1>Veckans fläsk är borttagen</h1>
+
+      <p>
+        Under juni till augusti 2026 publicerade vi en veckokrönika som
+        sammanfattade veckans nya vallöften. <strong>De sex krönikorna är
+        avpublicerade sedan den 14 augusti 2026</strong> och finns inte längre
+        på sajten.
+      </p>
+
+      <p>
+        Skälet är att texterna bar sina summor inskrivna i löptexten. Rättas ett
+        belopp någon annanstans blir en sådan mening tyst osann, och en krönika
+        från juli hade fortsatt visa en totalsumma som inte längre stämde. Vi
+        valde att ta bort dem hellre än att skriva om historisk text.
+      </p>
+
+      <p>
+        Texterna är inte raderade. De ligger kvar i sin helhet i
+        <a href="https://github.com/bambapappa/valflask/blob/main/data/chronicles.json" target="_blank" rel="noopener">kodförrådet<span aria-hidden="true"> ↗</span><span class="visually-hidden"> (öppnas i en ny flik)</span></a>
+        tillsammans med hela sajtens data, så att det går att se vad som stod
+        där och när. Borttagningen står också i
+        <a href="/rattelser">rättelseloggen</a>.
+      </p>
+
+      <p>
+        Ingen siffra på sajten påverkas. Krönikorna var en sammanfattning av
+        material som ligger kvar: <a href="/">totalsumman</a>, de enskilda
+        löftena och <a href="/rattelser">rättelserna</a> står där de stod.
+      </p>
+    </div>
+  </div>
+</Layout>

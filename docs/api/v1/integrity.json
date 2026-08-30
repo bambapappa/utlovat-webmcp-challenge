@@ -1,0 +1,12 @@
+{
+  "generated_at": "2026-08-30T17:59:07.280Z",
+  "data_hash": "ec409bfa53e834738644126c2202330f51ee8fcbf7513f3afd9a4c49dad555a3",
+  "algorithm": "sha256",
+  "canonical_source": "promises.json",
+  "files": {
+    "promises.json": "ec409bfa53e834738644126c2202330f51ee8fcbf7513f3afd9a4c49dad555a3",
+    "stances.json": "9ef9f578c16f14ca0bc763c7bbfb9ec3d915c67721fdab3fbe06d13319c7b382",
+    "issues.json": "0e7958194550e641a5fc64b5ce302f11b9e9a9386718405671ec5f8883290a32"
+  },
+  "license": "CC-BY-4.0"
+}

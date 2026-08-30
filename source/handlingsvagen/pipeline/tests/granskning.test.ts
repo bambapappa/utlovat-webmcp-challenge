@@ -1,0 +1,394 @@
+import { test } from "node:test";
+import assert from "node:assert/strict";
+import {
+  avvisaForslag,
+  byggIssueBody,
+  byggIssueTitel,
+  findIndexByKopplingId,
+  godkannForslag,
+  GranskningsFel,
+  kopplingId,
+  laggTillNyaKoPoster,
+  nastaKopplingsId,
+  nyaKoPoster,
+  parseGranskningsKommando,
+  provaNyttBevis,
+  stadaAvgjorda,
+  type KopplingPost,
+  type KoPost,
+} from "../src/granskning.ts";
+import type { Handling } from "../src/handlingar.ts";
+import { kanon, type Provning } from "../../../pipeline/src/provningar.ts";
+
+/**
+ * Kö-posten prövad, i den form den godkända kopplingen får.
+ *
+ * Grinden hashar kopplingen som faktiskt skrivs, så testet måste räkna på
+ * samma sak: kö-postens fält plus status "aktiv". `citat` skiljer sig när
+ * testet byter bevis — och att bytet gör prövningen gammal är avsiktligt,
+ * ett nytt citat har aldrig prövats.
+ */
+function provad(post: KoPost, over: Partial<Provning> & { citat?: string } = {}): Map<string, Provning> {
+  const { citat, ...rest } = over;
+  const somGodkand = {
+    promise_id: post.promise_id,
+    handling_id: post.handling_id,
+    riktning: post.riktning,
+    status: "aktiv",
+    bevis: { citat: citat ?? post.bevis.citat },
+  };
+  const id = `ko:${kopplingId(post)}`;
+  const p: Provning = {
+    id,
+    slag: "koppling",
+    datum: "2026-08-07",
+    utfall: "haller",
+    underlag_hash: kanon("koppling", somGodkand),
+    ...rest,
+  };
+  return new Map([[id, p]]);
+}
+
+
+function handling(over: Partial<Handling> = {}): Handling {
+  return {
+    id: "h-2026-0001",
+    kind: "motion",
+    dok_id: "HD021234",
+    datum: "2024-10-03",
+    parties: ["v"],
+    persons: [
+      { name: "A", party: "v", riksdagen_id: "1" },
+      { name: "B", party: "v", riksdagen_id: "2" },
+    ],
+    titel: "Höja taket i arbetslöshetsförsäkringen",
+    url: "https://data.riksdagen.se/dokument/HD021234",
+    archive_url: null,
+    ...over,
+  };
+}
+
+function koPost(over: Partial<KoPost> = {}): KoPost {
+  return {
+    promise_id: "p-2026-0042",
+    handling_id: "h-2026-0001",
+    riktning: "stodjer",
+    bevis: { citat: "taket i arbetslöshetsförsäkringen bör höjas" },
+    motionstyp: "kommitte",
+    method_note: "Motionen kräver samma takhöjning som löftet.",
+    confidence: 0.85,
+    skapad: "2026-07-19T12:00:00.000Z",
+    extraction: { model: "test-modell", verified_by: null, run_id: "foreslag-2026-07-19" },
+    ...over,
+  };
+}
+
+test("kopplingId: stabilt, 12 hex, och issue-uppslag träffar rätt post", () => {
+  const id = kopplingId(koPost());
+  assert.match(id, /^[0-9a-f]{12}$/u);
+  assert.equal(id, kopplingId(koPost({ confidence: 0.1 }))); // bara mål+handling räknas
+  const items = [koPost({ handling_id: "h-2026-0009" }), koPost()];
+  assert.equal(findIndexByKopplingId(items, id), 1);
+  assert.equal(findIndexByKopplingId(items, "ffffffffffff"), -1);
+});
+
+test("parseGranskningsKommando: godkänn, motionstyp, avvisa, alias, grumligt", () => {
+  assert.deepEqual(parseGranskningsKommando("/godkänn"), { action: "approve" });
+  assert.deepEqual(parseGranskningsKommando("/godkann\nfritext under"), { action: "approve" });
+  assert.deepEqual(parseGranskningsKommando("/approve"), { action: "approve" });
+  assert.deepEqual(parseGranskningsKommando("/godkänn --motionstyp parti"), { action: "approve", motionstyp: "parti" });
+  assert.deepEqual(parseGranskningsKommando("/godkänn --motionstyp=kommitté"), { action: "approve", motionstyp: "kommitte" });
+  assert.deepEqual(parseGranskningsKommando("/avvisa fel sakfråga"), { action: "reject", reason: "fel sakfråga" });
+  assert.deepEqual(parseGranskningsKommando("/reject"), { action: "reject", reason: "avvisad via koppling-issue" });
+  assert.equal(parseGranskningsKommando("/godkänn gärna"), null);
+  assert.equal(parseGranskningsKommando("/godkänn --motionstyp partibok"), null);
+  assert.equal(parseGranskningsKommando("ser bra ut!"), null);
+});
+
+test("issuetexten berättar att beviset går att byta", () => {
+  // Kommandot finns bara i praktiken om den som beslutar vet om det.
+  const b = byggIssueBody(koPost(), "abc123def456", handling());
+  assert.ok(b.includes("Bevis: <citatet>"), b.slice(-400));
+  assert.ok(b.includes("prövas ord för ord mot källdokumentet"));
+});
+
+test("parseGranskningsKommando: Bevis-raden byter citat", () => {
+  // Bakgrunden: genomgången 2026-08-02 lade 28 förslag i högen "citatet bär
+  // inte, men dokumentet bär sannolikt ett bättre" — och det fanns ingen väg
+  // att lägga in det bättre citatet. Nu finns den.
+  assert.deepEqual(
+    parseGranskningsKommando("/godkänn\nBevis: Riksdagen ställer sig bakom det som anförs i motionen om X."),
+    { action: "approve", bevis: "Riksdagen ställer sig bakom det som anförs i motionen om X." },
+  );
+  assert.deepEqual(
+    parseGranskningsKommando("/godkänn --motionstyp parti\nBevis: Ett annat citat ur samma dokument."),
+    { action: "approve", motionstyp: "parti", bevis: "Ett annat citat ur samma dokument." },
+  );
+  // Fritext utan märkning blir aldrig ett bevis — annars hade vilken kommentar
+  // som helst under kommandot kunnat hamna i ett publicerat citat.
+  assert.deepEqual(parseGranskningsKommando("/godkänn\nser bra ut, håller med"), { action: "approve" });
+  // En signatur under vågrät linje kapas, precis som i granskningskön.
+  assert.deepEqual(
+    parseGranskningsKommando("/godkänn\nBevis: Citatet står här.\n\n---\nBevis: signaturens text"),
+    { action: "approve", bevis: "Citatet står här." },
+  );
+});
+
+test("provaNyttBevis: samma krav som när förslaget skapades", () => {
+  const kalla =
+    "Inledning. Riksdagen ställer sig bakom det som anförs i motionen om att bygga fler skolor " +
+    "och tillkännager detta för regeringen. Avslutning.";
+  assert.deepEqual(
+    provaNyttBevis("Riksdagen ställer sig bakom det som anförs i motionen om att bygga fler skolor", kalla),
+    { ok: true },
+  );
+  // Typografi neutraliseras på båda sidor — men innehåll aldrig.
+  assert.deepEqual(
+    provaNyttBevis("Riksdagen  ställer sig bakom det som anförs i\nmotionen om att bygga fler skolor", kalla),
+    { ok: true },
+  );
+  const fabricerat = provaNyttBevis("Riksdagen ställer sig bakom att bygga fler sjukhus i landet", kalla);
+  assert.equal(fabricerat.ok, false);
+  assert.match((fabricerat as { skal: string }).skal, /ordagrant/);
+  const kort = provaNyttBevis("För kort", kalla);
+  assert.equal(kort.ok, false);
+  assert.match((kort as { skal: string }).skal, /tecken/);
+});
+
+test("godkannForslag: utbytt bevis hamnar i kopplingen och syns i motiveringen", () => {
+  const nytt = "Riksdagen ställer sig bakom det som anförs i motionen om något helt annat.";
+  const res = godkannForslag([koPost()], 0, [], [handling()], { year: 2026, bevis: nytt }, provad(koPost(), { citat: nytt }));
+  assert.equal(res.koppling.bevis.citat, nytt);
+  assert.match(res.koppling.method_note, /utbytt av granskaren/);
+  // Utan utbyte står postens eget citat kvar och motiveringen är orörd.
+  const utan = godkannForslag([koPost()], 0, [], [handling()], { year: 2026 }, provad(koPost()));
+  assert.equal(utan.koppling.bevis.citat, koPost().bevis.citat);
+  assert.doesNotMatch(utan.koppling.method_note, /utbytt/);
+});
+
+test("nastaKopplingsId räknar vidare från högsta", () => {
+  assert.equal(nastaKopplingsId([], 2026), "k-2026-0001");
+  assert.equal(nastaKopplingsId([{ id: "k-2026-0007" }, { id: "k-2026-0002" }], 2026), "k-2026-0008");
+});
+
+test("godkannForslag: posten flyttas ur kön, kopplingen aktiv med verified_by owner", () => {
+  const ko = [koPost()];
+  const res = godkannForslag(ko, 0, [], [handling()], { year: 2026 }, provad(ko[0]!));
+  assert.equal(res.ko.length, 0);
+  assert.equal(res.kopplingar.length, 1);
+  const k = res.koppling;
+  assert.equal(k.id, "k-2026-0001");
+  assert.equal(k.status, "aktiv");
+  assert.equal(k.extraction.verified_by, "owner");
+  assert.equal(k.motionstyp, "kommitte");
+  assert.ok(!("skapad" in k)); // kö-fältet följer inte med in i kopplingar.json
+});
+
+test("godkannForslag: granskarens motionstyp vinner (b-0007)", () => {
+  const res = godkannForslag([koPost()], 0, [], [handling()], { motionstyp: "parti", year: 2026 }, provad(koPost()));
+  assert.equal(res.koppling.motionstyp, "parti");
+});
+
+test("godkannForslag: motion utan motionstyp stoppas", () => {
+  const utanTyp = koPost();
+  delete utanTyp.motionstyp;
+  assert.throws(() => godkannForslag([utanTyp], 0, [], [handling()], { year: 2026 }, provad(utanTyp)), GranskningsFel);
+});
+
+test("godkannForslag: motionstyp på icke-motion stoppas", () => {
+  const vot = handling({ id: "h-2026-0005", kind: "votering" });
+  const post = koPost({ handling_id: "h-2026-0005" });
+  delete post.motionstyp;
+  assert.throws(
+    () => godkannForslag([post], 0, [], [vot], { motionstyp: "parti", year: 2026 }, provad(post)),
+    GranskningsFel,
+  );
+  const res = godkannForslag([post], 0, [], [vot], { year: 2026 }, provad(post));
+  assert.equal(res.koppling.motionstyp, undefined); // voteringar har aldrig motionstyp
+});
+
+test("godkannForslag: okänd handling, kort citat och tom motivering stoppas", () => {
+  assert.throws(() => godkannForslag([koPost({ handling_id: "h-9999-0001" })], 0, [], [handling()], {}, provad(koPost({ handling_id: "h-9999-0001" }))), GranskningsFel);
+  assert.throws(() => godkannForslag([koPost({ bevis: { citat: "för kort" } })], 0, [], [handling()], {}, new Map()), GranskningsFel);
+  assert.throws(() => godkannForslag([koPost({ method_note: "  " })], 0, [], [handling()], {}, new Map()), GranskningsFel);
+  assert.throws(() => godkannForslag([], 3, [], [handling()], {}, new Map()), GranskningsFel);
+});
+
+test("godkannForslag: bevisets kalla_dok_id (betänkandet) följer med", () => {
+  const vot = handling({ id: "h-2026-0005", kind: "votering" });
+  const post = koPost({
+    handling_id: "h-2026-0005",
+    bevis: { citat: "taket i arbetslöshetsförsäkringen bör höjas", kalla_dok_id: "HA01AU10" },
+  });
+  delete post.motionstyp;
+  const res = godkannForslag([post], 0, [], [vot], { year: 2026 }, provad(post));
+  assert.equal(res.koppling.bevis.kalla_dok_id, "HA01AU10");
+});
+
+test("avvisaForslag lyfter posten ur kön", () => {
+  const ko = [koPost(), koPost({ handling_id: "h-2026-0002" })];
+  const res = avvisaForslag(ko, 0);
+  assert.equal(res.ko.length, 1);
+  assert.equal(res.post.handling_id, "h-2026-0001");
+  assert.throws(() => avvisaForslag([], 0), GranskningsFel);
+});
+
+test("byggIssueTitel bär koppling-id, mål, handling och typ", () => {
+  const t = byggIssueTitel(koPost(), "abc123def456", handling());
+  assert.equal(t, "[koppling abc123def456] p-2026-0042 ↔ h-2026-0001 (motion)");
+});
+
+test("byggIssueBody: motion visar motionstyp-raden och beslutstabellen", () => {
+  const b = byggIssueBody(koPost(), "abc123def456", handling(), {
+    id: "p-2026-0042",
+    title: "Höj taket i a-kassan",
+    quote: "Vi vill höja taket.",
+    parties: ["v"],
+  });
+  assert.ok(b.includes("Höj taket i a-kassan"));
+  assert.ok(b.includes("/godkänn --motionstyp parti"));
+  assert.ok(b.includes("Motionstyp:"));
+  assert.ok(b.includes("/avvisa <skäl>"));
+  assert.ok(b.includes("koppling-id `abc123def456`"));
+});
+
+test("byggIssueBody: motion med riksdagsklassning visar den, utan visar avsaknad", () => {
+  const medTyp = byggIssueBody(koPost(), "abc123def456", { ...handling(), motionstyp: "enskild" });
+  assert.ok(medTyp.includes("riksdagens egen klassning: **enskild**"));
+  const utanTyp = byggIssueBody(koPost(), "abc123def456", handling());
+  assert.ok(utanTyp.includes("riksdagen har ingen klassning"));
+});
+
+test("byggIssueBody: votering förklarar riktningen och länkar betänkandet", () => {
+  const vot = handling({ id: "h-2026-0005", kind: "votering", utfall: "avslag" });
+  const post = koPost({
+    handling_id: "h-2026-0005",
+    bevis: { citat: "taket i arbetslöshetsförsäkringen bör höjas", kalla_dok_id: "HA01AU10" },
+  });
+  delete post.motionstyp;
+  const b = byggIssueBody(post, "abc123def456", vot);
+  assert.ok(b.includes("bifall (Ja)"));
+  assert.ok(b.includes("https://data.riksdagen.se/dokument/HA01AU10"));
+  assert.ok(!b.includes("--motionstyp")); // bara motioner erbjuder motionstyp-beslutet
+});
+
+test("byggIssueBody utan löftestext och utan handling degraderar ärligt", () => {
+  const b = byggIssueBody(koPost({ handling_id: "h-9999-0001" }), "abc123def456");
+  assert.ok(b.includes("p-2026-0042"));
+  assert.ok(b.includes("SAKNAS i handlingar.json"));
+});
+
+test("nyaKoPoster: bara det körningen skapade räknas som nytt", () => {
+  const gammal = koPost();
+  const ny = koPost({ handling_id: "h-2026-0002" });
+  assert.deepEqual(nyaKoPoster([gammal], [gammal, ny]).map((p) => p.handling_id), ["h-2026-0002"]);
+  assert.deepEqual(nyaKoPoster([gammal], [gammal]), []);
+});
+
+test("laggTillNyaKoPoster: avgjorda poster återuppstår aldrig, nya läggs på, dubbletter skyddas", () => {
+  const avgjord = koPost(); // fanns vid körningens start, ägaren hann avgöra den
+  const ny = koPost({ handling_id: "h-2026-0002" });
+  const redanInne = koPost({ handling_id: "h-2026-0003" });
+  const farsk = [redanInne]; // avgjord borta ur färska kön; redanInne kvar
+  const start = [avgjord, redanInne];
+  const resultat = [avgjord, redanInne, ny, redanInne]; // körningen såg gammalt läge
+  const ut = laggTillNyaKoPoster(farsk, start, resultat);
+  assert.deepEqual(ut.map((p) => p.handling_id), ["h-2026-0003", "h-2026-0002"]);
+});
+
+test("kopplingar sorteras på id vid godkännande", () => {
+  const befintliga: KopplingPost[] = [
+    {
+      id: "k-2026-0002",
+      promise_id: "p-2026-0001",
+      handling_id: "h-2026-0002",
+      riktning: "motverkar",
+      bevis: { citat: "ett tillräckligt långt citat härifrån" },
+      method_note: "x",
+      confidence: 0.5,
+      extraction: { model: "m", verified_by: "owner", run_id: "r" },
+      status: "aktiv",
+    },
+  ];
+  const res = godkannForslag([koPost()], 0, befintliga, [handling()], { year: 2026 }, provad(koPost()));
+  assert.deepEqual(res.kopplingar.map((k) => k.id), ["k-2026-0002", "k-2026-0003"]);
+});
+
+/** En köpost som pekar på en ståndpunkt, eller på ingenting alls. */
+function utanLofte(post: KoPost): KoPost {
+  const { promise_id: _bort, ...rest } = post;
+  return rest;
+}
+
+test("stadaAvgjorda: förslag mot tillbakadragna och försvunna löften städas bort", () => {
+  const ko = [
+    koPost({ promise_id: "p-2026-0042", handling_id: "h-2026-0001" }), // aktivt
+    koPost({ promise_id: "p-2026-0131", handling_id: "h-2026-0002" }), // tillbakadraget
+    koPost({ promise_id: "p-2026-9999", handling_id: "h-2026-0003" }), // finns inte
+    utanLofte(koPost({ stance_id: "sq-1::v", handling_id: "h-2026-0004" })),
+  ];
+  const { kvar, bortstadade } = stadaAvgjorda(ko, new Set(["p-2026-0042"]));
+  assert.deepEqual(
+    kvar.map((p) => p.handling_id),
+    ["h-2026-0001", "h-2026-0004"],
+  );
+  assert.deepEqual(
+    bortstadade.map((p) => p.promise_id),
+    ["p-2026-0131", "p-2026-9999"],
+  );
+});
+
+test("stadaAvgjorda: en ståndpunktskoppling rörs inte", () => {
+  // Ståndpunkternas id-form är inte fastställd — en gissning hade tömt kön.
+  const post = utanLofte(koPost({ stance_id: "sq-9::m", handling_id: "h-2026-0005" }));
+  const { kvar, bortstadade } = stadaAvgjorda([post], new Set(["p-2026-0042"]));
+  assert.equal(kvar.length, 1);
+  assert.equal(bortstadade.length, 0);
+});
+
+test("stadaAvgjorda: en post utan mål alls tystas inte bort", () => {
+  const trasig = utanLofte(koPost({ handling_id: "h-2026-0006" }));
+  const { kvar, bortstadade } = stadaAvgjorda([trasig], new Set());
+  assert.equal(kvar.length, 1);
+  assert.equal(bortstadade.length, 0);
+});
+
+// ── Kvalitetsfiltret som grind ────────────────────────────────────────
+//
+// Filtret fanns som text i skillarna men inte i koden: mätt 2026-08-07 hade
+// fyra av 1 382 publicerade saker gått genom det. En vana som ingenting mäter
+// blir inte gjord, så godkännandet frågar nu efter prövningen.
+
+test("godkannForslag: vägrar godkänna en koppling som inte gått genom kvalitetsfiltret", () => {
+  assert.throws(
+    () => godkannForslag([koPost()], 0, [], [handling()], { year: 2026 }, new Map()),
+    (e: unknown) => e instanceof GranskningsFel && /kvalitetsfiltret/.test(e.message),
+  );
+});
+
+test("godkannForslag: vägrar när prövningen slutade att kopplingen inte höll", () => {
+  assert.throws(
+    () =>
+      godkannForslag([koPost()], 0, [], [handling()], { year: 2026 },
+        provad(koPost(), { utfall: "haller-inte" })),
+    (e: unknown) => e instanceof GranskningsFel && /höll inte/.test(e.message),
+  );
+});
+
+// Ett utbytt bevis är ett citat som aldrig prövats. Släpps det igenom på den
+// gamla prövningen kan vem som helst byta ut det bevis en människa godkände.
+test("godkannForslag: ett bevis utbytt efter prövningen stoppas", () => {
+  const nytt = "Riksdagen ställer sig bakom det som anförs i motionen om något helt annat.";
+  assert.throws(
+    () =>
+      godkannForslag([koPost()], 0, [], [handling()], { year: 2026, bevis: nytt },
+        provad(koPost())),
+    (e: unknown) => e instanceof GranskningsFel && /ändrats/.test(e.message),
+  );
+});
+
+test("godkannForslag: håller med förbehåll släpps igenom", () => {
+  const res = godkannForslag([koPost()], 0, [], [handling()], { year: 2026 },
+    provad(koPost(), { utfall: "haller-med-forbehall" }));
+  assert.equal(res.koppling.status, "aktiv");
+});

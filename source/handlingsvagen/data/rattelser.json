@@ -1,0 +1,280 @@
+[
+  {
+    "date": "2026-08-02",
+    "affects": "Handlingsvågens rutnät och löftessidor — 95 löften",
+    "what": "Utslagen på sajten var räknade den 25 juli och hade inte räknats om sedan dess, trots att nya kopplingar godkänts löpande. 95 löften visade \"ingen handling ännu\" fastän de hade godkända handlingar bakom sig. Alla utslag är nu omräknade ur registret: 150 löften har utslag i stället för 55. Ingen koppling har lagts till, tagits bort eller ändrat riktning — det som saknades var själva omräkningen.",
+    "why": "Utslagen räknas fram av ett skript ur de godkända kopplingarna. Godkännandet sparade kopplingen och byggde om sajten, men ingenting körde omräkningen: den fanns bara som ett kommando att starta för hand. Sajten läste därför en åtta dagar gammal fil utan att något sa ifrån. Skriptets egen dokumentation påstod att en inaktuell fil skulle stoppa bygget; den kontrollen fanns inte. Nu räknas utslagen om i samma steg som kopplingen sparas, och ett test jämför den sparade filen med en omräkning så att samma sak inte kan hända tyst igen. Att \"ingen handling ännu\" är en neutral upplysning och inte en anklagelse gör den inte mindre fel när partiet faktiskt handlat.",
+    "commit": "2bdf809"
+  },
+  {
+    "date": "2026-08-05",
+    "affects": "Partisidorna /parti/s, /parti/m, /parti/sd, /parti/c, /parti/v, /parti/kd, /parti/l och /parti/mp",
+    "what": "Partisidorna visade ett tal, \"utan handling ännu\", som slog ihop två helt olika saker: löften vi sökt igenom utan att hitta någon handling, och löften vi ännu inte sökt på. Talet är nu uppdelat i \"genomsökta utan träff\" och \"ännu inte genomsökta\". Ingen koppling, inget utslag och ingen siffra om vad partierna gjort har ändrats — det är samma löften och samma handlingar som förut, redovisade så att det syns hur långt vi hunnit.",
+    "why": "Sökningen efter handlingar gick igenom löftena i den ordning de låg i vår fil, och den ordningen följer parti. En körning som tog slut innan den var färdig stannade därför alltid på samma ställe, och samma partier blev utan gång på gång. Vi kör numera det minst genomsökta löftet först. Ordningen ändrar inte vad som till slut hittas — samma löften och samma handlingar finns där oavsett i vilken ordning vi letar — men den gör att arbetet fördelar sig jämnare medan det pågår. Att bara byta ordning räcker dock inte: så länge en del löften är genomsökta och andra inte, säger ett tomt fält olika saker på olika sidor, och det gick inte att se. Nu står det utskrivet."
+  },
+  {
+    "date": "2026-08-05",
+    "affects": "Metodsidan /metod",
+    "what": "Metodsidan angav fel orsak till att en del löften saknar vägda handlingar. Det stod att sökningen för nästan en femtedel av löftena inte hittar något dokument alls från partiet att ens pröva, och att det gällde nästan hälften av Liberalernas löften. Båda delarna var fel. Alla de löftena har hundratals eller tusentals egna partihandlingar som skulle kunna prövas. Den verkliga orsaken är att sökningen kräver att löftet och handlingen delar tillräckligt många utmärkande ord, och att korta, allmänt hållna löften inte når dit. Andelen är också en annan i dag: 79 av 467 löften, och för Liberalerna en tredjedel i stället för nästan hälften. Ingen koppling, inget utslag och ingen siffra om vad partierna gjort har ändrats — det var förklaringen som var fel, inte vägningen.",
+    "why": "Talen togs fram genom att räkna vilka löften som saknade prövade handlingar, och orsaken antogs vara den gräns som säger att vi bara väger det ett parti självt skrivit under. När saken mättes ordentligt visade det sig att den gränsen inte fällde ett enda av löftena. Det som fäller dem är i stället kravet på ordlikhet mellan löfte och handling, och nästan alla ligger strax under det kravet. Skillnaden spelar roll för läsaren: den första förklaringen låter som att materialet saknas och att inget står att göra, den andra som att gränsen är satt av oss och går att ompröva.",
+    "commit": "9133e33"
+  },
+  {
+    "date": "2026-08-06",
+    "affects": "Handlingsvågens rutnät och löftessidorna för p-2026-0022, p-2026-0036, p-2026-0040, p-2026-0076, p-2026-0082, p-2026-0101, p-2026-0124 och p-2026-0503 — elva voteringar",
+    "what": "Citatet intill elva voteringar visade fel del av betänkandet. Ett citat ska visa vad riksdagen faktiskt beslutade i den punkt som röstades om; i stället stod där utskottets resonemang, en beskrivning av vad ärendet innehöll eller — i ett fall — remissinstansernas invändningar. Alla elva citat är nu utbytta mot voteringspunktens egen beslutstext eller mot utskottets sammanfattning av vad punkten antog, hämtade ur riksdagens öppna data och kontrollerade ord för ord mot källdokumentet. Ett av dem, kopplingen mellan Moderaternas kärnkraftslöfte och omröstningen om ny kärnkraft (NU5 punkt 1), stod dessutom inte ordagrant i sin källa: orden \"kärnkraft\" och \"samtidigt\" hade fått ett extra mellanslag inuti sig när texten hämtades, och citatet sa alltså inte riktigt vad betänkandet säger. Ingen koppling har lagts till eller tagits bort, ingen riktning har ändrats och inget utslag om vad ett parti gjort har ändrats — det som ändrats är vilket stycke ur samma dokument som visas som belägg.",
+    "why": "Kravet att belägget ska stå i den del av dokumentet som ÄR handlingen — motionens yrkande, voteringspunktens beslutstext — infördes den 6 augusti 2026 och tillämpades på de förslag som då låg i kö. De kopplingar som godkänts tidigare prövades aldrig mot det nya kravet. En genomgång av samtliga 36 publicerade voteringar samma dag visade att 16 av dem bar ett citat som inte skulle ha passerat. Elva gick att rätta genom att byta till rätt stycke ur samma dokument. Fem gäller punkter som bara avslår motioner utan att visa vad som avslogs; de är inte rättade här utan lämnade för ett eget beslut om kopplingen alls ska stå kvar. Mellanslagsfelet kom av att riksdagens dokument sätts med en formateringstagg per teckenformat, så att ett avstavat ord kunde delas itu när texten hämtades; hämtningen är lagad sedan tidigare samma dag och citatet är omprövat mot den rättade texten.",
+    "commit": "b2be8fe"
+  },
+  {
+    "date": "2026-08-06",
+    "affects": "Handlingsvågens rutnät och löftessidorna för p-2026-0038, p-2026-0040, p-2026-0042 och p-2026-0318 — fem voteringar borttagna",
+    "what": "Fem kopplingar mellan ett löfte och en omröstning är borttagna. Alla fem gällde en punkt där riksdagen enbart avslog motioner, och när vi läste vad som faktiskt avslogs höll kopplingen inte: fyra av dem var ett annat partis förslag, i en annan sakfråga än löftet. Att rösta nej till någon annans förslag är inte att uppfylla sitt eget löfte. Den femte var samma politiska händelse som en koppling vi redan hade — riksdagen avslog först Vänsterpartiets krav på att stoppa förslaget och antog sedan det, två omröstningar om ett beslut, så Moderaternas löfte om försvaret räknades två gånger. Följden: 2 080 partiomdömen blir 2 072 och 10 428 noteringar för enskilda ledamöter blir 9 393. Samtidigt visar vi nu vad som avslogs. En omröstning där riksdagen bara säger nej till en rad motioner gav tidigare bara en lista på nummer intill kopplingen; nu står varje nedröstat förslag utskrivet med sin egen lydelse, hämtad ur motionen och länkad till riksdagens dokument. Det gäller tre kvarvarande kopplingar, alla på Socialdemokraternas löfte om public service.",
+    "why": "Ett citat från en sådan omröstning kunde peka ut vilka motioner som föll utan att säga ett ord om vad de begärde — och det gick därför inte att se om kopplingen höll utan att slå upp varje motion för hand. Ingen hade gjort det. När det gjordes föll fem av åtta. Uppgiften fanns hela tiden: punkten anger riksmöte, motionsnummer, parti och yrkandenummer, och lydelsen ligger i motionens egen förslagslista hos riksdagen. Nu hämtas den automatiskt, och ett test stoppar bygget om en sådan koppling saknar den. Kravet gäller också framåt: en ny koppling av det slaget kan inte godkännas utan att det står vad som avslogs.",
+    "commit": "85e24fc"
+  },
+  {
+    "date": "2026-08-07",
+    "affects": "Handlingsvågens rutnät och löftessidorna för p-2026-0002, p-2026-0007, p-2026-0008, p-2026-0009, p-2026-0015, p-2026-0016, p-2026-0017, p-2026-0018, p-2026-0019, p-2026-0020, p-2026-0021, p-2026-0022, p-2026-0023, p-2026-0024, p-2026-0027, p-2026-0028, p-2026-0029, p-2026-0030, p-2026-0032, p-2026-0034, p-2026-0036, p-2026-0039, p-2026-0040, p-2026-0057, p-2026-0072, p-2026-0074, p-2026-0080, p-2026-0089, p-2026-0105, p-2026-0106, p-2026-0120, p-2026-0121, p-2026-0123, p-2026-0124, p-2026-0126, p-2026-0129, p-2026-0131, p-2026-0133, p-2026-0139, p-2026-0141, p-2026-0142, p-2026-0143, p-2026-0146, p-2026-0152, p-2026-0188, p-2026-0216, p-2026-0218, p-2026-0279, p-2026-0313, p-2026-0317, p-2026-0319, p-2026-0321, p-2026-0322, p-2026-0327, p-2026-0328, p-2026-0331, p-2026-0342, p-2026-0344, p-2026-0345, p-2026-0346, p-2026-0349, p-2026-0351, p-2026-0354, p-2026-0360, p-2026-0373, p-2026-0376, p-2026-0378, p-2026-0382, p-2026-0389, p-2026-0403, p-2026-0405, p-2026-0408, p-2026-0409, p-2026-0413, p-2026-0415, p-2026-0419, p-2026-0420, p-2026-0422, p-2026-0424, p-2026-0427, p-2026-0430, p-2026-0432, p-2026-0438, p-2026-0439, p-2026-0447, p-2026-0448, p-2026-0449, p-2026-0451, p-2026-0454, p-2026-0455, p-2026-0458, p-2026-0459, p-2026-0460, p-2026-0461, p-2026-0469, p-2026-0472, p-2026-0474, p-2026-0475, p-2026-0479, p-2026-0489, p-2026-0490, p-2026-0500, p-2026-0503, p-2026-0513, p-2026-0517, p-2026-0527, p-2026-0546, p-2026-0648 — 177 bevis utbytta",
+    "what": "Vi visar nu en annan del av samma riksdagsdokument som belägg för 162 kopplingar mellan ett löfte och en handling. Det gamla citatet stod ordagrant i dokumentet, men det visade argumenten för handlingen i stället för handlingen själv — motionens brödtext i stället för dess yrkande, frågans bakgrund i stället för frågan. För 15 kopplingar var den sparade citattexten trasig: när texten en gång hämtades ur riksdagens dokument sköts mellanrum in mitt i ord, så att citatet inte längre stod ord för ord i sin källa. Meningen är densamma — det är avskriften som är lagad, hämtad på nytt ur dokumentet. Varje nytt citat är hämtat ur riksdagens egna data och kontrollerat ord för ord mot källan. 12 av dem står inte bland handlingens egna lydelser och togs in på ett mänskligt beslut, med skälet utskrivet i varje enskild motivering.",
+    "why": "Ett belägg ska visa vad ledamoten eller partiet faktiskt gjorde. En motions handling är dess yrkande; brödtexten argumenterar för yrkandet och är inte i sig en handling. Ett citat som inte går att hitta i sin källa går inte heller att kontrollera, och då är det inte längre ett belägg. Bedömningen av kopplingen är oförändrad — det är belägget som bytt stycke, inte domen.",
+    "commit": "5272625"
+  },
+  {
+    "date": "2026-08-07",
+    "affects": "Åtta kopplingar (k-2026-0283, k-2026-0355, k-2026-0356, k-2026-0421, k-2026-0724, k-2026-0725, k-2026-0726, k-2026-0735)",
+    "what": "Åtta kopplingar är indragna sedan de tre löften de vägde handlingarna mot dragits tillbaka i Fläskvågen. Handlingarna står kvar oförändrade och inget utslag bygger längre på de här kopplingarna; det som föll bort är motparten. Riktningen i dem var i samtliga fall att handlingen stödde löftet, så ingen part förlorar ett utslag i sin disfavör på det här.",
+    "why": "En koppling väger en riksdagshandling mot ett löfte. Finns löftet inte kvar finns ingenting att väga mot, och att låta kopplingen ligga aktiv skulle låta sajten säga att ett parti hållit något vi inte längre påstår att det lovat. Löftena drogs tillbaka därför att deras citat inte stod i den källa löftena angav.",
+    "commit": "9133e33"
+  },
+  {
+    "date": "2026-08-07",
+    "affects": "Handlingsvågens rutnät, löftessidor och sökning — 67 löften",
+    "what": "Läskopian av Fläskvågens löften, som Handlingsvågens sajt bygger på, hade inte skrivits om på ett tag och visade därför fel innehåll. 65 publicerade löften saknades helt i rutnätet, och två löften som dragits tillbaka i Fläskvågen låg kvar som om de fanns (p-2026-0131 och p-2026-0537). Sex löften visade dessutom en äldre version av sitt citat eller saknade sin arkivlänk. Kopian är nu omskriven ur Fläskvågens data: 527 löften i stället för 467. Ingen koppling, handling eller utslag är ändrad av det här.",
+    "why": "Läskopian finns för att Handlingsvågens sajt ska kunna byggas utan att nå in i systerrepot, och den ska skrivas om varje gång Fläskvågens data ändras. Det steget kördes inte, och ingenting sa ifrån — samma slag av fel som utslagen hade den 2 augusti, där en fil låg kvar inaktuell för att omräkningen bara fanns som ett kommando någon skulle komma ihåg att starta. Ett löfte som saknas i rutnätet ser för läsaren ut som ett löfte partiet aldrig gett.",
+    "commit": "9133e33"
+  },
+  {
+    "date": "2026-08-07",
+    "affects": "Handlingsvågens rutnät och löftessidorna för p-2026-0456, p-2026-0504 — 2 bevis utbytta",
+    "what": "Vi visar nu en annan del av samma riksdagsdokument som belägg för 2 kopplingar mellan ett löfte och en handling. Det gamla citatet stod ordagrant i dokumentet, men det visade argumenten för handlingen i stället för handlingen själv — motionens brödtext i stället för dess yrkande, frågans bakgrund i stället för frågan. Varje nytt citat är hämtat ur riksdagens egna data och kontrollerat ord för ord mot källan.",
+    "why": "Ett belägg ska visa vad ledamoten eller partiet faktiskt gjorde. En motions handling är dess yrkande; brödtexten argumenterar för yrkandet och är inte i sig en handling. Bedömningen av kopplingen är oförändrad — det är belägget som bytt stycke, inte domen.",
+    "commit": "bd0cf62"
+  },
+  {
+    "date": "2026-08-07",
+    "affects": "Handlingsvågens rutnät och löftessidorna för p-2026-0517 — 1 bevis utbytta",
+    "what": "Vi visar nu en annan del av samma riksdagsdokument som belägg för 1 koppling mellan ett löfte och en handling. Det gamla citatet stod ordagrant i dokumentet, men det visade argumenten för handlingen i stället för handlingen själv — motionens brödtext i stället för dess yrkande, frågans bakgrund i stället för frågan. Varje nytt citat är hämtat ur riksdagens egna data och kontrollerat ord för ord mot källan.",
+    "why": "Ett belägg ska visa vad ledamoten eller partiet faktiskt gjorde. En motions handling är dess yrkande; brödtexten argumenterar för yrkandet och är inte i sig en handling. Bedömningen av kopplingen är oförändrad — det är belägget som bytt stycke, inte domen.",
+    "commit": "374a0b0"
+  },
+  {
+    "date": "2026-08-08",
+    "affects": "Handlingsvågens rutnät och löftessidorna för p-2026-0349, p-2026-0414 — 2 bevis utbytta",
+    "what": "Vi visar nu en annan del av samma riksdagsdokument som belägg för 2 kopplingar mellan ett löfte och en handling. Det gamla citatet stod ordagrant i dokumentet, men det visade argumenten för handlingen i stället för handlingen själv — motionens brödtext i stället för dess yrkande, frågans bakgrund i stället för frågan. Varje nytt citat är hämtat ur riksdagens egna data och kontrollerat ord för ord mot källan.",
+    "why": "Ett belägg ska visa vad ledamoten eller partiet faktiskt gjorde. En motions handling är dess yrkande; brödtexten argumenterar för yrkandet och är inte i sig en handling. Bedömningen av kopplingen är oförändrad — det är belägget som bytt stycke, inte domen.",
+    "commit": "c262d80c789d16eaccc6c2a4a1ae54e8d7073805"
+  },
+  {
+    "date": "2026-08-08",
+    "affects": "Handlingsvågens rutnät och löftessidorna för p-2026-0007, p-2026-0015, p-2026-0216, p-2026-0279, p-2026-0434, p-2026-0512 — 6 belägg indragna, med 16 ledamotsmeriter",
+    "what": "Sex kopplingar mellan ett löfte och en riksdagsfråga är indragna. Citatet stod ordagrant i dokumentet, men det stod i frågans bakgrundstext och inte i frågan själv — och frågans egen lydelse handlar om något annat än löftet. I ett fall frågar ledamoten hur regeringen hanterar ett förslag; i ett annat vad ministern avser göra åt en rapport. Ingenting i själva frågan visar att partiet agerade på löftet. Skälet står utskrivet på varje indragen koppling.",
+    "why": "En frågas handling är frågan som ställs. Bakgrundstexten förklarar varför frågan ställs och är inte i sig en handling — lika lite som en motions brödtext är motionens yrkande. Ett belägg som visar bakgrunden ser riktigt ut ända fram till att någon läser vad det faktiskt visar. Ingen partidom vilade på de sex; de bar 16 ledamotsmeriter, som försvinner med dem. En försvunnen merit är också en ändring, och därför står den här.",
+    "commit": "c262d80c789d16eaccc6c2a4a1ae54e8d7073805"
+  },
+  {
+    "date": "2026-08-08",
+    "affects": "Handlingsvågens rutnät och löftessidorna för p-2026-0001, p-2026-0002, p-2026-0139, p-2026-0143, p-2026-0256, p-2026-0325, p-2026-0346, p-2026-0351, p-2026-0425, p-2026-0473, p-2026-0522, p-2026-0628 — 17 belägg indragna och 5 omdömen om partier borttagna",
+    "what": "Sjutton kopplingar mellan ett löfte och en budgetmotion är indragna. Citatet stod ordagrant i motionen, men det stod i den löpande texten och inte i något av motionens yrkanden — och motionens yrkanden gäller bara budgetens ramverk: riktlinjerna för den ekonomiska politiken, utgiftstaket och fördelningen mellan utgiftsområden. Ett sådant yrkande pekar inte ut den enskilda reformen; den ligger inne i en områdessumma. Fem omdömen om att ett parti agerat i linje med sitt löfte vilade ensamt på ett av de här beläggen och är därför borttagna: Socialdemokraterna om p-2026-0001, Miljöpartiet om p-2026-0522 och p-2026-0473, Vänsterpartiet om p-2026-0217 och p-2026-0628. Skälet står utskrivet på varje indragen koppling.",
+    "why": "En motions handling är dess yrkande. Ett ramverksyrkande fördelar pengar på utgiftsområden och säger ingenting om vilken reform inom området som avses — att läsa det som stöd för ett enskilt löfte är att läsa in mer än det står. Undantaget gäller skatter och avgifter: där kan yrkandet om beräkningen av statens inkomster bära löftet, men bara när det också binder regeringen att återkomma med lagförslag. Fem av de indragna gäller skattelöften i motioner som saknar det ledet. Sex kopplingar där undantaget kan gälla är kvar och väntar på att inkomsttabellens rad hämtas. Att ett omdöme försvinner är också en ändring, och därför står den här.",
+    "commit": "cf2b47a1edb9986398005926f82c633d187db9d7"
+  },
+  {
+    "date": "2026-08-08",
+    "affects": "Handlingsvågens rutnät och löftessidorna för p-2026-0129, p-2026-0131, p-2026-0218, p-2026-0318, p-2026-0319, p-2026-0321, p-2026-0322, p-2026-0325, p-2026-0342, p-2026-0349, p-2026-0353, p-2026-0365, p-2026-0381, p-2026-0383, p-2026-0385, p-2026-0388, p-2026-0390, p-2026-0410, p-2026-0412, p-2026-0417, p-2026-0418, p-2026-0419, p-2026-0422, p-2026-0425, p-2026-0426, p-2026-0427, p-2026-0428, p-2026-0432, p-2026-0433, p-2026-0439, p-2026-0440, p-2026-0443, p-2026-0446, p-2026-0448, p-2026-0449, p-2026-0458, p-2026-0468, p-2026-0474, p-2026-0489, p-2026-0494, p-2026-0500, p-2026-0614, p-2026-0624, p-2026-0635, p-2026-0638, p-2026-0673 — 51 kopplingar har fått anslagsraden utskriven i motiveringen och 27 är tillbakadragna.",
+    "what": "En budgetmotion vars enda yrkande är att anvisa anslagen enligt en tabell säger i sitt yrkande ingenting om vad pengarna ska gå till — det står i tabellen, som ingår i yrkandet genom hänvisningen. Vi har hämtat tabellen ur varje sådan motion och lagt raderna bredvid löftet. För 51 kopplingar finns en rad för just det löftet gäller, och den raden står nu utskriven i motiveringen med anslagets nummer, dess namn och vad motionen begär mot regeringens förslag. För 27 kopplingar bär motionen inte löftet: antingen står tabellens rader för saken oförändrade, eller så är löftet inte ett löfte om pengar utan om en lag, en modell, ett villkor eller en skatt — och då kan ett belopp inte uttrycka det, hur nära anslaget än ligger. De kopplingarna är tillbakadragna med skälet skrivet på var och en. Tre löften mister med det sitt enda belägg och försvinner därför ur rutnätet helt: Centerpartiets löfte om en särskild modell för primärvård i landsbygder, Centerpartiets löfte om att bidragsnivån ska påverkas av deltagande i svenskundervisning, och Vänsterpartiets löfte om skattefria avsättningar för renovering. För varje löfte fanns en publicerad bedömning att partiet agerat i linje med det — de tre bedömningarna är tillbakadragna, eftersom det som bar dem inte höll.",
+    "why": "Ett belägg ska visa vad partiet faktiskt gjorde, och för en anslagsmotion är det tabellraden. Utan den vet läsaren bara att vi hänvisar till en budgetmotion, inte vilken rad i den som bär löftet, och kan alltså inte kontrollera oss. Att ett anslag råkar ligga nära ett löfte är inte samma sak som att motionen begärde pengar för löftet — och att pengar går till en myndighet är inte samma sak som att en lag om myndigheten stiftas. Bedömningen av de kopplingar som står kvar är oförändrad; det är belägget som blivit möjligt att granska. En bedömning får aldrig stå kvar sedan beviset under den fallit; att raden blir tom är då det ärliga utfallet.",
+    "commit": "4741d179a1a2229e0fd5ebfdf3fdef231fb1b193"
+  },
+  {
+    "date": "2026-08-08",
+    "affects": "Handlingsvågens rutnät och löftessidorna för p-2026-0143, p-2026-0170, p-2026-0256, p-2026-0257, p-2026-0345, p-2026-0406 — 5 kopplingar har fått inkomstberäkningens rad utskriven i motiveringen och 1 är tillbakadragna.",
+    "what": "En budgetmotion vars yrkanden bara fastställer budgetens ramar säger i yrkandet ingenting om en enskild reform — utom när ett av yrkandena godkänner beräkningen av statens inkomster och kräver att regeringen återkommer med lagförslag i överensstämmelse med beräkningen. Då är beräkningen ett åtagande att lagstifta, och den ingår i yrkandet genom hänvisningen. Vi har hämtat den beräkningen ur varje sådan motion och lagt raden bredvid löftet. För 5 kopplingar finns en rad för just den skatt löftet gäller, och den raden står nu utskriven i motiveringen med inkomsttitelns nummer, dess namn och vad motionen begär mot regeringens förslag. För 1 kopplingar bär motionen inte löftet, och de är tillbakadragna med skälet skrivet på var och en.",
+    "why": "Ett belägg ska visa vad partiet faktiskt gjorde. För en budgetmotion som bara sätter ramarna är det inkomstberäkningens rad som visar om partiet begärde en ändring av just den skatt löftet gäller — utan den vet läsaren bara att vi hänvisar till en budgetmotion. Att en skatt råkar ligga nära ett löfte är inte samma sak som att motionen begärde en ändring av den, och en motion som förstärker det avdrag ett löfte säger ska avskaffas är ingen handling på det löftet. Bedömningen av de kopplingar som står kvar är oförändrad; det är belägget som blivit möjligt att granska.",
+    "commit": "8d9834fd71c33cb4e9189af3c5f24dc3ec6a3fab"
+  },
+  {
+    "date": "2026-08-08",
+    "affects": "Handlingsvågens rutnät och löftessidorna för p-2026-0129, p-2026-0131, p-2026-0218, p-2026-0267, p-2026-0316, p-2026-0317, p-2026-0318, p-2026-0321, p-2026-0322, p-2026-0325, p-2026-0342, p-2026-0370, p-2026-0376, p-2026-0381, p-2026-0388, p-2026-0410, p-2026-0412, p-2026-0414, p-2026-0425, p-2026-0426, p-2026-0427, p-2026-0428, p-2026-0432, p-2026-0434, p-2026-0439, p-2026-0440, p-2026-0446, p-2026-0448, p-2026-0449, p-2026-0468, p-2026-0474, p-2026-0489, p-2026-0494, p-2026-0500, p-2026-0543, p-2026-0614, p-2026-0635, p-2026-0638, p-2026-0671, p-2026-0673 — 64 kopplingar har fått anslagsraden utskriven i motiveringen och 8 är tillbakadragna. Centerpartiets publicerade bedömning «har agerat i linje med löftet» på p-2026-0543 faller helt: löftet mister sitt enda belägg och försvinner ur rutnätet.",
+    "what": "En budgetmotion vars enda yrkande är att anvisa anslagen enligt en tabell säger i sitt yrkande ingenting om vad pengarna ska gå till — det står i tabellen, som ingår i yrkandet genom hänvisningen. Vi har hämtat tabellen ur varje sådan motion och lagt raderna bredvid löftet. För 64 kopplingar finns en rad för just det löftet gäller, och den raden står nu utskriven i motiveringen med anslagets nummer, dess namn och vad motionen begär mot regeringens förslag — och där en läsning har avgjort vilken rad som bär står också skälet för den läsningen, eftersom ett belopp utan sin förklaring kan läsas som motsatsen till vad motionen begär. För 8 kopplingar bär motionen inte löftet: antingen står tabellens rader för saken oförändrade, eller så är löftet inte ett löfte om pengar utan om en lag, en modell, ett villkor eller en skatt — och då kan ett belopp inte uttrycka det, hur nära anslaget än ligger. De kopplingarna är tillbakadragna med skälet skrivet på var och en.",
+    "why": "Ett belägg ska visa vad partiet faktiskt gjorde, och för en anslagsmotion är det tabellraden. Utan den vet läsaren bara att vi hänvisar till en budgetmotion, inte vilken rad i den som bär löftet, och kan alltså inte kontrollera oss. Att ett anslag råkar ligga nära ett löfte är inte samma sak som att motionen begärde pengar för löftet — och att pengar går till en myndighet är inte samma sak som att en lag om myndigheten stiftas. Bedömningen av de kopplingar som står kvar är oförändrad; det är belägget som blivit möjligt att granska.",
+    "commit": "5e43ef967e0293214f756824002923110b06ac2d"
+  },
+  {
+    "date": "2026-08-08",
+    "affects": "Handlingsvågens rutnät och löftessidorna för p-2026-0002, p-2026-0020, p-2026-0089, p-2026-0106, p-2026-0325, p-2026-0373, p-2026-0415, p-2026-0432, p-2026-0449, p-2026-0468, p-2026-0499, p-2026-0503, p-2026-0533, p-2026-0556, p-2026-0638, p-2026-0644 — 18 bevis utbytta",
+    "what": "Vi visar nu en annan del av samma riksdagsdokument som belägg för 18 kopplingar mellan ett löfte och en handling. Det gamla citatet stod ordagrant i dokumentet, men det visade argumenten för handlingen i stället för handlingen själv — motionens brödtext i stället för dess yrkande, frågans bakgrund i stället för frågan. Varje nytt citat är hämtat ur riksdagens egna data och kontrollerat ord för ord mot källan.",
+    "why": "Ett belägg ska visa vad ledamoten eller partiet faktiskt gjorde. En motions handling är dess yrkande; brödtexten argumenterar för yrkandet och är inte i sig en handling. Bedömningen av kopplingen är oförändrad — det är belägget som bytt stycke, inte domen.",
+    "commit": "7a01ca69f25d42aef3b1962de156f57d19da695d"
+  },
+  {
+    "date": "2026-08-08",
+    "affects": "Handlingsvågens rutnät och löftessidorna för p-2026-0325, p-2026-0415, p-2026-0432, p-2026-0449, p-2026-0468, p-2026-0638 — 7 kopplingar har fått anslagsraden utskriven i motiveringen och 0 är tillbakadragna.",
+    "what": "En budgetmotion vars enda yrkande är att anvisa anslagen enligt en tabell säger i sitt yrkande ingenting om vad pengarna ska gå till — det står i tabellen, som ingår i yrkandet genom hänvisningen. Vi har hämtat tabellen ur varje sådan motion och lagt raderna bredvid löftet. För 7 kopplingar finns en rad för just det löftet gäller, och den raden står nu utskriven i motiveringen med anslagets nummer, dess namn och vad motionen begär mot regeringens förslag — och där en läsning har avgjort vilken rad som bär står också skälet för den läsningen, eftersom ett belopp utan sin förklaring kan läsas som motsatsen till vad motionen begär. För 0 kopplingar bär motionen inte löftet: antingen står tabellens rader för saken oförändrade, eller så är löftet inte ett löfte om pengar utan om en lag, en modell, ett villkor eller en skatt — och då kan ett belopp inte uttrycka det, hur nära anslaget än ligger. De kopplingarna är tillbakadragna med skälet skrivet på var och en.",
+    "why": "Ett belägg ska visa vad partiet faktiskt gjorde, och för en anslagsmotion är det tabellraden. Utan den vet läsaren bara att vi hänvisar till en budgetmotion, inte vilken rad i den som bär löftet, och kan alltså inte kontrollera oss. Att ett anslag råkar ligga nära ett löfte är inte samma sak som att motionen begärde pengar för löftet — och att pengar går till en myndighet är inte samma sak som att en lag om myndigheten stiftas. Bedömningen av de kopplingar som står kvar är oförändrad; det är belägget som blivit möjligt att granska.",
+    "commit": "7a01ca69f25d42aef3b1962de156f57d19da695d"
+  },
+  {
+    "date": "2026-08-08",
+    "affects": "Handlingsvågens rutnät och löftessidorna för p-2026-0004, p-2026-0021, p-2026-0022, p-2026-0040, p-2026-0129, p-2026-0210, p-2026-0321, p-2026-0322, p-2026-0333, p-2026-0382, p-2026-0383, p-2026-0385, p-2026-0408, p-2026-0410, p-2026-0415, p-2026-0418, p-2026-0422, p-2026-0424, p-2026-0439, p-2026-0443, p-2026-0447, p-2026-0454, p-2026-0457, p-2026-0458, p-2026-0460, p-2026-0474, p-2026-0529, p-2026-0607 — 34 kopplingar är tillbakadragna. p-2026-0210, p-2026-0383, p-2026-0385, p-2026-0408, p-2026-0447, p-2026-0457, p-2026-0529 mister sitt sista belägg och försvinner ur rutnätet. De publicerade bedömningarna «har agerat i linje med löftet» faller därmed helt för Vänsterpartiet på p-2026-0210, Centerpartiet på p-2026-0383 och p-2026-0385 och Miljöpartiet på p-2026-0408, p-2026-0447, p-2026-0457 och p-2026-0529. Socialdemokraternas bedömning på p-2026-0004 går från «har agerat i linje» till «ingen handling ännu». Partidomarna räknas om från 1 984 till 1 920 och ledamotsmeriterna från 9 218 till 9 054.",
+    "what": "Vi har läst var och en av de här motionerna mot det löfte kopplingen påstår att den gäller. En motions handling är dess yrkande — det motionen faktiskt begär att riksdagen ska besluta — och brödtexten argumenterar för yrkandet. I samtliga fall stod det vi citerade bara i brödtexten, och inget av motionens yrkanden begär det löftet lovar. Kopplingarna är tillbakadragna med skälet skrivet på var och en. Det gäller 34 kopplingar.",
+    "why": "Ett belägg ska visa vad partiet faktiskt gjorde, inte vad partiet skrev om saken. En motions handling är dess yrkande; brödtexten argumenterar för yrkandet. Står det vi citerar bara i brödtexten, och begär inget av motionens yrkanden det löftet lovar, har vi visat en åsikt och kallat den en handling. Bedömningen av de kopplingar som står kvar är oförändrad.",
+    "commit": "7a01ca69f25d42aef3b1962de156f57d19da695d"
+  },
+  {
+    "date": "2026-08-09",
+    "affects": "Handlingsvågens rutnät och löftessidorna för tre tillbakadragna centerpartistiska dubbletter (p-2026-0368, p-2026-0375, p-2026-0389). Fyra kopplingar är flyttade till de löften som står kvar; en är tillbakadragen.",
+    "what": "Tre centerpartistiska löften har dragits tillbaka som partiets egna dubbletter. Deras belägg är inte borttagna: fyra kopplingar är flyttade till det löfte som står kvar i respektive grupp, med skälet skrivet på var och en. Den femte, k-2026-0680, är tillbakadragen därför att samma riksdagshandling redan var belagd på det kvarvarande löftet — att flytta även den hade visat samma handling två gånger på samma löfte. Sexton bedömningar försvinner ur rutnätet, och alla sexton är «ingen handling ännu» på de tillbakadragna posterna. Ingen bedömning om att ett parti agerat i linje eller emot har fallit.",
+    "why": "En handling som visar att ett parti agerat på sin egen politik blir inte mindre sann av att posten den bokförts på var en dubblett. Hade vi dragit in beläggen i stället för att flytta dem hade fyra riktiga riksdagshandlingar slutat räknas, och sajten hade visat Centerpartiet som mindre aktivt än partiet är — en följd av vår städning, inte av partiets handlande. Ett belägg flyttas bara mellan löften som redan är sammanlänkade som samma politik.",
+    "commit": "98de06a361c0b9109e72d5538d9363f35c3ccb52"
+  },
+  {
+    "date": "2026-08-09",
+    "affects": "Ledamotslistan /ledamoter",
+    "what": "Ledamotslistan sa «De 425 som sitter i riksdagen i dag». Riksdagen har 349 platser, så det talet kunde aldrig stämma. Listan är ett register över alla som röstat i riksdagen någon gång under mandatperioden 2022–2026 — också ersättare och ledamöter som hunnit lämna sin plats. Ingressen säger nu det, och att 349 är antalet platser. Antalen per parti står kvar oförändrade och betyder samma sak som förut: hur många personer som röstat för partiet under perioden. Ingen röst, ingen merit och ingen sida om en enskild ledamot är ändrad.",
+    "why": "Registret byggs ur riksdagens egna voteringsprotokoll och samlar varje person som lagt en röst. Över fyra år blir de fler än platserna: bara riksmötet 2025/26 har 373 röstande, och tillsammans blir de fyra åren 425. Talet var alltså rätt räknat men fel beskrivet, och beskrivningen gjorde varje partisiffra till ett mandattal den inte var — 126 för Socialdemokraterna mot partiets 107 platser i valet 2022.",
+    "commit": "7982b10"
+  },
+  {
+    "date": "2026-08-09",
+    "affects": "Metodsidan /metod",
+    "what": "Metodsidan bar fyra tal som skrivits in som siffror och därmed stannat i den dag de mättes. Det stod att Miljöpartiets löften bar 155 kopplingar och Centerpartiets 131, medan Kristdemokraternas bar 8 och Liberalernas 6 — i dag är talen 211, 128, 28 och 12. Det stod också att sökningen inte hittar fram till «knappt en femtedel» av löftena, «79 av 467», och att det gav en tredjedel för Liberalerna och en tiondel för Socialdemokraterna. Rätt tal är 55 av 553, alltså tio procent. Alla fyra slås nu upp ur datat när sidan byggs och kan inte åldras igen. Ingen koppling och inget utslag är ändrat.",
+    "why": "Talen är påståenden om vad vi hunnit med, inte om metoden, och de ändras varje gång en kö betas av. Skrivna som siffror i en text som börjar «i augusti 2026» läser de som dagens läge även när de inte längre är det. Samma regel gäller nu här som för krönikorna: texten är statisk, talen slås upp.",
+    "commit": "7982b10"
+  },
+  {
+    "date": "2026-08-09",
+    "affects": "Ämnen och ord /amnen",
+    "what": "På Ämnen och ord ritades alla staplar i «Ord som skiljer partierna åt» lika långa, oavsett vilket tal de skulle visa. Talet till höger om varje stapel och beskrivningen i stapelns egen text var hela tiden rätt — det var streckets längd som inte följde dem. Staplarna ritas nu i sin rätta längd. Inget tal, ingen sökträff och ingen röstsammanställning är ändrad.",
+    "why": "Stapelns längd låg i ett stilattribut på elementet, och sajtens säkerhetsregler kastar bort varje sådant attribut — i alla webbläsare, inte bara någon. Längden nådde därför aldrig fram, och stapeln föll tillbaka på samma reservvärde överallt. Felet har visat sig två gånger med olika symtom: först som staplar som såg fulla ut, sedan som staplar som såg tomma ut. Längden ligger nu i en svg:s bredd, som är geometri och inte stil, och en grind i bygget faller om ett stilattribut smyger tillbaka.",
+    "commit": "7982b10"
+  },
+  {
+    "date": "2026-08-10",
+    "affects": "Handlingsvågens rutnät och ledamotssidorna. Fyra riksdagshandlingar var bokförda på ett löfte som dragits tillbaka: två är flyttade till löftet som står kvar (p-2026-0619), två är tillbakadragna. Vänsterpartiets bedömning på p-2026-0619 står kvar som «har agerat i linje med löftet» men vilar nu på tre handlingar i stället för en, och åtta ledamöter till får handlingen räknad som sin: Andrea Andersson Tay, Andreas Lennkvist Manriquez, Lotta Johnsson Fornarve, Nadja Awad, Nooshi Dadgostar, Samuel Gonzalez Westling, Tony Haddou och Vasiliki Tsouplaki.",
+    "what": "Löftet p-2026-0131 drogs tillbaka den 5 augusti som en dubblett — dess barnbidragsdel var samma löfte som p-2026-0619, där partiet dessutom anger sin egen nivå. Fyra handlingar låg kvar bokförda på det tillbakadragna löftet. Två av dem yrkar på en höjning av barnbidraget och är flyttade till löftet som står kvar. En tredje belade samma motion som redan var belagd där, och två belägg ur samma handling på samma löfte är en dubblett i rutnätet; den är tillbakadragen, och motionen syns fortfarande på löftet genom det belägg som fanns förut. Den fjärde föreslog ett tillfälligt flerbarnstillägg för ett enskilt budgetår — en annan åtgärd än att höja barnbidraget, som det kvarvarande löftet gäller; den är tillbakadragen på ett mänskligt beslut. Inget belopp och inget finansieringsgap ändras.",
+    "why": "Ett löfte som dras tillbaka som dubblett är inte ett löfte som visat sig vara fel — politiken finns kvar, bara på en annan post. Handlingarna som belade det är fortfarande sanna: motionerna finns, citaten står ordagrant i dem. Hade vi låtit beläggen falla med posten skulle riktiga riksdagshandlingar slutat räknas som att partiet agerat på sin egen politik, och sajten hade visat Vänsterpartiet som mindre aktivt än det är. Det är en fråga om opartiskhet och inte bara om ordning i datat: en städning får inte kosta ett parti dess belägg. Men den får inte heller ge ett parti belägg det inte har, och därför prövades varje handling mot lydelsen i det löfte som står kvar, inte mot den lösare lydelse som drogs tillbaka.",
+    "commit": "50570c9"
+  },
+  {
+    "date": "2026-08-10",
+    "affects": "Handlingsvågens rutnät, löftessidor och sökning — 29 löften saknades, 3 låg kvar som om de fanns och 18 visade ett äldre citat eller en äldre titel.",
+    "what": "Läskopian av Fläskvågens löften, som Handlingsvågens sajt bygger på, hade glidit ifrån sin källa igen. 29 publicerade löften fanns inte i rutnätet alls. Tre löften som drogs tillbaka den 9 augusti som dubbletter — p-2026-0368, p-2026-0375 och p-2026-0389, alla Centerpartiets — låg kvar som om de fortfarande gällde. Och 18 löften visade en äldre version av sin titel, sitt citat eller sin länk. Kopian är omskriven ur Fläskvågens data: 553 löften i stället för 527. Ingen koppling, ingen handling och ingen bedömning är ändrad av det här.",
+    "why": "Samma fel rättades den 7 augusti, med löftet att kopian ska skrivas om varje gång Fläskvågens data ändras. Två dagar senare hade den glidit igen, för löftet var ett kommando någon skulle komma ihåg att köra och inte en kontroll. Ett löfte som saknas i rutnätet ser för läsaren ut som ett löfte partiet aldrig gett, och ett tillbakadraget löfte som ligger kvar ser ut som ett löfte partiet fortfarande står bakom. Bygget mäter nu kopian mot källan och stannar om de skiljer sig, så att felet inte kan uppstå en tredje gång utan att någon får veta.",
+    "commit": "50570c9"
+  },
+  {
+    "date": "2026-08-10",
+    "affects": "Rättelseloggens egen post ovanför, om läskopian av löftena. Ingen sida, inget belopp och ingen bedömning berörs.",
+    "what": "Posten ovanför sade att 29 publicerade löften saknades i Handlingsvågens rutnät, att tre tillbakadragna låg kvar som om de fanns och att 18 visade ett äldre citat. Det stämmer om filen som ligger i kodförrådet, men inte om sajten: bygget skriver om den filen ur Fläskvågens löften varje gång sajten byggs, sedan 6 augusti, och det steget ligger före Handlingsvågen byggs. Läsaren har alltså hela tiden fått dagens löften. Glidningen var verklig men syntes aldrig utåt, och posten ovanför beskriver en skada som inte inträffade.",
+    "why": "Vi kräver av partierna att ett påstående ska stämma med vad som faktiskt hänt, och samma krav gäller det vi själva skriver — också när felet är att vi tagit på oss för mycket. En rättelselogg som överdriver blir lika oanvändbar som en som tiger: läser man den i efterhand går det inte att skilja de fel som drabbade någon från de som aldrig lämnade kodförrådet. Filen i förrådet ska ändå stämma med sin källa, och kontrollen som infördes står kvar — men den vaktar ordningen i vårt eget material, inte något läsaren sett.",
+    "commit": "1cdb79f"
+  },
+  {
+    "date": "2026-08-10",
+    "affects": "Handlingsvågens ledamotsmeriter för skriftliga frågor och interpellationer — 83 redan publicerade meritposter tas bort från de statsråd som tog emot frågorna. Tre ytterligare felaktiga meritposter stoppas innan publicering i samband med k-2026-0842–k-2026-0844. Inga kopplingar eller partidomar ändras av rättelsen.",
+    "what": "Meritmotorn räknade varje person som Riksdagens dokumentdata listar på en fråga eller interpellation. Där finns både frågeställaren och den tillfrågade ministern, ofta med ministern dubblerad i rollerna «ställd till» och «besvarad av». Följden blev att mottagande statsråd felaktigt fick samma handling tillgodoräknad som den ledamot som faktiskt ställde frågan. Meritmotorn räknar nu bara frågeställaren och deduplicerar personer innan meriten skrivs. Den publicerade listan hade 9 043 poster; rättelsen tar bort 83 felaktiga och de sju nya kopplingarna tillför 12 riktiga, vilket ger 8 972 poster.",
+    "why": "En fråga är frågeställarens handling. Ministerns svar är en annan handling och kan inte bokföras som om ministern hade ställt frågan till sig själv. Samma aktörsregel användes redan när förslag skapades och när partiet bakom frågan bestämdes; dommotorn hade missat den och läste rålistan över dokumentets samtliga intressenter i stället.",
+    "commit": "496223a"
+  },
+  {
+    "date": "2026-08-19",
+    "affects": "Handlingsvågens rutnät och löftessidan för p-2026-0640 — ett belägg är tillbakadraget och ett är flyttat. Löftet mister sitt sista belägg och försvinner ur rutnätet.",
+    "what": "Miljöpartiets löfte om att återställa enprocentsmålet för biståndet fanns publicerat två gånger: en gång ur partiets politiska handlingsprogram och en gång ur en nyhetstext, där samma mening också lovade att prioritera sexuell och reproduktiv hälsa och hbtqi-personers rättigheter. Upprepningen är tillbakadragen, och de två belägg som satt på den har följt olika vägar. Det ena — en partimotion som yrkar ordagrant på ett mål om minst en procent av bruttonationalinkomsten till bistånd — är flyttat till det löfte som står kvar, eftersom det är samma löfte. Det andra gäller den andra halvan av meningen, prioriteringen av sexuell och reproduktiv hälsa, och är tillbakadraget: den halvan finns inte som ett eget löfte hos partiet, och ett belägg för den kan inte bokföras på ett löfte som bara handlar om biståndets storlek.",
+    "why": "Ett belägg som flyttas fel ger ett parti något det inte har förtjänat; ett som inte dras in lämnar ett utslag på ett löfte ingen läsare kan nå. Därför skildes de två åt i stället för att behandlas lika. Ingen bedömning av ett parti föll bort: Miljöpartiets omdöme «har agerat i linje» står kvar och vilar nu på fyra belägg i stället för tre, sedan motionen flyttats dit. De övriga raderna som försvann var tomma — sju partier utan handling på ett löfte som inte längre finns.",
+    "commit": "cb793992"
+  },
+  {
+    "date": "2026-08-20",
+    "affects": "Partisidorna /parti/s, /parti/m, /parti/sd, /parti/c, /parti/v, /parti/kd, /parti/l och /parti/mp",
+    "what": "Talet «ännu inte genomsökta» är uppdelat i två, och sammanfattningen är delad i två grupper: vad vi vägt, och hur långt vi hunnit. Det som förut var ett tal heter nu «ingen liknande handling» — sökningen har varit där och inte funnit något dokument som liknar löftet tillräckligt — och «väntar på sökning», som är löften sökningen ännu inte gått över. Täckningen visas dessutom som en andel med en stapel: så många av så många löften genomsökta. Ingen koppling, inget utslag och ingen siffra om vad partierna gjort har ändrats. Det är samma löften och samma handlingar som förut, redovisade så att det syns vad som är en mätning och vad som är en arbetskö.",
+    "why": "Uppdelningen 2026-08-05 gick inte hela vägen. «Ännu inte genomsökta» bar fortfarande två påståenden: att sökningen letat och inte funnit något som liknar löftet, och att sökningen inte hunnit dit. Det första är en mätning vi ska stå för och som metodsidan förklarar; det andra säger ingenting alls. Sida vid sida lästes båda som ett omdöme om partiet, särskilt när talet var stort. Skillnaden går heller inte att se i det vi sparat hittills, eftersom minnet över sökningen bara bokförde par av löfte och handling — ett löfte utan en enda kandidat lämnade inget spår. Förslagskörningen bokför nu varje löfte den går över, också när kandidatlistan är tom. Tills den hunnit runt en gång räknas ett löfte utan spår som «väntar på sökning», vilket är det försiktiga svaret: vi påstår inte att vi sökt förrän vi mätt att vi gjort det."
+  },
+  {
+    "date": "2026-08-22",
+    "affects": "Handlingsvågens rutnät och löftessidorna för p-2026-0027, p-2026-0057, p-2026-0072, p-2026-0124, p-2026-0425, p-2026-0432, p-2026-0449, p-2026-0498, p-2026-0842, p-2026-1978 — 10 bevis utbytta",
+    "what": "Vi visar nu en annan del av samma riksdagsdokument som belägg för tio kopplingar mellan ett löfte och en handling. De gamla citaten stod ordagrant i dokumentet men sa inte vad handlingen gällde: två voteringar citerades med en ren paragrafhänvisning, tre budgetmotioner med det yrkande som bara anvisar medel enligt en tabell, en med en tabellrad där tre kolumner runnit ihop till ett tal, två med ett avhugget utsnitt ur sitt eget yrkande, och en grundlagsvotering med en mening om abort där kopplingen gäller medborgarskap. Varje nytt citat är hämtat ur riksdagens egna data och kontrollerat ord för ord mot källan. Fyra av dem står inte bland handlingens egna lydelser och togs in på ett mänskligt beslut, med skälet utskrivet i varje enskild motivering.",
+    "why": "Ett belägg ska visa vad partiet faktiskt gjorde, och citatet ska säga det på egen hand. En paragrafhänvisning, en tabellrad eller ett yrkande som bara pekar på en tabell säger att något beslutades, inte vad. Bedömningen av kopplingarna är oförändrad — det är belägget som bytt stycke, inte domen.",
+    "commit": "f5f94e52"
+  },
+  {
+    "date": "2026-08-22",
+    "affects": "Handlingsvågens rutnät och löftessidorna för p-2026-0024, p-2026-0033, p-2026-0133, p-2026-0648 — 4 kopplingar är tillbakadragna. p-2026-0133 mister sitt sista belägg och försvinner ur rutnätet.",
+    "what": "Vi har läst varje handling mot det löfte kopplingen påstår att den gäller, och funnit att handlingen rör en annan sakfråga än löftet. Skälet står på var och en. Vänsterpartiets löfte om att det inte ska gå att bli rik på människors otrygghet mister sitt enda belägg och står nu utan handling i rutnätet. Det gäller 4 kopplingar.",
+    "why": "En koppling kräver samma konkreta åtgärd eller mål, inte samma politikområde i allmänhet. Håller likheten bara i ord — någon tjänar pengar, någon vill något bra — har vi visat en ordlikhet och kallat den en handling. Två av löftena är dessutom omdömen om ett tillstånd och pekar inte ut någon åtgärd alls; mot ett sådant löfte går ingen handling att väga, och en tom cell är ärligare än en uttänjd koppling. Ingen av de fyra kopplingarna gav något utslag, så inget partis bedömning ändras.",
+    "commit": "f5f94e52"
+  },
+  {
+    "date": "2026-08-22",
+    "affects": "Handlingsvågens rutnät och löftessidorna för p-2026-0425, p-2026-0619 — 4 motiveringar omskrivna",
+    "what": "Texten som förklarar varför handlingen bär löftet är omskriven för 4 kopplingar. Citatet, riktningen, handlingen och bedömningen står stilla — det är förklaringen som är rättad, inte belägget.",
+    "why": "Motiveringen är det enda som säger läsaren varför handlingen bär löftet, och den ska säga det om det citat som faktiskt står intill. Tre av posterna beskrev Vänsterpartiets förslag som en höjning «rejält» eller «i löftets inriktning» och dolde därmed att motionerna begär 400 kronor i månaden där löftet lovar 500 — samma sakfråga och samma riktning, men inte den utlovade nivån. Den fjärde pekade ut fel rad i motionens anslagstabell: 1:2 Bidrag till allmän kulturverksamhet i stället för 14:1 Bidrag till folkbildningen, som är den rad löftet gäller och den siffra motiveringens egen första mening angav. Ingen koppling har lagts till, tagits bort eller ändrat riktning, och inget partis utslag ändras.",
+    "commit": "f5f94e52"
+  },
+  {
+    "date": "2026-08-22",
+    "affects": "Handlingsvågens rutnät och löftessidorna för p-2026-0022 — 2 kopplingar är tillbakadragna.",
+    "what": "Vi har läst om två voteringspunkter ur samma betänkande och funnit att riktningen «motverkar» inte går att läsa ur punkternas egen beslutstext. Skälet står på var och en. Det gäller 2 kopplingar. Utslaget för Centerpartiet på löftet ändras därmed från «både och» till «emot»: de två indragna kopplingarna var de enda där partiet röstade i löftets riktning, och kvar står de punkter där partiet röstade emot. Övriga partiers utslag på löftet är oförändrade.",
+    "why": "En koppling får bara peka åt ett håll om dokumentet självt pekar dit. Bägge punkterna GODKÄNNER något om public service-uppdragets utformning och uppföljning; att det skulle motverka löftet att skydda public service kom ur vår läsning, i ena fallet ur ett annat partis reservation. Vid tvekan ska ingen koppling göras — tomma celler är ärliga. Löftet har kvar fyra kopplingar som visar samma sak med punkternas egna ord, däribland de två punkter som avslog Socialdemokraternas egna motioner om public service, och där står vad som avslogs utskrivet. Inget partis utslag ändras.",
+    "commit": "f5f94e52"
+  },
+  {
+    "date": "2026-08-22",
+    "affects": "Handlingsvågens rutnät och löftessidorna för p-2026-0008, p-2026-0020, p-2026-0022, p-2026-0029, p-2026-0031, p-2026-0034, p-2026-0121, p-2026-0320, p-2026-0376, p-2026-0438, p-2026-0451, p-2026-0469, p-2026-0555, p-2026-0556 — 16 motiveringar omskrivna",
+    "what": "Texten som förklarar varför handlingen bär löftet är omskriven för 16 kopplingar. Citatet, riktningen, handlingen och bedömningen står stilla — det är förklaringen som är rättad, inte belägget.",
+    "why": "Bevisbytet 7–8 augusti bytte citatet på 269 kopplingar men rörde inte meningen som förklarar citatet. Motiveringen beskrev därför i många fall det dokument den skrevs mot, medan citatet visar något annat: att motionen föreslår grundlagsskydd, en specialenhet eller en nationell strategi, när det citerade yrkandet begär något annat. Två motiveringar åberopade dessutom motionens rubrik i stället för dess yrkande, och rubriken är inte belägg — den är vår sammanfattning. Motiveringarna säger nu vad det citerade yrkandet faktiskt begär, och skriver ut när yrkandet är svagare än löftet: begär det en utredning i stället för åtgärden, eller namnger det målet men inte medlet, står det där. Citatet, riktningen, handlingen och bedömningen står stilla.",
+    "commit": "b1e71d11"
+  },
+  {
+    "date": "2026-08-22",
+    "affects": "Handlingsvågens rutnät och löftessidorna för p-2026-0126, p-2026-0316, p-2026-0317, p-2026-0320, p-2026-0322, p-2026-0325, p-2026-0343, p-2026-0344, p-2026-0468, p-2026-1978 — 11 motiveringar omskrivna",
+    "what": "Texten som förklarar varför handlingen bär löftet är omskriven för 11 kopplingar. Citatet, riktningen, handlingen och bedömningen står stilla — det är förklaringen som är rättad, inte belägget.",
+    "why": "Andra passet ur läslistan över motiveringar som inte talar om sitt eget citat. Tjugofyra poster är lästa, elva behövde skrivas om och tretton höll — måttet är trubbigt med flit och pekar ut fler än det finns fel, vilket är varför listan betas av genom läsning och inte genom en körning. De elva beskrev något annat än det citerade yrkandet: fritt val av utförare i slutenvården där yrkandet gäller medfinansiering av små primärvårdsenheter, en kriskommission där yrkandet gäller punktligheten, en höjning av barnbidraget där yrkandet bara anvisar medel enligt en tabell. Motiveringarna säger nu vad yrkandet begär, och skriver ut när det är smalare än löftet eller när det bara anvisar medel. Citatet, riktningen, handlingen och bedömningen står stilla.",
+    "commit": "07cede49"
+  },
+  {
+    "date": "2026-08-23",
+    "affects": "Handlingsvågens rutnät och löftessidorna för p-2026-0321, p-2026-0425, p-2026-0427, p-2026-0439, p-2026-0448, p-2026-0619 — 6 motiveringar omskrivna",
+    "what": "Texten som förklarar varför handlingen bär löftet är omskriven för 6 kopplingar. Citatet, riktningen, handlingen och bedömningen står stilla — det är förklaringen som är rättad, inte belägget.",
+    "why": "H2-svepets första körning visade att sex av de tio kopplingar som åberopade det mänskliga beslutet inte behöver undantaget: deras motioner har bara anslagsyrkanden, så brödtexten öppnas av regeln själv och citatet står i handlingens egen del. Grunden är anslagsraden.",
+    "commit": "7982b10"
+  },
+  {
+    "date": "2026-08-23",
+    "affects": "Handlingsvågens rutnät och löftessidorna för p-2026-0317, p-2026-0489 — 2 motiveringar omskrivna",
+    "what": "Texten som förklarar varför handlingen bär löftet är omskriven för 2 kopplingar. Citatet, riktningen, handlingen och bedömningen står stilla — det är förklaringen som är rättad, inte belägget.",
+    "why": "Två motiveringar ur den skärpta läslistan sa mer än sitt citat bär: den ena kallade ett högkostnadsskydd på 1 200 kronor ett direkt stöd för ett löfte om 1 450, den andra påstod att motionen föreslår anslag för bredbandsutbyggnad när citatet och anslagsraden bara gäller vägunderhåll. Kopplingarna står kvar; det är förklaringarna som är rättade.",
+    "commit": "8550c56"
+  },
+  {
+    "date": "2026-08-23",
+    "affects": "Handlingsvågens rutnät och löftessidorna för p-2026-0325, p-2026-0468, p-2026-0638, p-2026-1978 — 4 motiveringar omskrivna",
+    "what": "Texten som förklarar varför handlingen bär löftet är omskriven för 4 kopplingar. Citatet, riktningen, handlingen och bedömningen står stilla — det är förklaringen som är rättad, inte belägget.",
+    "why": "Fyra kopplingar vilar på ett anslagsyrkande som inte i sig säger vad medlen ska gå till. Läsningen fann inget bättre citat: en budgetmotion av det slaget anvisar bara anslag, och partiets egna ord om ändamålet står i brödtexten, som riksdagen inte tar ställning till. Att yrkandet är den enda lydelsen står nu utskrivet i motiveringen i stället för att vara underförstått, tillsammans med den anslagsrad som namnger ändamålet och beloppet. För en av dem skrivs också ut att motionens brödtext anger ett annat tal än anslagsraden, och varför raden är den som gäller.",
+    "commit": "f4fc420"
+  },
+  {
+    "date": "2026-08-26",
+    "affects": "Handlingsvågens rutnät och löftessidorna för p-2026-0952, p-2026-1030, p-2026-1064, p-2026-1066, p-2026-1079, p-2026-1082, p-2026-1102, p-2026-1139 — 9 motiveringar omskrivna",
+    "what": "Texten som förklarar varför handlingen bär löftet är omskriven för 9 kopplingar. Citatet, riktningen, handlingen och bedömningen står stilla — det är förklaringen som är rättad, inte belägget.",
+    "why": "H6: läslistan (motiveringsglappet) — motiveringarna skrevs om så de återger frågornas egna ord, mätt 2026-08-26",
+    "commit": "f4a85e05"
+  },
+  {
+    "date": "2026-08-29",
+    "affects": "Handlingsvågens rutnät och löftessidorna för p-2026-0349, p-2026-1086, p-2026-1137, p-2026-1161 — 5 kopplingar är tillbakadragna. p-2026-1161 mister sitt sista belägg och försvinner ur rutnätet.",
+    "what": "Vi har läst varje handling mot det löfte kopplingen påstår att den gäller, och funnit att handlingen inte bär löftet. Kopplingarna är tillbakadragna med skälet skrivet på var och en. Det gäller 5 kopplingar.",
+    "why": "Ett belägg ska visa vad partiet faktiskt gjorde, inte vad partiet skrev om saken. En motions handling är dess yrkande; brödtexten argumenterar för yrkandet. Står det vi citerar bara i brödtexten, och begär inget av motionens yrkanden det löftet lovar, har vi visat en åsikt och kallat den en handling. Bedömningen av de kopplingar som står kvar är oförändrad.",
+    "commit": "0000000"
+  }
+]

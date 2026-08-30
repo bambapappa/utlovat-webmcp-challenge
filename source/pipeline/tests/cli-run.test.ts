@@ -1,0 +1,380 @@
+import { describe, it } from "node:test";
+import assert from "node:assert/strict";
+import { buildContextFromEnv, byggLed, valjFeeds, valjUrlar } from "../src/cli-run.ts";
+import type { SourceConfig, SourceFeed } from "../src/fetch.ts";
+
+const config: SourceConfig = {
+  allowlist_domains: ["data.riksdagen.se", "www.dn.se"],
+  feeds: [{ id: "dn", type: "rss", url: "https://www.dn.se/rss/politik" }],
+  limits: { max_articles_per_run: 10, min_chars: 400 },
+};
+
+const baseEnv: Record<string, string> = {
+  // Primären har ingen inbyggd leverantör längre — adressen måste anges.
+  LLM_BASE_URL: "https://openrouter.ai/api/v1",
+  OPENROUTER_API_KEY: "sk-test",
+  MODEL_EXTRACT: "deepseek-v4-pro",
+  MODEL_VERIFY: "kimi-k2.7",
+  MODEL_COPY: "glm-5.1",
+  PIPELINE_MODE: "review",
+};
+
+const opts = {
+  config,
+  dataDir: "/tmp/drygast-test",
+  now: new Date("2026-06-14T21:30:00Z"),
+};
+
+function envWithout(key: string): NodeJS.ProcessEnv {
+  const e: Record<string, string> = { ...baseEnv };
+  delete e[key];
+  return e as NodeJS.ProcessEnv;
+}
+
+function envWith(extra: Record<string, string>): NodeJS.ProcessEnv {
+  return { ...baseEnv, ...extra } as NodeJS.ProcessEnv;
+}
+
+describe("cli-run buildContextFromEnv", () => {
+  it("bygger giltig ctx från korrekt env", () => {
+    const ctx = buildContextFromEnv(baseEnv as NodeJS.ProcessEnv, opts);
+    assert.equal(ctx.mode, "review");
+    assert.deepEqual(ctx.models, {
+      extract: "deepseek-v4-pro",
+      verify: "kimi-k2.7",
+      copy: "glm-5.1",
+      // Osatt MODEL_KOSTNAD ärver utvinningen — samma modell som gjorde
+      // kostnadssteget innan rollen fanns.
+      kostnad: "deepseek-v4-pro",
+    });
+    assert.deepEqual([...ctx.allowlist], ["data.riksdagen.se", "www.dn.se"]);
+    assert.equal(ctx.maxNewArticles, 10);
+    assert.equal(ctx.runId, "run-2026-06-14-21-30");
+    assert.equal(ctx.outputDir, "/tmp/drygast-test");
+    assert.ok(ctx.llm && ctx.articleSource && ctx.archiveFn);
+  });
+
+  it("default-läge är review när PIPELINE_MODE saknas", () => {
+    assert.equal(buildContextFromEnv(envWithout("PIPELINE_MODE"), opts).mode, "review");
+  });
+
+  it("auto-läge accepteras", () => {
+    assert.equal(buildContextFromEnv(envWith({ PIPELINE_MODE: "auto" }), opts).mode, "auto");
+  });
+
+  it("kastar utan OPENROUTER_API_KEY", () => {
+    assert.throws(() => buildContextFromEnv(envWithout("OPENROUTER_API_KEY"), opts), /halvt konfigurerat/);
+  });
+
+  it("kastar utan MODEL_EXTRACT", () => {
+    assert.throws(() => buildContextFromEnv(envWithout("MODEL_EXTRACT"), opts), /MODEL_EXTRACT/);
+  });
+
+  it("kastar när MODEL_VERIFY == MODEL_EXTRACT (§20)", () => {
+    assert.throws(
+      () => buildContextFromEnv(envWith({ MODEL_VERIFY: "deepseek-v4-pro" }), opts),
+      /annan modell/,
+    );
+  });
+
+  it("kastar vid ogiltig PIPELINE_MODE", () => {
+    assert.throws(() => buildContextFromEnv(envWith({ PIPELINE_MODE: "yolo" }), opts), /Ogiltig PIPELINE_MODE/);
+  });
+
+  it("kastar när bara en fallback-del är satt", () => {
+    assert.throws(
+      () => buildContextFromEnv(envWith({ LLM_FALLBACK_BASE_URL: "https://x/v1" }), opts),
+      /halvt konfigurerat/,
+    );
+  });
+
+  // Ett led är komplett först när det har adress, nyckel OCH egna modellnamn.
+  // Enbart adress + nyckel räcker inte längre: ett led utan egna modellnamn
+  // får primärens strängar och svarar 4xx hos en leverantör med annat
+  // namnschema — det var precis så reserven kunde stå som attrapp i drift.
+  it("accepterar komplett fallback-led (adress, nyckel och modeller)", () => {
+    const ctx = buildContextFromEnv(
+      envWith({
+        LLM_FALLBACK_BASE_URL: "https://opencode.ai/zen/go/v1",
+        LLM_FALLBACK_API_KEY: "oc-test",
+        MODEL_EXTRACT_FALLBACK: "deepseek-v4-pro",
+        MODEL_VERIFY_FALLBACK: "kimi-k2.7",
+        MODEL_COPY_FALLBACK: "glm-5.1",
+      }),
+      opts,
+    );
+    assert.ok(ctx.llm);
+  });
+
+  // Ett led vars nycklar finns för ETT ANNAT arbete (matchningen har egna
+  // MODEL_KOPPLING_*) ska hoppas över, inte fälla körningen. Utan den
+  // skillnaden hade pipelinen kastat vid nästa körning bara för att det
+  // extra ledets adress och nyckel råkar vara satta i repot.
+  it("hoppar över ett led som har adress och nyckel men inga modeller för rollerna", () => {
+    const ctx = buildContextFromEnv(
+      envWith({ LLM_ZAI_BASE_URL: "https://z.ai/api/paas/v4", LLM_ZAI_API_KEY: "z-test" }),
+      opts,
+    );
+    assert.equal(ctx.models.extract, "deepseek-v4-pro");
+  });
+
+  it("kastar när bara en fallback-modell är satt (kräver alla tre)", () => {
+    assert.throws(
+      () => buildContextFromEnv(envWith({ MODEL_EXTRACT_FALLBACK: "deepseek-v4-pro" }), opts),
+      /halvt konfigurerat/,
+    );
+  });
+
+  it("accepterar komplett fallback-endpoint + fallback-modeller", () => {
+    const ctx = buildContextFromEnv(
+      envWith({
+        LLM_FALLBACK_BASE_URL: "https://opencode.ai/zen/go/v1",
+        LLM_FALLBACK_API_KEY: "oc-test",
+        MODEL_EXTRACT_FALLBACK: "deepseek-v4-pro",
+        MODEL_VERIFY_FALLBACK: "kimi-k2.7",
+        MODEL_COPY_FALLBACK: "glm-5.1",
+      }),
+      opts,
+    );
+    assert.ok(ctx.llm);
+  });
+
+  it("kastar vid tom allowlist i sources.yaml", () => {
+    assert.throws(
+      () => buildContextFromEnv(baseEnv as NodeJS.ProcessEnv, {
+        ...opts,
+        config: { ...config, allowlist_domains: [] },
+      }),
+      /allowlist/,
+    );
+  });
+
+  // SKORD_KALLOR: en riktad körning som bara läser namngivna feeds. Utan den
+  // delar en katalogbacklog hos ETT parti budgeten med alla andra feeds i
+  // sources.yaml — även med SKORD_RUNDGANG på.
+  it("SKORD_KALLOR osatt lämnar alla feeds orörda", () => {
+    const ctx = buildContextFromEnv(baseEnv as NodeJS.ProcessEnv, opts);
+    assert.ok(ctx.articleSource);
+  });
+
+  it("kastar när SKORD_KALLOR inte matchar något feed-id", () => {
+    assert.throws(
+      () => buildContextFromEnv(envWith({ SKORD_KALLOR: "finns-inte" }), opts),
+      /SKORD_KALLOR.*matchar inget feed-id/u,
+    );
+  });
+
+  it("SKORD_KALLOR med ett giltigt id bygger ändå en giltig körning", () => {
+    const ctx = buildContextFromEnv(envWith({ SKORD_KALLOR: "dn" }), opts);
+    assert.ok(ctx.articleSource, "en riktad körning ska fortfarande ge en fungerande källa");
+  });
+});
+
+describe("valjFeeds", () => {
+  const feeds: SourceFeed[] = [
+    { id: "l-politik-sitemap", type: "sitemap", url: "https://www.liberalerna.se/sitemap.xml" },
+    { id: "c-politik-sitemap", type: "sitemap", url: "https://www.centerpartiet.se/sitemap.xml" },
+    { id: "dn", type: "rss", url: "https://www.dn.se/rss/politik" },
+  ];
+
+  it("utan SKORD_KALLOR: alla feeds orörda, i samma ordning", () => {
+    assert.deepEqual(valjFeeds(feeds, undefined), feeds);
+  });
+
+  it("tom sträng räknas som osatt", () => {
+    assert.deepEqual(valjFeeds(feeds, ""), feeds);
+  });
+
+  it("filtrerar till namngivna id, mellanslag runt kommatecken tolereras", () => {
+    const valda = valjFeeds(feeds, "l-politik-sitemap, c-politik-sitemap");
+    assert.deepEqual(valda.map((f) => f.id), ["l-politik-sitemap", "c-politik-sitemap"]);
+  });
+
+  it("ett enda id ger en enda feed", () => {
+    assert.deepEqual(valjFeeds(feeds, "dn").map((f) => f.id), ["dn"]);
+  });
+
+  it("kastar — inte tyst noll — när inget id matchar", () => {
+    assert.throws(() => valjFeeds(feeds, "stavfel-har"), /SKORD_KALLOR="stavfel-har"/u);
+  });
+});
+
+describe("valjUrlar", () => {
+  it("utan SKORD_URLAR blir listan tom — hela urvalet gäller", () => {
+    assert.deepEqual(valjUrlar(undefined), []);
+    assert.deepEqual(valjUrlar(""), []);
+  });
+
+  it("delar på komma och tål mellanslag runt", () => {
+    assert.deepEqual(
+      valjUrlar("https://a.se/x, https://b.se/y"),
+      ["https://a.se/x", "https://b.se/y"],
+    );
+  });
+
+  it("kastar på något som inte är en adress", () => {
+    // Tyst filtrering hade gett en tom skörd som rapporterar sig klar.
+    assert.throws(() => valjUrlar("l-politik-sitemap"), /ingen giltig adress/u);
+  });
+
+  it("kastar på fel protokoll", () => {
+    assert.throws(() => valjUrlar("file:///etc/passwd"), /varken http eller https/u);
+  });
+});
+
+describe("varningen mäter bristen på modellreserv, inte mönstret", () => {
+  // Projektets uppsättning: primär och sekundär är TVÅ KONTON hos samma
+  // leverantör med samma modeller, det tredje ledet har egna. Det är en
+  // fullgod reserv mot allt som sitter i kontot — slut kvot, taktspärr, död
+  // nyckel — och ska inte varnas för. Bara när HELA kedjan kör en enda modell
+  // för en roll finns det inget kvar när modellen faller.
+
+  const roller = { extract: "extract", verify: "verify", copy: "copy" };
+
+  function fangaVarningar(fn: () => void): string[] {
+    const rader: string[] = [];
+    const original = console.warn;
+    console.warn = (...a: unknown[]) => void rader.push(a.join(" "));
+    try {
+      fn();
+    } finally {
+      console.warn = original;
+    }
+    return rader.filter((r) => /i HELA kedjan/u.test(r));
+  }
+
+  const env = (led: Array<Record<string, string>>) => {
+    const e: Record<string, string> = {};
+    const suffix = ["", "_FALLBACK", "_ZAI"];
+    const url = ["LLM_BASE_URL", "LLM_FALLBACK_BASE_URL", "LLM_ZAI_BASE_URL"];
+    const key = ["LLM_API_KEY", "LLM_FALLBACK_API_KEY", "LLM_ZAI_API_KEY"];
+    led.forEach((m, n) => {
+      e[url[n]!] = `https://led${n + 1}`;
+      e[key[n]!] = `nyckel-${n + 1}`;
+      for (const roll of Object.keys(roller)) {
+        e[`MODEL_${roll.toUpperCase()}${suffix[n]}`] = m[roll]!;
+      }
+    });
+    return e;
+  };
+
+  it("varnar INTE för två konton med samma modell när ett tredje led bär en egen", () => {
+    // Uppsättningen i drift: go konto 1, go konto 2, zai.
+    const rader = fangaVarningar(() =>
+      byggLed(
+        env([
+          { extract: "deepseek", verify: "kimi", copy: "copy-a" },
+          { extract: "deepseek", verify: "kimi", copy: "copy-a" },
+          { extract: "glm", verify: "glm", copy: "glm" },
+        ]),
+        roller,
+      ),
+    );
+    assert.deepEqual(rader, [], "delad modell mellan konton är en reserv, inte en brist");
+  });
+
+  it("varnar när rollen kör en enda modell i hela kedjan", () => {
+    const rader = fangaVarningar(() =>
+      byggLed(
+        env([
+          { extract: "deepseek", verify: "kimi", copy: "copy-a" },
+          { extract: "deepseek", verify: "glm", copy: "copy-b" },
+        ]),
+        roller,
+      ),
+    );
+    assert.equal(rader.length, 1, "bara utvinningsrollen saknar modellreserv");
+    assert.match(rader[0]!, /rollen extract/u);
+    assert.match(rader[0]!, /deepseek/u);
+    assert.match(rader[0]!, /MODEL_EXTRACT/u);
+    assert.doesNotMatch(rader[0]!, /rollen verify/u, "verify har två modeller och är hel");
+  });
+
+  it("varnar inte för ett ensamt led — det finns ingen reserv att sakna", () => {
+    const rader = fangaVarningar(() =>
+      byggLed(env([{ extract: "deepseek", verify: "kimi", copy: "copy-a" }]), roller),
+    );
+    assert.deepEqual(rader, [], "en kedja med ett led är ett val, inte en brist");
+  });
+
+  it("varningen stoppar inte körningen", () => {
+    const e = env([
+      { extract: "deepseek", verify: "deepseek", copy: "deepseek" },
+      { extract: "deepseek", verify: "deepseek", copy: "deepseek" },
+    ]);
+    const rader = fangaVarningar(() => void byggLed(e, roller));
+    assert.equal(rader.length, 3, "alla tre rollerna saknar modellreserv");
+    assert.equal(byggLed(e, roller).length, 2, "båda leden är ändå kvar");
+  });
+});
+
+
+/**
+ * Kostnadsrollen — egen modell för kostnadssteget.
+ *
+ * Uppskattningarna gjordes av utvinningsmodellen, inte för att någon valt det
+ * utan för att `estimateCost` fick `models.extract` inskickad. Rollen finns
+ * för att den ska gå att välja. Provet låser fast det som gör den ofarlig att
+ * införa: **osatt betyder oförändrat**. Kedjan är konfigurerad för tre roller
+ * i drift, och en fjärde obligatorisk roll hade stoppat pipelinen tills varje
+ * led fått sin variabel.
+ */
+describe("kostnadsrollen", () => {
+  const bas = {
+    LLM_BASE_URL: "https://led1",
+    LLM_API_KEY: "nyckel-1",
+    MODEL_EXTRACT: "utvinnaren",
+    MODEL_VERIFY: "granskaren",
+    MODEL_COPY: "skribenten",
+  };
+
+  it("ärver utvinningsmodellen när MODEL_KOSTNAD inte är satt", () => {
+    const led = byggLed(bas, { extract: "utvinnaren", verify: "granskaren", copy: "skribenten", kostnad: "utvinnaren" }, new Set(["kostnad"]));
+    assert.equal(led.length, 1);
+    assert.equal(led[0]!.modell!["utvinnaren"], "utvinnaren");
+  });
+
+  it("byter modell för kostnadssteget när variabeln är satt", () => {
+    const e = { ...bas, MODEL_KOSTNAD: "raknaren" };
+    const led = byggLed(e, { extract: "utvinnaren", verify: "granskaren", copy: "skribenten", kostnad: "raknaren" }, new Set(["kostnad"]));
+    assert.equal(led[0]!.modell!["raknaren"], "raknaren", "kostnadssteget kör sin egen modell");
+    assert.equal(led[0]!.modell!["utvinnaren"], "utvinnaren", "utvinningen är orörd");
+  });
+
+  it("ett led utan egen kostnadsmodell lånar sin egen utvinningsmodell, inte primärens", () => {
+    // Kärnan: reservledet ska inte få primärens modellsträng skickad till en
+    // leverantör som inte känner igen den. Det var felet som gav 4xx när
+    // rollerna infördes, och det får inte komma tillbaka via kostnadsrollen.
+    const e = {
+      ...bas,
+      MODEL_KOSTNAD: "raknaren",
+      LLM_ZAI_BASE_URL: "https://led3",
+      LLM_ZAI_API_KEY: "nyckel-3",
+      MODEL_EXTRACT_ZAI: "zai-utvinnare",
+      MODEL_VERIFY_ZAI: "zai-granskare",
+      MODEL_COPY_ZAI: "zai-skribent",
+    };
+    const led = byggLed(e, { extract: "utvinnaren", verify: "granskaren", copy: "skribenten", kostnad: "raknaren" }, new Set(["kostnad"]));
+    const extra = led.find((l) => l.namn === "extra")!;
+    assert.equal(extra.modell!["raknaren"], "zai-utvinnare", "ledet lånar SIN modell");
+    assert.notEqual(extra.modell!["raknaren"], "raknaren", "aldrig primärens sträng");
+  });
+
+  it("ett led som saknar allt hoppas fortfarande över tyst", () => {
+    // Räknas de valfria rollerna som obligatoriska blir ett bortvalt led
+    // aldrig "helt osatt", och då kastar bygget i stället för att hoppa.
+    const led = byggLed(bas, { extract: "utvinnaren", verify: "granskaren", copy: "skribenten", kostnad: "raknaren" }, new Set(["kostnad"]));
+    assert.equal(led.length, 1, "de två osatta leden är bortvalda, inte trasiga");
+  });
+
+  it("buildContextFromEnv låter kostnaden falla tillbaka på utvinningen", () => {
+    const ctx = buildContextFromEnv({ ...bas }, { config, dataDir: "/tmp" });
+    assert.equal(ctx.models.kostnad, "utvinnaren");
+  });
+
+  it("buildContextFromEnv plockar upp MODEL_KOSTNAD", () => {
+    const ctx = buildContextFromEnv({ ...bas, MODEL_KOSTNAD: "raknaren" }, { config, dataDir: "/tmp" });
+    assert.equal(ctx.models.kostnad, "raknaren");
+    assert.equal(ctx.models.extract, "utvinnaren", "utvinningen är orörd");
+  });
+});

@@ -1,0 +1,99 @@
+{
+  "generated_at": "2026-08-30T17:59:07.584Z",
+  "data_hash": "ec409bfa53e834738644126c2202330f51ee8fcbf7513f3afd9a4c49dad555a3",
+  "license": "CC-BY-4.0",
+  "data": {
+    "generated_at": "2026-08-30T17:59:07.584Z",
+    "data_hash": "ec409bfa53e834738644126c2202330f51ee8fcbf7513f3afd9a4c49dad555a3",
+    "total_parties": 8,
+    "total_promises": 3950,
+    "total_msek_flasket": 12993830,
+    "total_msek_besparingar": 436700,
+    "total_financing_claimed_msek": 380000,
+    "financing_gap_msek": 12177130,
+    "reformutrymme_msek_per_ar": 80000,
+    "reformutrymme_total_msek": 320000,
+    "parties": [
+      {
+        "code": "s",
+        "name": "Socialdemokraterna",
+        "total_msek": 1601654,
+        "mandates": 107,
+        "votes": 1964474,
+        "per_vote": 815.3093398029192,
+        "promises_count": 634,
+        "financing_gap_msek": 1601654
+      },
+      {
+        "code": "m",
+        "name": "Moderaterna",
+        "total_msek": 2807221,
+        "mandates": 68,
+        "votes": 1237428,
+        "per_vote": 2268.593405030434,
+        "promises_count": 413,
+        "financing_gap_msek": 2807221
+      },
+      {
+        "code": "sd",
+        "name": "Sverigedemokraterna",
+        "total_msek": 497893,
+        "mandates": 73,
+        "votes": 1330325,
+        "per_vote": 374.2641835641667,
+        "promises_count": 60,
+        "financing_gap_msek": 497893
+      },
+      {
+        "code": "c",
+        "name": "Centerpartiet",
+        "total_msek": 2747423,
+        "mandates": 24,
+        "votes": 434945,
+        "per_vote": 6316.713607467611,
+        "promises_count": 1006,
+        "financing_gap_msek": 2567423
+      },
+      {
+        "code": "v",
+        "name": "Vänsterpartiet",
+        "total_msek": 1396588,
+        "mandates": 24,
+        "votes": 437050,
+        "per_vote": 3195.487930442741,
+        "promises_count": 368,
+        "financing_gap_msek": 1396588
+      },
+      {
+        "code": "kd",
+        "name": "Kristdemokraterna",
+        "total_msek": 1015186,
+        "mandates": 19,
+        "votes": 345712,
+        "per_vote": 2936.507844679965,
+        "promises_count": 251,
+        "financing_gap_msek": 815186
+      },
+      {
+        "code": "l",
+        "name": "Liberalerna",
+        "total_msek": 1651089,
+        "mandates": 16,
+        "votes": 298542,
+        "per_vote": 5530.508270193139,
+        "promises_count": 743,
+        "financing_gap_msek": 1651089
+      },
+      {
+        "code": "mp",
+        "name": "Miljöpartiet",
+        "total_msek": 2364558,
+        "mandates": 18,
+        "votes": 329242,
+        "per_vote": 7181.823704144672,
+        "promises_count": 483,
+        "financing_gap_msek": 2364558
+      }
+    ]
+  }
+}

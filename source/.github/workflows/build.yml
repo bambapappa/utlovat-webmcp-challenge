@@ -1,0 +1,280 @@
+name: build
+on:
+  push:
+    branches: [main]
+    # Handlingsvågens matchningskörning pushar en gång per löfte — timvis, i
+    # timmar. Kön och listan över prövade par syns aldrig på sajten, så ett
+    # bygge per sådan push vore bara en deploy-kö utan innehåll. Allt annat
+    # under handlingsvagen/data/ (kopplingar, domar, handlingar, arkiv,
+    # rättelser) ändrar vad läsaren ser och bygger som förut.
+    paths-ignore:
+      - "handlingsvagen/data/kopplingsforslag.json"
+      - "handlingsvagen/data/provade-par.json"
+  pull_request:
+    branches: [main]
+  workflow_dispatch: {}
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  # PAGES-GRUPPEN SERIALISERAR DEPLOYEN, INTE PROVEN. Fram till 2026-08-29 delade
+  # varje PR-körning grupp med mains pushar, och main tar emot bot-pushar med
+  # några minuters mellanrum. En PR-körning som köade bakom dem ströks så snart
+  # nästa push köade — och en struken kontroll är inte en godkänd kontroll, så
+  # med kravet på gröna kontroller blir PR:en omöjlig att slå ihop.
+  #
+  # Deployen sker bara på main (deploy-pages är villkorad på det), så PR-körningar
+  # behöver inte dela kö med den. Varje gren får sin egen grupp; main behåller
+  # 'pages' och därmed sin serialisering.
+  group: ${{ github.ref == 'refs/heads/main' && 'pages' || format('pages-{0}', github.ref) }}
+  cancel-in-progress: false
+jobs:
+  test-pipeline:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: pnpm/action-setup@v4  # ogiltig SHA-pin ersatt 2026-06-15
+        with:
+          version: 9
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: pipeline/pnpm-lock.yaml
+      - name: Install pipeline dependencies
+        run: pnpm install --frozen-lockfile
+        working-directory: pipeline
+      - name: Run pipeline tests
+        run: pnpm test
+        working-directory: pipeline
+      - name: Typecheck pipeline
+        run: pnpm typecheck
+        working-directory: pipeline
+      # Kvalitetsfiltrets täckning. Faller när något publicerats utan att gå
+      # genom filtret — antalet oprövade får bli färre, aldrig fler. Utan det
+      # här måttet är filtret en vana: det fanns ett dygn som text i skillarna
+      # och täckningen stod på fyra av 1 382.
+      - name: Kvalitetsfiltrets täckning
+        run: pnpm provningar:status --tak
+        working-directory: pipeline
+
+  # Handlingsvågens egen pipeline har eget beroendeträd (npm, inte pnpm) och
+  # egna grindar. Den körs som eget jobb tills avdubbleringen slår ihop dem
+  # (SAMMANSLAGNING.md steg 3), så ett fel i den ena vågen syns för sig.
+  test-handlingsvagen:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: handlingsvagen/pipeline/package-lock.json
+      - name: Install pipeline dependencies
+        run: npm ci
+        working-directory: handlingsvagen/pipeline
+      - name: Run pipeline tests
+        run: npm test
+        working-directory: handlingsvagen/pipeline
+      - name: Typecheck pipeline
+        run: npm run typecheck
+        working-directory: handlingsvagen/pipeline
+
+  build-and-test:
+    runs-on: ubuntu-latest
+    needs: [test-pipeline, test-handlingsvagen]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: pnpm/action-setup@v4  # ogiltig SHA-pin ersatt 2026-06-15
+        with:
+          version: 9
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: site/pnpm-lock.yaml
+      - name: Install python fonttools
+        run: pip install --user fonttools brotli
+      - name: Decompress fonts for OG generation
+        run: |
+          cd site/public/fonts
+          for f in *.woff2; do
+            ttf="${f%.woff2}.ttf"
+            fonttools ttLib.woff2 decompress "$f" --output "$ttf" || true
+          done
+      - name: Install site dependencies
+        run: pnpm install --frozen-lockfile
+        working-directory: site
+      # Går före bygget: den mäter data och kod, inte utdata, och ett fel här
+      # betyder att en lista och en summa säger olika saker om samma grupp.
+      - name: Grindar för grupperade listor
+        run: node --experimental-strip-types scripts/test-grupplista.mts
+        working-directory: site
+      # Också före bygget: delningsbilderna genereras i byggsteget, och en bild
+      # som visar ett annat tal än sidan är det som syns när sajten delas.
+      # Grinden läser skriptets källa och faller om det återinför egna kopior
+      # av summorna eller formateringen.
+      - name: Grindar för delningsbilderna
+        run: node --experimental-strip-types scripts/test-og.mts
+        working-directory: site
+      # Delningsknapparna: bara kanaler med en dokumenterad delningsadress, och
+      # inga tredjepartsskript. Faller om någon lägger in en knapp som ser ut
+      # att dela men inte gör det (TikTok saknar adress för webblänkar).
+      - name: Grindar för delningsknapparna
+        run: node --experimental-strip-types scripts/test-dela.mts
+        working-directory: site
+      # src/lib ska gå att importera från ett fristående skript, inte bara från
+      # Astro. Det var den tröskeln som fick delningsbilderna att bära egna
+      # kopior av sajtens summor i stället för att importera dem.
+      - name: Grindar för importvägarna
+        run: node --experimental-strip-types scripts/test-importer.mts
+        working-directory: site
+      # Invarianterna R1/R3/R4 (SPEC §5.3). Låg tidigare i pipeline/tests och
+      # prövade egna kopior av summorna — den gav grönt även med gapfelet
+      # återinfört. Mäter nu sajtens skarpa aggregates.ts.
+      - name: Grindar för invarianterna
+        run: node --experimental-strip-types --test scripts/test-invarianter.mts
+        working-directory: site
+      # Prosagrinden: metod-, om-, press-, api- och neutralitetssidornas
+      # påståenden om koden mäts i stället för att läsas. Ligger FÖRE bygget,
+      # som de andra sajtgrindarna — en osann metodsida ska inte hinna
+      # driftsättas. Offline, inget nät. Bakgrunden i test-prosan.mts.
+      - name: Grindar för prosan
+        run: node --experimental-strip-types scripts/test-prosan.mts
+        working-directory: site
+      # Ordgrinden: de förbjudna orden mäts i stället för att minnas. Regeln
+      # om att skriva «mänskligt beslut» stod i CLAUDE.md medan det förbjudna
+      # ordet levde kvar på ett trettiotal ställen, ett av dem i data som
+      # serveras publikt — en språkregel utan grind är en påminnelse. Sveper
+      # hela repot, inte bara sajten. Bakgrunden i test-ord.mts.
+      - name: Ordgrinden
+        run: node --experimental-strip-types scripts/test-ord.mts
+        working-directory: site
+      # Rättelsenoten ska nå den sida rättelsen gäller. Frågevågens celler
+      # visade ingenting förrän 2026-08-14 — rättelserna fanns bara på
+      # /rattelser, inte där läsaren ser cellen. Mäter också hur många poster
+      # som INTE når fram, som ett tak: det får sjunka, aldrig stiga.
+      - name: Grindar för rättelsenoterna
+        run: node --experimental-strip-types scripts/test-rattelsenoter.mts
+        working-directory: site
+      # Krönikornas tal ska slås upp vid bygget, inte skrivas in i texten.
+      # Mekanismen fanns med egna prov i fyra månader utan att någon anropade
+      # den — grinden mäter därför INKOPPLINGEN, inte funktionen.
+      - name: Grindar för krönikornas tal
+        run: node --experimental-strip-types scripts/test-kronikans-tal.mts
+        working-directory: site
+      # Ett beslut ska säga vilka vågar det gäller. Dåtidsregeln tillämpades
+      # fyra gånger i löfteskön och gällde aldrig i ståndpunktsrutnätet, där
+      # två publicerade celler stod på just sådana citat.
+      - name: Grindar för beslutsloggen
+        run: node --experimental-strip-types scripts/test-beslutsloggen.mts
+        working-directory: site
+      - name: Build site + OG images
+        run: pnpm build
+        working-directory: site
+      - name: Run T1 (build output)
+        run: pnpm test:t1
+        working-directory: site
+      - name: Run T3 (schema + HTML validation)
+        run: pnpm test:t3
+        working-directory: site
+      # Handlingsvågen byggs som egen Astro-sajt med basstigen /handlingsvagen
+      # och läggs som katalog i samma utdata. Ett bygge, en domän, en
+      # driftsättning — det är hela skälet till att vågarna bor i ett repo
+      # (SAMMANSLAGNING.md). Stegen ligger EFTER T1/T3, som mäter Fläskvågens
+      # egen utdata och inte ska räkna med Handlingsvågens sidor.
+      - name: Läs in löftena ur samma träd
+        # Handlingsvågens rutnät läser ett slimmat löftesindex. Före
+        # sammanslagningen var det en kopia som kunde bli gammal åt två håll;
+        # nu skrivs det om ur promises.json vid varje bygge, så det som visas
+        # alltid är dagens löften.
+        run: node --experimental-strip-types scripts/bygg-vendor.mts --promises ../../data/promises.json --parties ../../data/parties.json
+        working-directory: handlingsvagen/pipeline
+      - name: Install Handlingsvågen site dependencies
+        run: npm ci
+        working-directory: handlingsvagen/site
+      - name: Handlingsvågens grindar (budget + struktur)
+        run: npm test
+        working-directory: handlingsvagen/site
+      - name: Build Handlingsvågen
+        run: npm run build
+        working-directory: handlingsvagen/site
+      - name: Kontrollera att basstigen sitter
+        # Utan basstigen pekar varje länk i Handlingsvågen på Fläskvågens
+        # adresser. Grinden kostar ingenting och fäller här i stället för i
+        # produktion.
+        run: |
+          if ! grep -q 'href="/handlingsvagen/"' handlingsvagen/site/dist/index.html; then
+            echo "::error::Handlingsvågens förstasida saknar länkar under /handlingsvagen/ — basstigen i astro.config.mjs har tappats."
+            exit 1
+          fi
+          if ! grep -q 'data-api-base="/handlingsvagen/"' handlingsvagen/site/dist/index.html; then
+            echo "::error::Sökrutans API-bas pekar inte på /handlingsvagen/ — söket skulle sluta svara."
+            exit 1
+          fi
+      - name: Lägg Handlingsvågen under /handlingsvagen i utdatan
+        run: |
+          if [ -e site/dist/handlingsvagen ]; then
+            echo "::error::site/dist/handlingsvagen finns redan — Fläskvågen bygger något på den sökvägen och de två skulle skriva över varandra."
+            exit 1
+          fi
+          cp -r handlingsvagen/site/dist site/dist/handlingsvagen
+          test -f site/dist/handlingsvagen/index.html
+          echo "Handlingsvågen: $(find site/dist/handlingsvagen -name '*.html' | wc -l) sidor i utdatan."
+      - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9
+        with:
+          path: site/dist
+
+  deploy-pages:
+    needs: build-and-test
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@cd2ce8fcbc39b97be8ca5fce6e763baed58fa128
+
+  # IndexNow: pinga Bing (→ Copilot/ChatGPT-sök) m.fl. med de sidor som ändrats,
+  # EFTER att sajten (och nyckelfilen) är live. Använder bara Node-inbyggda API:er
+  # (ingen install). Icke-blockerande — får aldrig påverka deploy-status.
+  indexnow:
+    needs: deploy-pages
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with:
+          node-version: 22
+      - name: Submit changed URLs to IndexNow
+        run: node --experimental-strip-types scripts/indexnow-submit.mts
+        working-directory: site
+
+  # Ett rött test här stoppar hela driftsättningen tyst: main tar emot data som
+  # vanligt medan sajten inte byggs om. Det hände 2026-08-03 och kostade en dag.
+  # Bara push till main larmar — en röd PR-körning har redan en människa som
+  # tittar på den. Delad implementation i larm.yml; lägg aldrig en kopia här.
+  larm:
+    needs: [test-pipeline, test-handlingsvagen, build-and-test, deploy-pages]
+    if: failure() && github.event_name == 'push' && github.ref == 'refs/heads/main'
+    permissions:
+      contents: read
+      issues: write
+    uses: ./.github/workflows/larm.yml
+    with:
+      rubrik: "Bygget av sajten"
+      etikett: "larm-build"
+      atgard: |
+        Sajten är INTE ombyggd, och det syns inte på utlovat.se — den visar
+        förra bygget. Läs vilket jobb som föll:
+
+        - `test-pipeline` / `test-handlingsvagen`: ett test föll. Kör
+          `pnpm test` i `pipeline/` respektive `npm test` i
+          `handlingsvagen/pipeline/` och laga felet — sänk aldrig grinden.
+        - `build-and-test`: bygget eller en av sajtens grindar föll.
+        - `deploy-pages`: bygget gick men driftsättningen inte. Se
+          `ops/RUNBOOK.md`.

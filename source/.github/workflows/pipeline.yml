@@ -1,0 +1,279 @@
+name: pipeline
+on:
+  schedule:
+    # Var fjärde timme sedan 2026-08-17, upp från tre gånger om dygnet.
+    # Skälet är att komma ikapp: sju partiers politikavdelningar kopplades in
+    # samma dag (C 208, L 126, S 121, V 111, MP 98, M 87, SD 6 sidor) och
+    # nästan inget av det var läst, medan KD:s A–Ö redan var genomläst. Med
+    # den gamla kadensen hade utjämningen tagit månader.
+    #
+    # RÄTTAT 2026-08-18. Här stod att körningen tar 73–87 minuter. Det var inte
+    # sant när det skrevs om: de tre senaste tog 201, 296 och 325 minuter, och
+    # concurrency-gruppen nedan köade dem bakom varandra i stället för att de
+    # hann emellan. Kadensen mätte alltså aldrig vad den utlovade — en
+    # schemalagd start var ett löfte om en körning som redan låg och väntade.
+    #
+    # Två saker gjordes åt det samma dag: hämtningen och artikelloopen kör
+    # samtidigt (`samtidigt.ts`, tak i sources.yaml), och etag-cachen sparas
+    # mellan körningar i steget nedan — utan den lästes alla ~1 500 sidor om
+    # från början varje gång.
+    #
+    # Kadensen står kvar på fyra timmar tills den NYA körtiden är mätt. Att
+    # täta den innan dess vore att gissa igen, och det var gissningen som
+    # skapade kön. Ryms körningen med marginal: täta till varannan timme.
+    - cron: "10 0,4,8,12,16,20 * * *"   # UTC → 02:10, 06:10 … svensk sommartid
+  workflow_dispatch:
+    inputs:
+      forst:
+        description: "Prova detta led först i just den här körningen (tomt = primär → sekundär → extra)"
+        type: choice
+        options: ["", primar, sekundar, extra]
+        default: ""
+      rundgang:
+        description: "Rundgång: låt partierna varvas i stället för att det minst lästa går först. För att TÖMMA en katalogbacklog — stäng av när den är tom."
+        type: boolean
+        default: false
+      kallor:
+        description: "Riktad körning: kommaseparerad lista feed-id ur sources.yaml (t.ex. l-politik-sitemap,c-politik-sitemap). Tomt = alla feeds som vanligt."
+        type: string
+        default: ""
+      urlar:
+        description: "Ännu snävare: kommaseparerad lista EXAKTA adresser (t.ex. https://www.liberalerna.se/politik/jakt). Tomt = hela urvalet. Kombineras med kallor för att slippa läsa katalogen."
+        type: string
+        default: ""
+permissions:
+  contents: write
+  issues: write
+concurrency:
+  group: pipeline
+  cancel-in-progress: false
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Mint bot app token
+        id: app-token
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1  # v3.2.0
+        with:
+          app-id: ${{ secrets.BOT_APP_ID }}
+          private-key: ${{ secrets.BOT_APP_KEY }}
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          token: ${{ steps.app-token.outputs.token }}
+          # INGA sparade uppgifter. Checkouten skriver annars in jobbstart-
+          # tokenen i git-configen, och den vinner över den färska token vi
+          # sätter i origin-URL:en före pushen. Tokenen lever en timme, och
+          # körningen tar numera 73–87 minuter — då skickar git den döda
+          # tokenen i stället för den färska: "Invalid username or token".
+          # Samma rättelse som arkiv, foreslag, skord och nyckelord redan
+          # har. Bara commit-steget rör origin, och det bär sin egen färska
+          # token i URL:en.
+          persist-credentials: false
+      - uses: pnpm/action-setup@v4  # ogiltig SHA-pin ersatt 2026-06-15
+        with:
+          version: 9
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38  # v6.5.0
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: site/pnpm-lock.yaml
+      - name: Install pipeline deps
+        run: pnpm install --frozen-lockfile
+        working-directory: pipeline
+      - name: Run pipeline tests
+        run: pnpm test
+        working-directory: pipeline
+      - name: T7 check
+        run: pnpm check-t7
+        working-directory: pipeline
+        continue-on-error: true
+      - name: Install site deps
+        run: pnpm install --frozen-lockfile
+        working-directory: site
+      # Etag-cachen mellan körningar. Utan det här steget startade varje
+      # körning med tom cache och hämtade om alla ~1 500 sidor i sin helhet;
+      # med det svarar de oförändrade 304 utan kropp. Cachen är bara ett minne
+      # av vad vi redan hämtat — går den förlorad blir körningen långsam, aldrig
+      # fel, och seen.json (som ligger i git) är det som styr vad som bearbetas.
+      # Nyckeln bär run_id så varje körning sparar en färsk kopia; restore-keys
+      # plockar den senaste.
+      - name: Cache för hämtningen (etag)
+        uses: actions/cache@v4
+        with:
+          path: pipeline/.cache
+          key: pipeline-etag-${{ github.run_id }}
+          restore-keys: |
+            pipeline-etag-
+      - name: Run pipeline
+        run: pnpm pipeline:run
+        working-directory: pipeline
+        env:
+          LLM_BASE_URL: ${{ vars.LLM_BASE_URL }}
+          LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          LLM_FALLBACK_BASE_URL: ${{ vars.LLM_FALLBACK_BASE_URL || secrets.LLM_FALLBACK_BASE_URL }}
+          LLM_FALLBACK_API_KEY: ${{ secrets.LLM_FALLBACK_API_KEY }}
+          # Kedjan är tre led, och varje led bär sin egen adress, sin egen
+          # nyckel och sina EGNA modellnamn. Leverantörerna har olika
+          # namnscheman, så ett led utan egna namn kan inte svara — och ett
+          # halvt konfigurerat led stoppar körningen med besked i stället för
+          # att tyst stå som attrapp. Byte av leverantör görs här, i
+          # variablerna, aldrig i koden.
+          MODEL_EXTRACT: ${{ vars.MODEL_EXTRACT }}
+          MODEL_VERIFY: ${{ vars.MODEL_VERIFY }}
+          MODEL_COPY: ${{ vars.MODEL_COPY }}
+          # Kostnadssteget har egen modell sedan 2026-08-28. Osatt variabel
+          # ärver MODEL_EXTRACT, alltså oförändrat beteende — sätt den bara
+          # när kostnadssteget ska köra något annat än utvinningen.
+          MODEL_KOSTNAD: ${{ vars.MODEL_KOSTNAD }}
+          MODEL_EXTRACT_FALLBACK: ${{ vars.MODEL_EXTRACT_FALLBACK }}
+          MODEL_VERIFY_FALLBACK: ${{ vars.MODEL_VERIFY_FALLBACK }}
+          MODEL_COPY_FALLBACK: ${{ vars.MODEL_COPY_FALLBACK }}
+          MODEL_KOSTNAD_FALLBACK: ${{ vars.MODEL_KOSTNAD_FALLBACK }}
+          LLM_ZAI_BASE_URL: ${{ vars.LLM_ZAI_BASE_URL }}
+          LLM_ZAI_API_KEY: ${{ secrets.LLM_ZAI_API_KEY }}
+          MODEL_EXTRACT_ZAI: ${{ vars.MODEL_EXTRACT_ZAI }}
+          MODEL_VERIFY_ZAI: ${{ vars.MODEL_VERIFY_ZAI }}
+          MODEL_COPY_ZAI: ${{ vars.MODEL_COPY_ZAI }}
+          MODEL_KOSTNAD_ZAI: ${{ vars.MODEL_KOSTNAD_ZAI }}
+          # Kastar om kedjans ordning för EN körning, utan att röra
+          # variablerna. Tomt = vanlig ordning (primär → sekundär → extra).
+          LLM_FORST: ${{ inputs.forst }}
+          # Stänger av täckningsvägningen i skördeordningen för EN körning.
+          # Se docstringen i pipeline/src/skordeordning.ts: täckningstalet
+          # räknar allt vi läst hos partiet, inte vad som är kvar, så det parti
+          # som har oläst kvar kan vara just det som får sämst rang.
+          SKORD_RUNDGANG: ${{ inputs.rundgang && '1' || '' }}
+          SKORD_KALLOR: ${{ inputs.kallor }}
+          SKORD_URLAR: ${{ inputs.urlar }}
+          PIPELINE_MODE: ${{ vars.PIPELINE_MODE }}
+          # Frågevågen PÅ som default (mänskligt beslut 2026-07-11); stäng av genom att
+          # sätta repovariabeln STANCES_ENABLED=false. STANCES_MODE osatt = review
+          # (torrkörning, steg 2) — växlas till auto först i steg 4.
+          STANCES_ENABLED: ${{ vars.STANCES_ENABLED || 'true' }}
+          STANCES_MODE: ${{ vars.STANCES_MODE }}
+          ALERT_EMAIL: ${{ vars.ALERT_EMAIL }}
+      # Arkiv-backfill (SPEC §6.2 "nytt försök tills satt"): fyll archive_url för
+      # publicerade löften som saknar det (seed/review-godkännanden sätter null).
+      # Bunden budget saves/run — snällt mot Wayback; nullen dräneras över dagar.
+      # Best-effort: får aldrig fälla datakörningen.
+      - name: Arkiv-backfill (Wayback)
+        continue-on-error: true
+        run: node --import tsx/esm scripts/archive-backfill.mts save 12
+        working-directory: pipeline
+      # Handlingsvågens läskopia av löftena, och utslagen som räknas ur den.
+      # Ändras promises.json utan att kopian skrivs om saknas de nya löftena i
+      # rutnätet — och för läsaren ser ett löfte som saknas ut som ett löfte
+      # partiet aldrig gett. Det hade hänt två gånger när steget lades till:
+      # den 7 augusti (65 löften) och den 9 augusti (29). Båda gångerna var
+      # rättelsen ett åtagande att köra kommandot, och båda gångerna glömdes
+      # det. Nu kör körningen det själv, och `vendorkopia.test.ts` fäller
+      # bygget om kopian ändå glider.
+      - name: Skriv om Handlingsvågens läskopia och räkna om utslagen
+        # Samma anrop som build.yml använder: --experimental-strip-types kör
+        # TypeScript direkt, så steget behöver inga installerade beroenden i
+        # handlingsvagen/pipeline och lägger inte en minut på pipelinekörningen.
+        run: |
+          node --experimental-strip-types scripts/bygg-vendor.mts \
+            --promises ../../data/promises.json --parties ../../data/parties.json
+          node --experimental-strip-types scripts/domar.mts --promises ../../data/promises.json
+        working-directory: handlingsvagen/pipeline
+      # App-tokens lever 1 h. Pipelinesteget kan ta längre (första manifest-
+      # körningen tog 71 min) — då är jobbstart-tokenen död vid push och datan
+      # går förlorad (run 28673246764). Mynta därför en FÄRSK token efter
+      # LLM-steget, precis före commit/push.
+      - name: Mint fresh push token
+        id: push-token
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1  # v3.2.0
+        with:
+          app-id: ${{ secrets.BOT_APP_ID }}
+          private-key: ${{ secrets.BOT_APP_KEY }}
+      - name: Commit data if changed
+        env:
+          PUSH_TOKEN: ${{ steps.push-token.outputs.token }}
+        run: |
+          git config user.name "utlovat-bot"
+          git config user.email "bot@utlovat.se"
+          # Peka om origin till den färska tokenen. Checkouten sparar inga
+          # uppgifter (se persist-credentials ovan), så det här är de enda
+          # inloggningsuppgifter git har att gå på.
+          #
+          # Här stod tidigare en rensning av http.….extraheader. Den var
+          # verkningslös: checkout v7 sparar inte längre uppgifterna i den
+          # rubriken utan i en egen configfil som dras in med includeIf.gitdir,
+          # och den rensningen rörde alltså ingenting. Att stänga av sparandet
+          # i checkout-steget är det som faktiskt håller.
+          git remote set-url origin "https://x-access-token:${PUSH_TOKEN}@github.com/${{ github.repository }}.git"
+          git add data/ handlingsvagen/data/
+          if git diff --cached --quiet; then
+            echo "Inga dataändringar — inget att committa."
+            exit 0
+          fi
+          git commit -m "data: pipeline run ${{ github.run_id }}"
+          # main kan ha gått vidare (mergad PR) sedan checkout → rebasa och försök igen,
+          # annars avvisas push:en som non-fast-forward och hela körningen failar.
+          #
+          # `git rebase --abort` är det som saknades 2026-08-17 (larm #1908).
+          # Rebasen föll på en konflikt i data/changelog.json, trädet blev
+          # kvar i rebase-läge, och de fyra följande försöken svarade alla
+          # «Pulling is not possible because you have unmerged files». Loopen
+          # såg ut att försöka fem gånger men försökte i praktiken en enda —
+          # och körningens data pushades aldrig.
+          for attempt in 1 2 3 4 5; do
+            if git pull --rebase origin main && git push; then
+              echo "Push lyckades (försök $attempt)."
+              exit 0
+            fi
+            # Skilj kapplöpning från konflikt. En kapplöpning löser sig av
+            # att försöka igen; en konflikt gör det aldrig, och att snurra
+            # på den döljer vad som hände.
+            if git rev-parse --verify --quiet REBASE_HEAD >/dev/null; then
+              konflikter=$(git diff --name-only --diff-filter=U | tr '\n' ' ')
+              git rebase --abort 2>/dev/null || true
+              if [ -n "$konflikter" ]; then
+                echo "Rebasen föll på en KONFLIKT i: $konflikter"
+                echo "Det är inte en kapplöpning och löser sig inte av fler försök."
+                echo "data/changelog.json är en tillagd-sist-lista: två körningar som"
+                echo "båda lägger till en post krockar alltid i slutet. Datat i den här"
+                echo "körningen är INTE pushat. Lös för hand och kontrollera att sista"
+                echo "postens data_hash matchar computeDataHash(promises.json)."
+                exit 1
+              fi
+            fi
+            echo "Push-försök $attempt misslyckades (main har troligen gått vidare). Försöker igen..."
+            sleep $((attempt * 5))
+          done
+          echo "Push misslyckades efter 5 försök."
+          exit 1
+      # Review-kön → GitHub-issues (ett per post; beslut via review.yml).
+      # Idempotent och best-effort — issue-synk får aldrig fälla datakörningen.
+      - name: Sync review-kö till issues
+        continue-on-error: true
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: node --import tsx/esm scripts/sync-review-issues.mts
+        working-directory: pipeline
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # v4.6.2
+        with:
+          name: run-report
+          path: pipeline/.report/
+          if-no-files-found: ignore
+
+  # Larmet är hela skälet till att ett fel i den här körningen syns för en
+  # människa. Delad implementation i larm.yml — lägg aldrig en kopia här.
+  larm:
+    needs: [run]
+    if: failure()
+    permissions:
+      contents: read
+      issues: write
+    uses: ./.github/workflows/larm.yml
+    with:
+      rubrik: "Pipelinekörningen"
+      etikett: "larm-pipeline"
+      atgard: |
+            Läs körningens logg. De två orsaker som redan inträffat är att
+            pushen föll på en utgången token (körningen hann bli längre än
+            timmen) och att ett steg föll på nätverket hos en leverantör.
+            Datat kan vara halvskrivet: kontrollera `data/changelog.json` mot
+            `computeDataHash(promises.json)` innan nästa körning startas om.
