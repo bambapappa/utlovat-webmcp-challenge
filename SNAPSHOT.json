@@ -1,9 +1,9 @@
 {
-  "status": "pre-deadline rehearsal; not the final competition freeze",
+  "status": "final competition freeze; do not modify during judging",
   "source_repository": "https://github.com/bambapappa/valflask",
   "source_commit": "6d77945637089022df79fab731e0b6f16a270010",
   "source_commit_time": "2026-08-30T17:36:52Z",
-  "built_at": "2026-08-30T20:00:00+02:00",
+  "frozen_at": "2026-08-31T07:27:56Z",
   "data_hash": "ec409bfa53e834738644126c2202330f51ee8fcbf7513f3afd9a4c49dad555a3",
   "files": {
     "docs/index.html": "sha256:7cf7d4596331a7f1e877963bbadabfe548532f4d82e14b85be9466aa311df109",
